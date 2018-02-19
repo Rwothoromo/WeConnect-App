@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>WeConnect</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../../../static/css/bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <link href="../../../static/css/custom/style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../../../static/img/fav.png">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+            <a class="navbar-brand" href="#">
+                <img src="../../../static/img/logo.png" alt="WeConnect">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item dropdown active">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Businesses
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Add new</a>
+                            </div>
+                        </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            User
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <br>
+    <br>
+
+    <main role="main" class="container-fluid other-bg">
+        <br>
+        <br>
+        <div class="row col-md-12">
+            <div class="col-md-2"></div>
+
+            <div class="col-md-8 weconnect-div">
+                <form class="form-signin weconnect-form" action="#">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="" style="text-align: center;">Register a business</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-6" for="business_name">Business name: </label>
+                        <div class="control-label col-md-6">
+                            <input type="text" class="form-control" id="business_name" name="business_name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-6" for="description">Description: </label>
+                        <div class="control-label col-md-6">
+                            <textarea name="" id="description" name="description" cols="28" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-6" for="category">Category: </label>
+                        <div class="control-label col-md-6">
+                            <select class="col-md-12" id="category" name="category">
+                                <option value="" selected>--select--</option>
+                                <option value="1">Construction</option>
+                                <option value="2">Furniture</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-6" for="location">Location: </label>
+                        <div class="control-label col-md-6">
+                            <select class="col-md-12" name="" id="location" name="location">
+                                <option value="" selected>--select--</option>
+                                <option value="1">Kabale</option>
+                                <option value="2">Kampala</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-6" for=""></label>
+                        <div class="control-label col-md-6">
+                            <input type="submit" class="btn btn-default weconnect-btn" id="register" name="register" value="Register">
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+
+            <div class="col-md-2"></div>
+        </div>
+    </main>
+    <br>
+    <br>
+
+    <footer class="footer">
+        <div class="container">
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="list-inline-item footer-menu-divider">⋅</li>
+                <li class="list-inline-item active">
+                    <a href="#">Businesses</a>
+                </li>
+                <li class="list-inline-item footer-menu-divider">⋅</li>
+                <li class="list-inline-item">
+                    <a href="#">User</a>
+                </li>
+                <li class="copyright text-muted small" style="float:right;">Copyright © 2018. All Rights Reserved</li>
+            </ul>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -72,9 +72,9 @@ footer {
 
 .other-bg {
     background-image: url("../../img/other-bg.png");
-    height: 645px;
+    height: 1100px;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
 }
 
 .weconnect-div {
