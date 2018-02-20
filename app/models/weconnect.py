@@ -5,7 +5,7 @@
 from werkzeug.security import check_password_hash
 
 # local imports
-# from app.models.business import Business
+from app.models.business import Business
 from app.models.category import Category
 from app.models.location import Location
 # from app.models.review import Review
@@ -236,3 +236,137 @@ class WeConnect(object):
 
             return self.locations
         return "User did not create the location!"
+
+# Begin businesses
+    def create_business(self, username, name, description, category, location, photo):
+        """Create Business.
+        Add an instance of the Business class to the businesses dictionary
+        of unique names as keys, if username exists in users dictionary.
+
+        :param username:    A string: userusername of the active user
+        :param name:        A string: name of the business to create
+        :param description: A string: Some details on the review
+        :param category:    A string: name of the category
+        :param location:    A string: name of the location
+        :param photo:       A string: path to the business photo
+        :return:         businesses dictionary
+        """
+
+        if username in self.users.keys():
+            if not all(isinstance(i, str) for i in [name, description, category, location, photo]):
+                raise TypeError("Input should be a string!")
+
+            if name not in self.businesses:
+                business = Business(name, description,
+                                    category, location, photo)
+
+                # Update businesses in WeConnect
+                self.businesses[name] = business
+
+                # Update businesses of this user
+                self.users[username].businesses[name] = business
+
+                # Update businesses in this category
+                self.categories[category].businesses[name] = business
+
+                # Update businesses in this location
+                self.locations[location].businesses[name] = business
+
+                return self.businesses
+            return "This business already exists!"
+        return "Username does not exist!"
+
+    def view_business(self, username, name):
+        """Display a Business
+        Display a Business if it exists in the businesses dictionary,
+        and if username exists in users dictionary.
+
+        :param username: A string: username of the active user
+        :param name:     A string: name of the business to view
+        :return:         The value of key matching the business name
+        """
+        if username in self.users.keys():
+            if name in self.businesses:
+                return self.businesses[name]
+            return "Business does not exist!"
+        return "Username does not exist!"
+
+    def edit_business(self, username, name, description, category, location, photo):
+        """Edit a Business
+        Edit a Business if username exists in users dictionary.
+
+        :param username:    A string: username of the active user
+        :param name:        A string: name of the business to edit
+        :param description: A string: Some details on the business
+        :return:            businesses dictionary
+        """
+
+        # Update all except the name
+        if username in self.users.keys():
+            if not all(isinstance(i, str) for i in [name, description, category, location, photo]):
+                raise TypeError("Input should be a string!")
+
+            if self.users[username].businesses[name]:
+                updated_business = Business(
+                    name, description, category, location, photo)
+
+                this_business = self.users[username].businesses[name]
+                old_category = this_business.category
+                old_location = this_business.location
+
+                # Update businesses in WeConnect
+                self.businesses[name] = updated_business
+
+                # Update businesses of this user
+                self.users[username].businesses[name] = updated_business
+
+                # Update businesses in this category
+                self.categories[category].businesses[name] = updated_business
+
+                # Delete this business from the previous category
+                if old_category != category:
+                    del self.categories[old_category].businesses[name]
+
+                # Update businesses in this location
+                self.locations[location].businesses[name] = updated_business
+
+                # Delete this business from the previous location
+                if old_location != location:
+                    del self.locations[old_location].businesses[name]
+
+            return self.businesses
+        return "User did not create the business!"
+
+    def delete_business(self, username, name):
+        """Delete a Business
+        Delete a Business if username exists in users dictionary.
+
+        :param username: A string: username of the active user
+        :param name:     A string: name of the business to delete
+        :return:         businesses dictionary
+        """
+
+        if username in self.users.keys():
+            if not isinstance(name, str):
+                raise TypeError("Input should be a string!")
+
+            if self.users[username].businesses[name]:
+
+                this_business = self.users[username].businesses[name]
+                old_category = this_business.category
+                old_location = this_business.location
+
+                # Delete this business from WeConnect
+                del self.businesses[name]
+
+                # Delete this business from the businesses of this user
+                del self.users[username].businesses[name]
+
+                # Delete this business from the previous category
+                del self.categories[old_category].businesses[name]
+
+                # Delete this business from the previous location
+                del self.locations[old_location].businesses[name]
+
+            return self.businesses
+        return "User did not create the business!"
