@@ -9,7 +9,7 @@ from app import APP
 def index():
     """Route to home page"""
 
-    return render_template("home.index.html")
+    return render_template("home/index.html")
     # return 'Hello WeConnect!'
 
 # users
