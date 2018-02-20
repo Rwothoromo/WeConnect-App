@@ -8,7 +8,7 @@ from werkzeug.security import check_password_hash
 from app.models.business import Business
 from app.models.category import Category
 from app.models.location import Location
-# from app.models.review import Review
+from app.models.review import Review
 from app.models.user import User
 
 
@@ -370,3 +370,108 @@ class WeConnect(object):
 
             return self.businesses
         return "User did not create the business!"
+
+# Begin reviews
+    def create_review(self, username, name, description, business):
+        """Create Review.
+        Add an instance of the Review class to the reviews dictionary
+        of unique names as keys, if username exists in users dictionary.
+
+        :param username:    A string: userusername of the active user
+        :param name:        A string: name of the review to create
+        :param description: A string: Some details on the review
+        :param business:    A string: name of the business
+        :return:            reviews dictionary
+        """
+
+        if username in self.users.keys():
+            if not all(isinstance(i, str) for i in [name, description, business]):
+                raise TypeError("Input should be a string!")
+
+            if name not in self.reviews:
+                review = Review(name, description, business)
+
+                # Update reviews in WeConnect
+                self.reviews[name] = review
+
+                # Update reviews of this user
+                self.users[username].reviews[name] = review
+
+                # Update reviews in this business
+                self.businesses[business].reviews[name] = review
+
+                return self.reviews
+            return "This review already exists!"
+        return "Username does not exist!"
+
+    def view_review(self, username, name):
+        """Display a Review
+        Display a Review if it exists in the reviews dictionary,
+        and if username exists in users dictionary.
+
+        :param username: A string: username of the active user
+        :param name:     A string: name of the review to view
+        :return:         The value of key matching the review name
+        """
+        if username in self.users.keys():
+            if name in self.reviews:
+                return self.reviews[name]
+            return "Review does not exist!"
+        return "Username does not exist!"
+
+    def edit_review(self, username, name, description, business):
+        """Edit a Review
+        Edit a Review if username exists in users dictionary.
+
+        :param username:    A string: userusername of the active user
+        :param name:        A string: name of the review to create
+        :param description: A string: Some details on the review
+        :param business:    A string: name of the business
+        :return:            reviews dictionary
+        """
+
+        # Update the description
+        if self.users[username].reviews[name]:
+            if not all(isinstance(i, str) for i in [name, description]):
+                raise TypeError("Input should be a string!")
+
+            updated_review = Review(name, description, business)
+
+            # Update reviews in WeConnect
+            self.reviews[name] = updated_review
+
+            # Update reviews of this user
+            self.users[username].reviews[name] = updated_review
+
+            # Update reviews in this business
+            self.businesses[business].reviews[name] = updated_review
+
+            return self.reviews
+        return "User did not create the review!"
+
+    def delete_review(self, username, name):
+        """Delete a Review
+        Delete a Review if username exists in users dictionary.
+
+        :param username: A string: username of the active user
+        :param name:     A string: name of the review to delete
+        :return:         reviews dictionary
+        """
+
+        if self.users[username].reviews[name]:
+            if not isinstance(name, str):
+                raise TypeError("Input should be a string!")
+
+            old_business = self.reviews[name].business
+
+            # Delete this review from WeConnect
+            del self.reviews[name]
+
+            # Delete this review from the reviews of this user
+            del self.users[username].reviews[name]
+
+            # Delete this review from the previous business
+            del self.businesses[old_business].reviews[name]
+
+            return self.reviews
+        return "User did not create the review!"
