@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash
 # local imports
 # from app.models.business import Business
 from app.models.category import Category
-# from app.models.location import Location
+from app.models.location import Location
 # from app.models.review import Review
 from app.models.user import User
 
@@ -144,3 +144,95 @@ class WeConnect(object):
 
             return self.categories
         return "User did not create the category!"
+
+        # Begin locations
+    def create_location(self, username, name, description):
+        """Create Location.
+        Add an instance of the Location class to the locations dictionary
+        of unique names as keys, if username exists in users dictionary.
+
+        :param username:    A string: username of the active user
+        :param name:        A string: name of the location to edit
+        :param description: A string: Some details on the location
+        :return:            locations dictionary
+        """
+
+        if username in self.users.keys():
+            if not all(isinstance(i, str) for i in [name, description]):
+                raise TypeError("Input should be a string!")
+
+            if name not in self.locations:
+                location = Location(name, description)
+
+                # Update locations in WeConnect
+                self.locations[name] = location
+
+                # Update locations of this user
+                self.users[username].locations[name] = location
+
+                return self.locations
+            return "This location already exists!"
+        return "Username does not exist!"
+
+    def view_location(self, username, name):
+        """Display a Location
+        Display a Location if it exists in the locations dictionary,
+        and if username exists in users dictionary.
+
+        :param username: A string: username of the active user
+        :param name:     A string: name of the location to view
+        :return:         The value of key matching the location name
+        """
+        if username in self.users.keys():
+            if name in self.locations:
+                return self.locations[name]
+            return "Location does not exist!"
+        return "Username does not exist!"
+
+    def edit_location(self, username, name, description):
+        """Edit a Location
+        Edit a Location if username exists in users dictionary.
+
+        :param username:    A string: username of the active user
+        :param name:        A string: name of the location to edit
+        :param description: A string: Some details on the location
+        :return:            locations dictionary
+        """
+
+        # Update the description
+        if self.users[username].locations[name]:
+            if not all(isinstance(i, str) for i in [name, description]):
+                raise TypeError("Input should be a string!")
+
+            updated_location = Location(name, description)
+
+            # Update locations in WeConnect
+            self.locations[name] = updated_location
+
+            # Update locations of this user
+            self.users[username].locations[name] = updated_location
+
+            return self.locations
+        return "User did not create the location!"
+
+    def delete_location(self, username, name):
+        """Delete a Location
+        Delete a Location if username exists in users dictionary.
+
+        :param username: A string: username of the active user
+        :param name:     A string: name of the location to delete
+        :return:         locations dictionary
+        """
+
+        if self.users[username].locations[name]:
+            if not isinstance(name, str):
+                raise TypeError("Input should be a string!")
+
+            # Delete this location from WeConnect
+            del self.locations[name]
+
+            # Delete this location from the locations of this user
+            del self.users[username].locations[name]
+
+            return self.locations
+        return "User did not create the location!"
