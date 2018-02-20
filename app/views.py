@@ -6,8 +6,8 @@ from app import app
 
 @app.route('/')
 def index():
-    # return render_template("index.html")
-    return 'Hello WeConnect!'
+    return render_template("home.index.html")
+    # return 'Hello WeConnect!'
 
 # users
 @app.route('/user/register')
