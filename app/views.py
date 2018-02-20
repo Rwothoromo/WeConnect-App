@@ -1,4 +1,4 @@
-# views.py
+# app/views.py
 """Routes to view pages"""
 
 from flask import render_template
