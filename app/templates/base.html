@@ -1,0 +1,109 @@
+<!-- app/templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.0.0-dist/css/bootstrap.min.css') }}">
+    <link href="{{ url_for('static', filename='css/custom/style.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/fav.png') }}">
+    <script src="{{ url_for('static', filename='js/jquery-3.3.1.slim.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-4.0.0-dist/js/bootstrap.min.js') }}"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="WeConnect">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="businessDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Businesses
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="businessDropdown">
+                            <a class="dropdown-item" href="#">Add new</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Categories
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <a class="dropdown-item" href="#">Add new</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="locationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Locations
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="locationDropdown">
+                            <a class="dropdown-item" href="#">Add new</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            User
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    {% block body %} {% endblock %}
+
+    <footer class="footer">
+        <div class="container">
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="list-inline-item footer-menu-divider">⋅</li>
+                <li class="list-inline-item">
+                    <a href="#">Businesses</a>
+                </li>
+                <li class="list-inline-item footer-menu-divider">⋅</li>
+                <li class="list-inline-item">
+                    <a href="#">Categories</a>
+                </li>
+                <li class="list-inline-item footer-menu-divider">⋅</li>
+                <li class="list-inline-item">
+                    <a href="#">Locations</a>
+                </li>
+                <li class="list-inline-item footer-menu-divider">⋅</li>
+                <li class="list-inline-item">
+                    <a href="#">User</a>
+                </li>
+                <li class="copyright text-muted small" style="float:right;">Copyright © 2018. All Rights Reserved</li>
+            </ul>
+        </div>
+    </footer>
+</body>
+
+</html>
