@@ -44,19 +44,19 @@ def register():
     return jsonify({"msg": "User added", "user_data": args})
 
 @app.route('/api/auth/login', methods=['POST'])
-def login(self):
+def login():
     """Logs in a user"""
     
     return jsonify(users)
 
 @app.route('/api/auth/logout', methods=['POST'])
-def logout(self):
+def logout():
     """Logs out a user"""
     
     return jsonify(users)
 
 @app.route('/api/auth/reset-password', methods=['POST'])
-def reset_password(self):
+def reset_password():
     """Password reset"""
     
     return jsonify(users)
