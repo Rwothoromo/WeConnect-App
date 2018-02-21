@@ -28,15 +28,34 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Home</a>
                     </li>
-                    <li class="nav-item dropdown active">
-                        <a class="nav-link" href="UI/business/index.html">Businesses</a>
-                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        <a class="nav-link dropdown-toggle" href="#" id="businessDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Businesses
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="businessDropdown">
+                            <a class="dropdown-item" href="UI/business/index.html">Businesses</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="UI/business/register.html">Add new</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="UI/business/show.html">Show</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="UI/user/register.html">Register</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="UI/user/login.html">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             User
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="UI/user/update.html">Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Logout</a>
@@ -82,11 +101,15 @@
                 </li>
                 <li class="list-inline-item footer-menu-divider">⋅</li>
                 <li class="list-inline-item">
-                    <a href="#">Businesses</a>
+                    <a href="UI/business/index.html">Businesses</a>
                 </li>
                 <li class="list-inline-item footer-menu-divider">⋅</li>
-                <li class="list-inline-item active">
-                    <a href="#">User</a>
+                <li class="list-inline-item">
+                    <a href="UI/user/register.html">Register</a>
+                </li>
+                <li class="list-inline-item footer-menu-divider">⋅</li>
+                <li class="list-inline-item">
+                    <a href="UI/user/login.html">Login</a>
                 </li>
                 <li class="copyright text-muted small" style="float:right;">Copyright © 2018. All Rights Reserved</li>
             </ul>
