@@ -33,6 +33,3 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 ## GitHub pages
 Go to [WeConnect](https://rwothoromo.github.io/WeConnect-App/)
-Then navigate `app/designs/UI`
-Then `user`/(`login.html`)(`register.html`)(`update.html`)
-Or business/(`index.html`)(`register.html`)(`show.html`)
