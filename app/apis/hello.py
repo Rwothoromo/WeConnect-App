@@ -1,5 +1,5 @@
 # run.py
-"""Weconnect entry point"""
+"""Weconnect greeting"""
 
 from flask import Flask, jsonify
 from flask_restful import Resource, Api
