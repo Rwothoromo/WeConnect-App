@@ -4,7 +4,7 @@
 from flask import Flask
 
 # Initialize the app
-APP = Flask(__name__, instance_relative_config=True)
+app = Flask(__name__, instance_relative_config=True)
 
 # Load the config file
-APP.config.from_object('config')
+app.config.from_object('config')
