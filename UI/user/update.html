@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
             <a class="navbar-brand" href="#">
-                <img src="../../static/img/logo.png" alt="WeConnect">
+                <img src="static/img/logo.png" alt="WeConnect">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -28,23 +28,35 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Home</a>
                     </li>
-                    <li class="nav-item dropdown active">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                Businesses
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Add new</a>
-                            </div>
-                        </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        <a class="nav-link dropdown-toggle" href="#" id="businessDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Businesses
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="businessDropdown">
+                            <a class="dropdown-item" href="business/index.html">Businesses</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="business/register.html">Add new</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="business/show.html">Show</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="user/register.html">Register</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="user/login.html">Home</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             User
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Profile</a>
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="user/update.html">Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Logout</a>
                         </div>
@@ -122,11 +134,15 @@
                 </li>
                 <li class="list-inline-item footer-menu-divider">⋅</li>
                 <li class="list-inline-item">
-                    <a href="#">Businesses</a>
+                    <a href="business/index.html">Businesses</a>
                 </li>
                 <li class="list-inline-item footer-menu-divider">⋅</li>
-                <li class="list-inline-item active">
-                    <a href="#">User</a>
+                <li class="list-inline-item">
+                    <a href="user/register.html">Register</a>
+                </li>
+                <li class="list-inline-item footer-menu-divider">⋅</li>
+                <li class="list-inline-item">
+                    <a href="user/login.html">Login</a>
                 </li>
                 <li class="copyright text-muted small" style="float:right;">Copyright © 2018. All Rights Reserved</li>
             </ul>
