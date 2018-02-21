@@ -20,6 +20,13 @@ users = [
         "username": "jackdan", "password_hash": "password_hash"}
 ]
 
+def get_user(username):
+    """Return user if username matches"""
+
+    for user in users:
+        if user.get("username") == username:
+            return user
+
 # RequestParser and added arguments will know which fields to accept and how to validate those
 user_request_parser = RequestParser(bundle_errors=True)
 user_request_parser.add_argument(
@@ -51,7 +58,7 @@ class UserCollection(Resource):
     def get(self):
         """Return all users"""
 
-        return jsonify({"msg": "All users "})
+        return jsonify(users)
 
     def post(self):
         """Create users"""
@@ -70,17 +77,31 @@ class User(Resource):
     def get(self, username):
         """Return a user's details"""
 
-        return jsonify({"msg": "Details about user : {}".format(username)})
+        user = get_user(username)
+        if not user:
+            return jsonify({"error": "User not found"})
+
+        return jsonify(user)
 
     def put(self, username):
         """Update a user's details"""
 
-        return jsonify({"msg": "Update user user : {}".format(username)})
+        args = user_request_parser.parse_args()
+        user = get_user(username)
+        if user:
+            users.remove(user)
+            users.append(args)
+
+        return jsonify(args)
 
     def delete(self, username):
         """Delete a user"""
 
-        return jsonify({"msg": "Delete user user : {}".format(username)})
+        user = get_user(username)
+        if user:
+            users.remove(user)
+
+        return jsonify({"message": "Deleted"})
 
 
 # Add the resource to the API.
