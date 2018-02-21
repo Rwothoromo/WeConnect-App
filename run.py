@@ -3,6 +3,7 @@
 
 from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
+from flask_restful.reqparse import RequestParser
 
 from app import app
 
@@ -11,10 +12,24 @@ api = Api(app, prefix="/api/v1")    # Wrap the app in Api
 
 # users list of user dictionary objects
 users = [
-    {"first_name": "john", "last_name": "doe", "username": "johndoe", "password_hash": "password_hash"},
-    {"first_name": "jane", "last_name": "len", "username": "janelen", "password_hash": "password_hash"},
-    {"first_name": "jack", "last_name": "dan", "username": "jackdan", "password_hash": "password_hash"}
+    {"first_name": "john", "last_name": "doe",
+        "username": "johndoe", "password_hash": "password_hash"},
+    {"first_name": "jane", "last_name": "len",
+        "username": "janelen", "password_hash": "password_hash"},
+    {"first_name": "jack", "last_name": "dan",
+        "username": "jackdan", "password_hash": "password_hash"}
 ]
+
+# RequestParser and added arguments will know which fields to accept and how to validate those
+user_request_parser = RequestParser(bundle_errors=True)
+user_request_parser.add_argument(
+    "first_name", type=str, required=True, help="First name must be a valid string")
+user_request_parser.add_argument(
+    "last_name", type=str, required=True, help="Last name must be a valid string")
+user_request_parser.add_argument(
+    "username", type=str, required=True, help="Username must be a valid string")
+user_request_parser.add_argument("password_hash", required=True)
+
 
 # When we write our Resources, Flask-RESTful generates the routes
 # and the view handlers necessary to represent the resource over RESTful HTTP
@@ -25,7 +40,9 @@ class HelloWorld(Resource):
 
     # define what the get http verb will do
     def get(self):
-        return jsonify({'hello': 'world'})
+        """Return greeting"""
+
+        return jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'})
 
 
 class UserCollection(Resource):
@@ -39,7 +56,12 @@ class UserCollection(Resource):
     def post(self):
         """Create users"""
 
-        return jsonify({"msg": "We will create new users here"})
+        # request parsing code checks if the request is valid,
+        # and returns the validated data, and an error otherwise
+        args = user_request_parser.parse_args()
+        users.append(args)
+
+        return jsonify({"msg": "User added", "user_data": args})
 
 
 class User(Resource):
