@@ -40,13 +40,13 @@ def get_business(name):
 # and the view handlers necessary to represent the resource over RESTful HTTP
 
 @app.route('/api/businesses/<string:name>/reviews', methods=['POST'])
-def addReview():
+def addReview(name):
     """Add a review for a business"""
 
     return jsonify(businesses)
 
 @app.route('/api/businesses/<string:name>/reviews', methods=['GET'])
-def getReviews():
+def getReviews(name):
     """Get all reviews for a business"""
 
     return jsonify(businesses)
