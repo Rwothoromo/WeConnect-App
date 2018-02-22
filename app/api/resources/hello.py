@@ -1,5 +1,5 @@
-# run.py
-"""Weconnect greeting"""
+# app/api/resources/hello.py
+"""Contains simple greeting logic"""
 
 from flask import Flask, jsonify
 from flask_restful import Resource, Api

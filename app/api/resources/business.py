@@ -1,5 +1,5 @@
-# app/apis/businesses.py
-"""Weconnect business api"""
+# app/api/resources/business.py
+"""Contains business logic"""
 
 from flask import Flask, jsonify
 from flask_restful import Resource, Api
@@ -53,7 +53,7 @@ def getReviews(name):
 
 
 class BusinessCollection(Resource):
-    """Business collection resource"""
+    """Operate on a list of Businesses, to view and add them"""
 
     def get(self):
         """Retrieves all businesses"""
@@ -68,11 +68,11 @@ class BusinessCollection(Resource):
         args = business_request_parser.parse_args()
         businesses.append(args)
 
-        return jsonify({"msg": "Business added", "business_data": args})
+        return jsonify({"msg": "Business added", "business_data": args}), 201 # Post success
 
 
 class Business(Resource):
-    """Business resource"""
+    """Operate on a single Business, to view, update and delete it"""
 
     def get(self, name):
         """Get a business"""
@@ -92,7 +92,7 @@ class Business(Resource):
             businesses.remove(business)
             businesses.append(args)
 
-        return jsonify(args)
+        return jsonify(args), 201 # Update success
 
     def delete(self, name):
         """Remove a business"""
@@ -101,7 +101,7 @@ class Business(Resource):
         if business:
             businesses.remove(business)
 
-        return jsonify({"message": "Deleted"})
+        return jsonify({"message": "Deleted"}), 204 # Delete success
 
 
 # Add the resource to the API.

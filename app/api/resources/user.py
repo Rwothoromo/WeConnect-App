@@ -1,5 +1,5 @@
-# app/apis/auth.py
-"""Weconnect entry point"""
+# app/api/resources/user.py
+"""Contains user logic"""
 
 from flask import Flask, jsonify
 from flask_restful import Resource, Api

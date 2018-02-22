@@ -1,5 +1,5 @@
-# app/apis/auth.py
-"""Weconnect entry point"""
+# app/api/resources/auth.py
+"""Contains auth logic"""
 
 from flask import Flask, jsonify
 from flask_restful import Resource, Api
@@ -41,25 +41,25 @@ def register():
     args = user_request_parser.parse_args()
     users.append(args)
 
-    return jsonify({"msg": "User added", "user_data": args})
+    return jsonify({"msg": "User added", "user_data": args}), 201 # Post success
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     """Logs in a user"""
     
-    return jsonify(users)
+    return jsonify(users), 201 # Post success
 
 @app.route('/api/auth/logout', methods=['POST'])
 def logout():
     """Logs out a user"""
     
-    return jsonify(users)
+    return jsonify(users), 201 # Post success
 
 @app.route('/api/auth/reset-password', methods=['POST'])
 def reset_password():
     """Password reset"""
     
-    return jsonify(users)
+    return jsonify(users), 201 # Post success
 
 
 if __name__ == '__main__':
