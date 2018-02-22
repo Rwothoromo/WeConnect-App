@@ -2,14 +2,11 @@
 """Contains user logic"""
 
 from flask import Flask, jsonify
-from flask_restful import Resource, Api, fields, marshal_with
+from flask_restful import Resource, fields, marshal_with
 from flask_restful.reqparse import RequestParser
 
 # marshal_with Takes raw data (in the form of a dict, list, object) 
 # and a dict of fields to output and filters the data based on those fields.
-
-app = Flask(__name__)               # Create Flask WSGI appliction
-api_v1 = Api(app, prefix="/api/v1")  # Wrap the app in Api
 
 # users list of user dictionary objects
 users = [
@@ -109,11 +106,3 @@ class User(Resource):
             users.remove(user)
 
         return jsonify({"message": "Deleted"})
-
-
-# Add the resource to the API.
-api_v1.add_resource(UserCollection, '/users')
-api_v1.add_resource(User, '/users/<string:username>')
-
-if __name__ == '__main__':
-    app.run(debug=True)

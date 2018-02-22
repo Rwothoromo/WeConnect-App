@@ -5,8 +5,7 @@ from flask import Flask, Blueprint, jsonify
 from flask_restful import Resource, Api, url_for
 from flask_restful.reqparse import RequestParser
 
-app = Flask(__name__)               # Create Flask WSGI appliction
-api_v1 = Api(app, prefix="/api/v1")  # Wrap the app in Api
+
 
 # businesses list of business dictionary objects
 businesses = [
@@ -39,18 +38,6 @@ def get_business(name):
 # When we write our Resources, Flask-RESTful generates the routes
 # and the view handlers necessary to represent the resource over RESTful HTTP
 
-@app.route('/api/businesses/<string:name>/reviews', methods=['POST'])
-def addReview(name):
-    """Add a review for a business"""
-
-    return jsonify(businesses)
-
-@app.route('/api/businesses/<string:name>/reviews', methods=['GET'])
-def getReviews(name):
-    """Get all reviews for a business"""
-
-    return jsonify(businesses)
-
 
 class BusinessCollection(Resource):
     """Operate on a list of Businesses, to view and add them"""
@@ -68,7 +55,8 @@ class BusinessCollection(Resource):
         args = business_request_parser.parse_args()
         businesses.append(args)
 
-        return jsonify({"msg": "Business added", "business_data": args}), 201 # Post success
+        # Post success
+        return jsonify({"msg": "Business added", "business_data": args}), 201
 
 
 class Business(Resource):
@@ -92,7 +80,7 @@ class Business(Resource):
             businesses.remove(business)
             businesses.append(args)
 
-        return jsonify(args), 201 # Update success
+        return jsonify(args), 201  # Update success
 
     def delete(self, name):
         """Remove a business"""
@@ -101,12 +89,18 @@ class Business(Resource):
         if business:
             businesses.remove(business)
 
-        return jsonify({"message": "Deleted"}), 204 # Delete success
+        return jsonify({"message": "Deleted"}), 204  # Delete success
 
 
-# Add the resource to the API.
-api_v1.add_resource(BusinessCollection, '/businesses')
-api_v1.add_resource(Business, '/businesses/<string:name>')
+class BusinessReviews(Resource):
+    """Business Reviews"""
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    def get(self, name):
+        """Get all reviews for a business"""
+
+        return jsonify(businesses)
+
+    def post(self, name):
+        """Add a review for a business"""
+
+        return jsonify(businesses), 201

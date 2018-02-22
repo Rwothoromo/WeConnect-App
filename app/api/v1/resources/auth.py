@@ -1,12 +1,11 @@
 # app/api/resources/auth.py
 """Contains auth logic"""
 
-from flask import Flask, jsonify
+from flask import Flask, Blueprint, jsonify
 from flask_restful import Resource, Api
 from flask_restful.reqparse import RequestParser
 
-app = Flask(__name__)               # Create Flask WSGI appliction
-api_v1 = Api(app, prefix="/api/v1")  # Wrap the app in Api
+auth_blueprint = Blueprint('auth', __name__)
 
 # users list of user dictionary objects
 users = []
@@ -32,7 +31,7 @@ user_request_parser.add_argument(
 user_request_parser.add_argument("password_hash", required=True)
 
 
-@app.route('/api/auth/register', methods=['POST'])
+@auth_blueprint.route('/api/auth/register', methods=['POST'])
 def register():
     """Creates a user account"""
 
@@ -43,24 +42,20 @@ def register():
 
     return jsonify({"msg": "User added", "user_data": args}), 201 # Post success
 
-@app.route('/api/auth/login', methods=['POST'])
+@auth_blueprint.route('/api/auth/login', methods=['POST'])
 def login():
     """Logs in a user"""
     
     return jsonify(users), 201 # Post success
 
-@app.route('/api/auth/logout', methods=['POST'])
+@auth_blueprint.route('/api/auth/logout', methods=['POST'])
 def logout():
     """Logs out a user"""
     
     return jsonify(users), 201 # Post success
 
-@app.route('/api/auth/reset-password', methods=['POST'])
+@auth_blueprint.route('/api/auth/reset-password', methods=['POST'])
 def reset_password():
     """Password reset"""
     
     return jsonify(users), 201 # Post success
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
