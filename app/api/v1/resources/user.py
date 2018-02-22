@@ -5,11 +5,6 @@ from flask import Flask, jsonify
 from flask_restful import Resource, fields, marshal_with
 from flask_restful.reqparse import RequestParser
 
-import sys
-# from .user import User
-# from app.models.weconnect import WeConnect
-
-# weconnect = WeConnect()
 
 # marshal_with Takes raw data (in the form of a dict, list, object) 
 # and a dict of fields to output and filters the data based on those fields.
@@ -73,9 +68,8 @@ class UserCollection(Resource):
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
         args = user_request_parser.parse_args()
-        # users.append(args)
-        # user = create_user(args.first_name, args.last_name, args.username, args.password_hash)
-
+        users.append(args)
+        
         return jsonify({"msg": "User added", "user_data": args})
 
 
@@ -114,6 +108,7 @@ class UserResource(Resource):
 
         return jsonify({"message": "Deleted"})
 
+
 class RegisterUser(Resource):
     """Register a user"""
 
@@ -125,10 +120,9 @@ class RegisterUser(Resource):
         # and returns the validated data, and an error otherwise
         args = user_request_parser.parse_args()
         users.append(args)
-        user_object = User(args.first_name, args.last_name, args.username, args.password_hash)
-        user = weconnect.register(user_object)
-        if isinstance(user, User):
-            return jsonify({"message": "User added", "user_data": args}), 201 # Post success
+        
+        return jsonify({"msg": "User added", "user_data": args})
+
 
 class LoginUser(Resource):
     """Login a user"""
@@ -141,6 +135,7 @@ class LoginUser(Resource):
 
         return jsonify({"message": "User logged in", "user_data": args}), 201 # Post success
 
+
 class ResetPassword(Resource):
     """Password reset"""
 
@@ -151,6 +146,7 @@ class ResetPassword(Resource):
         args = user_request_parser.parse_args()
     
         return jsonify({"message": "Password reset", "user_data": args}), 201 # Post success
+
 
 class LogoutUser(Resource):
     """Logs out a user"""
