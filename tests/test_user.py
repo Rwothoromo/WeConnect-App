@@ -4,6 +4,8 @@
 from app.models.user import User
 from tests.test_weconnect import WeConnectTestCase
 
+import json
+
 
 class TestUser(WeConnectTestCase):
     """Test User class functionality."""
@@ -21,4 +23,4 @@ class TestUser(WeConnectTestCase):
         user = User(first_name = 'eli', last_name = 'rwt', username = 'elirwt', password_hash = 'password_hash')
         auth_token = user.encode_auth_token(user.username)
         self.assertTrue(isinstance(auth_token, bytes))
-        self.assertTrue(User.decode_auth_token(auth_token) == 'elirwt')
+        self.assertTrue(User.decode_auth_token(auth_token) == 1)

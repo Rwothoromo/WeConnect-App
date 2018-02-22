@@ -32,7 +32,7 @@ class WeConnect(object):
         if isinstance(user, User):
             if user.username not in self.users:
                 self.users[user.username] = user
-                return True
+                return user
             return False
         return "Not a User instance!"
 
