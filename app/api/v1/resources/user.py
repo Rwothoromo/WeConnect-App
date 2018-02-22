@@ -2,8 +2,11 @@
 """Contains user logic"""
 
 from flask import Flask, jsonify
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, fields, marshal_with
 from flask_restful.reqparse import RequestParser
+
+# marshal_with Takes raw data (in the form of a dict, list, object) 
+# and a dict of fields to output and filters the data based on those fields.
 
 app = Flask(__name__)               # Create Flask WSGI appliction
 api_v1 = Api(app, prefix="/api/v1")  # Wrap the app in Api
@@ -19,6 +22,25 @@ users = [
 ]
 
 
+# RequestParser and added arguments will know which fields to accept and how to validate those
+user_request_parser = RequestParser(bundle_errors=True)
+user_request_parser.add_argument(
+    "first_name", dest="first_name", location="form", type=str, required=True, help="First name must be a valid string")
+user_request_parser.add_argument(
+    "last_name", dest="last_name", location="form", type=str, required=True, help="Last name must be a valid string")
+user_request_parser.add_argument(
+    "username", dest="username", location="form", type=str, required=True, help="Username must be a valid string")
+user_request_parser.add_argument(
+    "password_hash", dest="password_hash", location="form", type=str, required=True, help="Password is required")
+
+user_fields = {
+    'first_name': fields.String,
+    'last_name': fields.String,
+    'username': fields.String,
+    'password_hash': fields.String,
+}
+
+
 def get_user(username):
     """Return user if username matches"""
 
@@ -26,17 +48,6 @@ def get_user(username):
         if user.get("username") == username:
             return user
     return None
-
-
-# RequestParser and added arguments will know which fields to accept and how to validate those
-user_request_parser = RequestParser(bundle_errors=True)
-user_request_parser.add_argument(
-    "first_name", type=str, required=True, help="First name must be a valid string")
-user_request_parser.add_argument(
-    "last_name", type=str, required=True, help="Last name must be a valid string")
-user_request_parser.add_argument(
-    "username", type=str, required=True, help="Username must be a valid string")
-user_request_parser.add_argument("password_hash", required=True)
 
 
 # When we write our Resources, Flask-RESTful generates the routes
@@ -51,20 +62,23 @@ class UserCollection(Resource):
 
         return jsonify(users)
 
+    @marshal_with(user_fields)
     def post(self):
         """Create users"""
 
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
         args = user_request_parser.parse_args()
-        users.append(args)
+        # users.append(args)
+        user = create_user(args.first_name, args.last_name, args.username, args.password_hash)
 
-        return jsonify({"msg": "User added", "user_data": args})
+        return jsonify({"msg": "User added", "user_data": user})
 
 
 class User(Resource):
     """User resource"""
 
+    @marshal_with(user_fields)
     def get(self, username):
         """Return a user's details"""
 
@@ -74,6 +88,7 @@ class User(Resource):
 
         return jsonify(user)
 
+    @marshal_with(user_fields)
     def put(self, username):
         """Update a user's details"""
 
@@ -85,6 +100,7 @@ class User(Resource):
 
         return jsonify(args)
 
+    @marshal_with(user_fields)
     def delete(self, username):
         """Delete a user"""
 
