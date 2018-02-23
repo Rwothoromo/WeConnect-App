@@ -42,6 +42,10 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `flask run` on command prompt
 * View the app on `http://127.0.0.1:5000/`
 
+**Use endpoints**
+* Run `python app/api/app.py` on command prompt
+* View the api on `http://127.0.0.1:5000/api/v1/`
+
 **Unittests**
 * Run `pytest` on command prompt
 
