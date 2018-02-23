@@ -1,13 +1,8 @@
-# app/api/resources/hello.py
+# app/api/v1/resources/hello.py
 """Contains simple greeting logic"""
 
-from flask import Flask, jsonify
-from flask_restful import Resource, Api
-from flask_restful.reqparse import RequestParser
-
-
-app = Flask(__name__)               # Create Flask WSGI appliction
-api_v1 = Api(app, prefix="/api/v1") # Wrap the app in Api
+from flask import jsonify
+from flask_restful import Resource
 
 
 # When we write our Resources, Flask-RESTful generates the routes
@@ -22,10 +17,3 @@ class HelloWorld(Resource):
         """Return greeting"""
 
         return jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'})
-
-
-# Add the resource to the API.
-api_v1.add_resource(HelloWorld, '/')
-
-if __name__ == '__main__':
-    app.run(debug=True)

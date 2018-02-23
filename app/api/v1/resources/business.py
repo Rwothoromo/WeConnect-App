@@ -1,11 +1,11 @@
 # app/api/resources/business.py
 """Contains business logic"""
 
-from flask import Flask, jsonify
-from flask_restful import Resource, Api
+from flask import jsonify
+from flask_restful import Resource, fields, marshal_with
 from flask_restful.reqparse import RequestParser
 
-
+from app.models import business
 
 # businesses list of business dictionary objects
 businesses = [
@@ -20,10 +20,18 @@ businesses = [
 business_request_parser = RequestParser(bundle_errors=True)
 business_request_parser.add_argument(
     "name", type=str, required=True, help="Business name must be a valid string")
-business_request_parser.add_argument("description", required=True)
-business_request_parser.add_argument("category", required=True)
-business_request_parser.add_argument("location", required=True)
-business_request_parser.add_argument("photo", required=True)
+business_request_parser.add_argument("description", type=str, required=True, help="Description must be a valid string")
+business_request_parser.add_argument("category", type=str, required=True, help="Category must be a valid string")
+business_request_parser.add_argument("location", type=str, required=True, help="Location must be a valid string")
+business_request_parser.add_argument("photo", type=str, required=True, help="Photo must be a valid string")
+
+business_fields = {
+    'name': fields.String,
+    'description': fields.String,
+    'category': fields.String,
+    'location': fields.String,
+    'photo': fields.String
+}
 
 
 def get_business(name):
@@ -42,11 +50,13 @@ def get_business(name):
 class BusinessCollection(Resource):
     """Operate on a list of Businesses, to view and add them"""
 
+    @marshal_with(business_fields)
     def get(self):
         """Retrieves all businesses"""
 
         return jsonify(businesses)
 
+    @marshal_with(business_fields)
     def post(self):
         """Register a business"""
 
@@ -62,6 +72,7 @@ class BusinessCollection(Resource):
 class Business(Resource):
     """Operate on a single Business, to view, update and delete it"""
 
+    @marshal_with(business_fields)
     def get(self, name):
         """Get a business"""
 
@@ -71,6 +82,7 @@ class Business(Resource):
 
         return jsonify(business)
 
+    @marshal_with(business_fields)
     def put(self, name):
         """Updates a business profile"""
 
@@ -82,6 +94,7 @@ class Business(Resource):
 
         return jsonify(args), 201  # Update success
 
+    @marshal_with(business_fields)
     def delete(self, name):
         """Remove a business"""
 
@@ -95,11 +108,13 @@ class Business(Resource):
 class BusinessReviews(Resource):
     """Business Reviews"""
 
+    @marshal_with(business_fields)
     def get(self, name):
         """Get all reviews for a business"""
 
         return jsonify(businesses)
 
+    @marshal_with(business_fields)
     def post(self, name):
         """Add a review for a business"""
 
