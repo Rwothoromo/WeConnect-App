@@ -18,16 +18,16 @@ WeConnect brings businesses and users together, and allows users to review busin
 | EndPoint                                             | Functionality                                    |
 | ---------------------------------------------------- | ------------------------------------------------ |
 | [POST   /api/v1/auth/register](#)                    | Creates a user account                           |
-| [POST   /api/v1/auth/login/](#)                      | Logs in a user                                   |
-| [POST   /api/v1/auth/logout/](#)                     | Logs out a user                                  |
+| [POST   /api/v1/auth/login](#)                       | Logs in a user                                   |
+| [POST   /api/v1/auth/logout](#)                      | Logs out a user                                  |
 | [POST   /api/v1/auth/reset-password](#)              | Password reset                                   |
 | [POST   /api/v1/businesses](#)                       | Register a business                              |
-| [PUT    /api/v1/businesses/<string:name>](#)         | Updates a business profile                       |
-| [DELETE /api/v1/businesses/<string:name>](#)         | Remove a business                                |
+| [PUT    /api/v1/businesses/\<string:name>](#)        | Updates a business profile                       |
+| [DELETE /api/v1/businesses/\<string:name>](#)        | Remove a business                                |
 | [GET    /api/v1/businesses](#)                       | Retrieves all businesses                         |
-| [GET    /api/v1/businesses/<string:name>](#)         | Get a business                                   |
-| [POST   /api/v1/businesses/<string:name>/reviews](#) | Add a review for a business by the logged in user|
-| [GET    /api/v1/businesses/<businessId>/reviews](#)  | Get all reviews for a business                   |
+| [GET    /api/v1/businesses/\<string:name>](#)        | Get a business                                   |
+| [POST   /api/v1/businesses/\<string:name>/reviews](#)| Add a review for a business by the logged in user|
+| [GET    /api/v1/businesses/\<businessId>/reviews](#) | Get all reviews for a business                   |
 
 **Technologies**
 * Python 3.6 or 2.7
