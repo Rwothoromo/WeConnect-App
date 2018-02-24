@@ -1,7 +1,7 @@
 # app/api/app.py
 """Weconnect api setup"""
 
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, redirect
 from flask_restful import Api
 
 from v1.resources.hello import HelloWorld
@@ -26,6 +26,12 @@ api.add_resource(ResetPassword, '/auth/reset-password')
 api.add_resource(LogoutUser, '/auth/logout')
 
 app.register_blueprint(api_bp)
+
+@app.route('/')
+def main():
+    """Redirect to api endpoints"""
+
+    return redirect('/api/v1/')
 
 if __name__ == '__main__':
     app.run(debug=True)

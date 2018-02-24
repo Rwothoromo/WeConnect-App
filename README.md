@@ -49,7 +49,7 @@ WeConnect brings businesses and users together, and allows users to review busin
 * View the app on `http://127.0.0.1:5000/`
 
 **Use endpoints**
-* Run `python app/api/app.py` on command prompt
+* Run `python app/api/api_run.py` on command prompt
 * View the api on `http://127.0.0.1:5000/api/v1/`
 
 **Unittests**

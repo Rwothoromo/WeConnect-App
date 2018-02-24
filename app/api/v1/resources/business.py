@@ -2,12 +2,13 @@
 """Contains business logic"""
 
 from flask import jsonify
-from flask_restful import Resource, fields, marshal_with
+from flask_restful import Resource, fields
 from flask_restful.reqparse import RequestParser
 
-from ....models.weconnect import WeConnect
-from ....models.business import Business
-from ....models.review import Review
+from app.models.weconnect import WeConnect
+from app.models.business import Business
+from app.models.review import Review
+from app.models.user import User
 
 
 weconnect = WeConnect()
@@ -16,11 +17,23 @@ all_reviews = []
 
 # businesses list of business dictionary objects
 businesses = [
-    {"name": "Buyondo Hardware", "description": "One stop center for building materials...",
-     "category": "Construction", "location": "Kabale", "photo": "photo"},
-    {"name": "Bondo furniture", "description": "Quality imported furniture for all your needs",
-     "category": "Furniture", "location": "Kampala", "photo": "photo"}
+    {"username": "johndoe", "name": "Buyondo Hardware", "description": "One stop center for building materials...",
+     "category": "Construction", "location": "Kabale", "photo": "photo"}
 ]
+
+# create initial user
+init_user = User("john", "doe", "johndoe", "password_hash")
+weconnect.register(init_user)
+
+# create initial category
+weconnect.create_category("johndoe", "Construction", "General hardware")
+
+# create initial location
+weconnect.create_location("johndoe", "Kabale", "Opposite Topper's")
+
+# create initial business
+weconnect.create_business("johndoe", "Buyondo Hardware", "One stop center for building materials...", 
+"Construction", "Kabale", "photo")
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
@@ -37,15 +50,6 @@ business_request_parser.add_argument(
     "location", type=str, required=True, help="Location must be a valid string")
 business_request_parser.add_argument(
     "photo", type=str, required=True, help="Photo must be a valid string")
-
-business_fields = {
-    'username': fields.String,
-    'name': fields.String,
-    'description': fields.String,
-    'category': fields.String,
-    'location': fields.String,
-    'photo': fields.String
-}
 
 
 # for reviews
@@ -89,13 +93,11 @@ def get_review(name):
 class BusinessCollection(Resource):
     """Operate on a list of Businesses, to view and add them"""
 
-    @marshal_with(business_fields)
     def get(self):
         """Retrieves all businesses"""
 
         return jsonify(businesses)
 
-    @marshal_with(business_fields)
     def post(self):
         """Register a business"""
 
@@ -111,10 +113,10 @@ class BusinessCollection(Resource):
             if isinstance(reg_business, Business):
                 businesses.append(args)
                 # Post success
-                return jsonify({"message": "Business added", "business_data": args}), 201
+                return jsonify({"message": "Business added", "business_data": args})
             else:
                 # Unprocessable entity
-                return jsonify({"message": reg_business, "business_data": args}), 422
+                return jsonify({"message": reg_business, "business_data": args})
 
         return jsonify({"error": "Business already exists"})
 
@@ -122,7 +124,6 @@ class BusinessCollection(Resource):
 class BusinessResource(Resource):
     """Operate on a single Business, to view, update and delete it"""
 
-    @marshal_with(business_fields)
     def get(self, name):
         """Get a business"""
 
@@ -132,7 +133,6 @@ class BusinessResource(Resource):
 
         return jsonify(business)
 
-    @marshal_with(business_fields)
     def put(self, name):
         """Updates a business profile"""
 
@@ -146,14 +146,13 @@ class BusinessResource(Resource):
                 businesses.remove(business)
                 businesses.append(args)
                 # Post success
-                return jsonify({"message": "Business updated", "business_data": args}), 201
+                return jsonify({"message": "Business updated", "business_data": args})
             else:
                 # Unprocessable entity
-                return jsonify({"message": updated_business, "business_data": args}), 422
+                return jsonify({"message": updated_business, "business_data": args})
 
         return jsonify({"error": "Business not found"})
 
-    @marshal_with(business_fields)
     def delete(self, name):
         """Remove a business"""
 
@@ -166,10 +165,10 @@ class BusinessResource(Resource):
             if name not in businesses_list.keys():
                 businesses.remove(business)
                 # Delete success
-                return jsonify({"message": "Business deleted", "businesses": businesses}), 204
+                return jsonify({"message": "Business deleted", "businesses": businesses})
             else:
                 # Unprocessable entity
-                return jsonify({"message": businesses_list, "business_data": args}), 422
+                return jsonify({"message": businesses_list, "business_data": args})
 
         return jsonify({"error": "Business not found"})
 
@@ -177,7 +176,6 @@ class BusinessResource(Resource):
 class BusinessReviews(Resource):
     """Business Reviews"""
 
-    @marshal_with(business_fields)
     def get(self, name):
         """Get all reviews for a business"""
 
@@ -199,7 +197,6 @@ class BusinessReviews(Resource):
 
         return jsonify({"error": "Business not found"})
 
-    @marshal_with(business_fields)
     def post(self, name):
         """Add a review for a business"""
 
@@ -222,7 +219,7 @@ class BusinessReviews(Resource):
                         all_reviews.append(args)
 
                 # Post success
-                return jsonify({"message": "Business review added", "review_data": reviews}), 201
+                return jsonify({"message": "Business review added", "review_data": reviews})
 
             return jsonify({"error": "Business already exists"})
 

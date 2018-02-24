@@ -2,55 +2,60 @@
 """Contains user logic"""
 
 import random
+import os
+import sys
+import inspect
 
 from flask import jsonify
-from flask_restful import Resource, fields, marshal_with
+from flask_restful import Resource, fields
 from flask_restful.reqparse import RequestParser
 
-from ....models.weconnect import WeConnect
-from ....models.user import User
 
-# marshal_with Takes raw data (in the form of a dict, list, object)
-# and a dict of fields to output and filters the data based on those fields.
+# solution to python 3 relative import errors
+# use the inspect module because for os.path.abspath(__file__), 
+# the __file__ attribute is not always given
+user_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+resources_dir = os.path.dirname(user_dir)
+v1_dir = os.path.dirname(resources_dir)
+api_dir = os.path.dirname(v1_dir)
+app_dir = os.path.dirname(api_dir)
+sys.path.insert(0, app_dir)
+# sys.path.append(os.path.dirname)
+
+from app.models.weconnect import WeConnect
+from app.models.user import User
+
 
 weconnect = WeConnect()
 
 # users list of user dictionary objects
 users = [
     {"first_name": "john", "last_name": "doe",
-     "username": "johndoe", "password_hash": "password_hash"},
-    {"first_name": "jane", "last_name": "len",
-     "username": "janelen", "password_hash": "password_hash"},
-    {"first_name": "jack", "last_name": "dan",
-     "username": "jackdan", "password_hash": "password_hash"}
+     "username": "johndoe", "password_hash": "password_hash"}
 ]
 
+# create initial user
+init_user = User("john", "doe", "johndoe", "password_hash")
+weconnect.register(init_user)
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
 user_request_parser = RequestParser(bundle_errors=True)
 
 user_request_parser.add_argument(
-    "first_name", dest="first_name", location="form", type=str, required=True,
+    "first_name", type=str, required=True,
     help="First name must be a valid string")
 
 user_request_parser.add_argument(
-    "last_name", dest="last_name", location="form", type=str, required=True,
+    "last_name", type=str, required=True,
     help="Last name must be a valid string")
 
 user_request_parser.add_argument(
-    "username", dest="username", location="form", type=str, required=True,
+    "username", type=str, required=True,
     help="Username must be a valid string")
 
 user_request_parser.add_argument(
-    "password_hash", dest="password_hash", location="form", type=str, required=True,
+    "password_hash", type=str, required=True,
     help="Password is required")
-
-user_fields = {
-    'first_name': fields.String,
-    'last_name': fields.String,
-    'username': fields.String,
-    'password_hash': fields.String
-}
 
 
 def get_user(username):
@@ -69,13 +74,11 @@ def get_user(username):
 class UserCollection(Resource):
     """User collection resource"""
 
-    @marshal_with(user_fields)
     def get(self):
         """Return all users"""
 
         return jsonify(users)
 
-    @marshal_with(user_fields)
     def post(self):
         """Create users"""
 
@@ -92,10 +95,10 @@ class UserCollection(Resource):
             if isinstance(reg_user, User):
                 users.append(args)
                 # Post success
-                return jsonify({"message": "User added", "user_data": args}), 201
+                return jsonify({"message": "User added", "user_data": args})
             else:
                 # Unprocessable entity
-                return jsonify({"message": reg_user, "user_data": args}), 422
+                return jsonify({"message": reg_user, "user_data": args})
 
         return jsonify({"error": "User already exists"})
 
@@ -103,7 +106,6 @@ class UserCollection(Resource):
 class UserResource(Resource):
     """User resource"""
 
-    @marshal_with(user_fields)
     def get(self, username):
         """Return a user's details"""
 
@@ -113,7 +115,6 @@ class UserResource(Resource):
 
         return jsonify(user)
 
-    @marshal_with(user_fields)
     def put(self, username):
         """Update a user's details"""
 
@@ -128,14 +129,13 @@ class UserResource(Resource):
                 users.remove(user)
                 users.append(args)
                 # Post success
-                return jsonify({"message": "User updated", "user_data": args}), 201
+                return jsonify({"message": "User updated", "user_data": args})
             else:
                 # Unprocessable entity
-                return jsonify({"message": updated_user, "user_data": args}), 422
+                return jsonify({"message": updated_user, "user_data": args})
 
         return jsonify({"error": "User not found"})
 
-    @marshal_with(user_fields)
     def delete(self, username):
         """Delete a user"""
 
@@ -143,13 +143,12 @@ class UserResource(Resource):
         if user:
             users.remove(user)
 
-        return jsonify({"message": "Deleted"})
+        return jsonify({"message": "User deleted"})
 
 
 class RegisterUser(Resource):
     """Register a user"""
 
-    @marshal_with(user_fields)
     def post(self):
         """Creates a user account"""
 
@@ -163,16 +162,15 @@ class RegisterUser(Resource):
         if isinstance(reg_user, User):
             users.append(args)
             # Post success
-            return jsonify({"message": "User added", "user_data": args}), 201
+            return jsonify({"message": "User added", "user_data": args})
         else:
             # Unprocessable entity
-            return jsonify({"message": reg_user, "user_data": args}), 422
+            return jsonify({"message": reg_user, "user_data": args})
 
 
 class LoginUser(Resource):
     """Login a user"""
 
-    @marshal_with(user_fields)
     def post(self):
         """Logs in a user"""
 
@@ -182,34 +180,34 @@ class LoginUser(Resource):
 
         if logged_in_username == args.username:
             # Post success
-            return jsonify({"message": "User logged in", "user_data": args}), 201
+            return jsonify({"message": "User logged in", "user_data": args})
         else:
             # Unprocessable entity
-            return jsonify({"message": logged_in_username, "user_data": args}), 422
+            return jsonify({"message": logged_in_username, "user_data": args})
 
 
 class ResetPassword(Resource):
     """Password reset"""
 
-    @marshal_with(user_fields)
     def post(self):
         """Password reset"""
 
         args = user_request_parser.parse_args()
         user = get_user(args.username)
         if user:
+            args.password_hash = 'Chang3m3'+str(random.randrange(10000))
             user_object = User(args.first_name, args.last_name,
-                        args.username, 'Chang3m3'+str(random.randrange(10000)))
+                        args.username, args.password_hash)
             updated_user = weconnect.edit_user(user_object)
 
             if isinstance(updated_user, User):
                 users.remove(user)
                 users.append(args)
                 # Post success
-                return jsonify({"message": "User password reset", "user_data": args}), 201
+                return jsonify({"message": "User password reset", "user_data": args})
             else:
                 # Unprocessable entity
-                return jsonify({"message": updated_user, "user_data": args}), 422
+                return jsonify({"message": updated_user, "user_data": args})
 
         return jsonify({"error": "User not found"})
 
@@ -217,11 +215,10 @@ class ResetPassword(Resource):
 class LogoutUser(Resource):
     """Logs out a user"""
 
-    @marshal_with(user_fields)
     def post(self):
         """Logs out a user"""
 
         args = user_request_parser.parse_args()
 
         # Post success
-        return jsonify({"message": "User logged out", "user_data": args}), 201
+        return jsonify({"message": "User logged out", "user_data": args})
