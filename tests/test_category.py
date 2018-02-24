@@ -29,7 +29,7 @@ class TestCategory(WeConnectTestCase):
                          msg='Category does not exist')
 
     def test_category_edit(self):
-        """ Test if category is edited"""
+        """Test if category is edited"""
 
         self.weconnect.register(self.user)
         self.weconnect.create_category(
@@ -41,7 +41,7 @@ class TestCategory(WeConnectTestCase):
                          categories['Construction'].description, msg='Category was not edited')
 
     def test_category_deletion(self):
-        """ Test if category is deleted"""
+        """Test if category is deleted"""
 
         self.weconnect.register(self.user)
         self.weconnect.create_category(

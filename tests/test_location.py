@@ -27,7 +27,7 @@ class TestLocation(WeConnectTestCase):
                          msg='Location does not exist')
 
     def test_location_edit(self):
-        """ Test if location is edited"""
+        """Test if location is edited"""
 
         self.weconnect.register(self.user)
         self.weconnect.create_location('johndoe', 'Kampala', 'Kampala road')
@@ -38,7 +38,7 @@ class TestLocation(WeConnectTestCase):
                          locations['Kampala'].description, msg='Location was not edited')
 
     def test_location_deletion(self):
-        """ Test if location is deleted"""
+        """Test if location is deleted"""
 
         self.weconnect.register(self.user)
         self.weconnect.create_location('johndoe', 'Kampala', 'Kampala road')

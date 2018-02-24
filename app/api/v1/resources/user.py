@@ -1,6 +1,8 @@
 # app/api/resources/user.py
 """Contains user logic"""
 
+import random
+
 from flask import jsonify
 from flask_restful import Resource, fields, marshal_with
 from flask_restful.reqparse import RequestParser
@@ -80,17 +82,22 @@ class UserCollection(Resource):
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
         args = user_request_parser.parse_args()
-        user = User(args.first_name, args.last_name,
-                    args.username, args.password_hash)
-        reg_user = weconnect.register(user)
 
-        if isinstance(reg_user, User):
-            users.append(args)
-            # Post success
-            return jsonify({"message": "User added", "user_data": args}), 201
-        else:
-            # Unprocessable entity
-            return jsonify({"message": reg_user, "user_data": args}), 422
+        user = get_user(args.username)
+        if not user:
+            user_object = User(args.first_name, args.last_name,
+                        args.username, args.password_hash)
+            reg_user = weconnect.register(user_object)
+
+            if isinstance(reg_user, User):
+                users.append(args)
+                # Post success
+                return jsonify({"message": "User added", "user_data": args}), 201
+            else:
+                # Unprocessable entity
+                return jsonify({"message": reg_user, "user_data": args}), 422
+
+        return jsonify({"error": "User already exists"})
 
 
 class UserResource(Resource):
@@ -113,10 +120,20 @@ class UserResource(Resource):
         args = user_request_parser.parse_args()
         user = get_user(username)
         if user:
-            users.remove(user)
-            users.append(args)
+            user_object = User(args.first_name, args.last_name,
+                        args.username, args.password_hash)
+            updated_user = weconnect.edit_user(user_object)
 
-        return jsonify(args)
+            if isinstance(updated_user, User):
+                users.remove(user)
+                users.append(args)
+                # Post success
+                return jsonify({"message": "User updated", "user_data": args}), 201
+            else:
+                # Unprocessable entity
+                return jsonify({"message": updated_user, "user_data": args}), 422
+
+        return jsonify({"error": "User not found"})
 
     @marshal_with(user_fields)
     def delete(self, username):
@@ -179,9 +196,22 @@ class ResetPassword(Resource):
         """Password reset"""
 
         args = user_request_parser.parse_args()
+        user = get_user(args.username)
+        if user:
+            user_object = User(args.first_name, args.last_name,
+                        args.username, 'Chang3m3'+str(random.randrange(10000)))
+            updated_user = weconnect.edit_user(user_object)
 
-        # Post success
-        return jsonify({"message": "Password reset", "user_data": args}), 201
+            if isinstance(updated_user, User):
+                users.remove(user)
+                users.append(args)
+                # Post success
+                return jsonify({"message": "User password reset", "user_data": args}), 201
+            else:
+                # Unprocessable entity
+                return jsonify({"message": updated_user, "user_data": args}), 422
+
+        return jsonify({"error": "User not found"})
 
 
 class LogoutUser(Resource):

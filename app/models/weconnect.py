@@ -23,7 +23,7 @@ class WeConnect(object):
         self.users = {}
 
     def register(self, user):
-        """Register user.
+        """Register user
         Add an instance of the User class to the users dictionary of unique usernames as keys.
 
         :param user: class instance:
@@ -34,6 +34,20 @@ class WeConnect(object):
                 self.users[user.username] = user
                 return user
             return "User already exists!"
+        return "Not a User instance!"
+
+    def edit_user(self, user):
+        """Update a User
+        Update an instance of the User class if username exists in users dictionary.
+
+        :param user: class instance:
+        """
+
+        if isinstance(user, User):
+            if user.username in self.users:
+                self.users[user.username] = user
+                return user
+            return "User does not exist!"
         return "Not a User instance!"
 
     def login(self, username, password):

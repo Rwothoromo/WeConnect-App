@@ -18,8 +18,7 @@ class TestLocation(WeConnectTestCase):
             'johndoe', 'Buyondo Hardware', 'One stop center for building materials...',
             'Construction', 'Kabale', 'path to photo')
 
-        self.assertEqual(business.name, 'Buyondo Hardware',
-                        msg='Business was not created')
+        self.assertEqual(business.name, 'Buyondo Hardware', msg='Business was not created')
 
     def test_business_view(self):
         """Test if business is viewed"""
@@ -37,7 +36,7 @@ class TestLocation(WeConnectTestCase):
                          msg='Business does not exist')
 
     def test_business_edit(self):
-        """ Test if business is edited"""
+        """Test if business is edited"""
 
         self.weconnect.register(self.user)
         self.weconnect.create_category(
@@ -54,7 +53,7 @@ class TestLocation(WeConnectTestCase):
                          updated_business.description, msg='Business was not edited')
 
     def test_business_deletion(self):
-        """ Test if business is deleted"""
+        """Test if business is deleted"""
 
         self.weconnect.register(self.user)
         self.weconnect.create_category(

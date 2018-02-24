@@ -151,7 +151,6 @@ class BusinessResource(Resource):
                 # Unprocessable entity
                 return jsonify({"message": updated_business, "business_data": args}), 422
 
-        # Unprocessable entity
         return jsonify({"error": "Business not found"})
 
     @marshal_with(business_fields)

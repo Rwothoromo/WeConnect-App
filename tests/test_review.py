@@ -39,7 +39,7 @@ class TestReview(WeConnectTestCase):
         self.assertEqual('Good service', review.name, msg='Review does not exist')
 
     def test_review_edit(self):
-        """ Test if review is edited"""
+        """Test if review is edited"""
 
         self.weconnect.register(self.user)
         self.weconnect.create_category(
@@ -57,7 +57,7 @@ class TestReview(WeConnectTestCase):
                          reviews['Good service'].description, msg='Review was not edited')
 
     def test_review_deletion(self):
-        """ Test if review is deleted"""
+        """Test if review is deleted"""
 
         self.weconnect.register(self.user)
         self.weconnect.create_category(
