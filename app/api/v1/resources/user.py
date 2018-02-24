@@ -5,9 +5,13 @@ from flask import jsonify
 from flask_restful import Resource, fields, marshal_with
 from flask_restful.reqparse import RequestParser
 
+from ....models.weconnect import WeConnect
+from ....models.user import User
 
 # marshal_with Takes raw data (in the form of a dict, list, object)
 # and a dict of fields to output and filters the data based on those fields.
+
+weconnect = WeConnect()
 
 # users list of user dictionary objects
 users = [
@@ -76,9 +80,17 @@ class UserCollection(Resource):
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
         args = user_request_parser.parse_args()
-        users.append(args)
+        user = User(args.first_name, args.last_name,
+                    args.username, args.password_hash)
+        reg_user = weconnect.register(user)
 
-        return jsonify({"msg": "User added", "user_data": args})
+        if isinstance(reg_user, User):
+            users.append(args)
+            # Post success
+            return jsonify({"message": "User added", "user_data": args}), 201
+        else:
+            # Unprocessable entity
+            return jsonify({"message": reg_user, "user_data": args}), 422
 
 
 class UserResource(Resource):
@@ -127,9 +139,17 @@ class RegisterUser(Resource):
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
         args = user_request_parser.parse_args()
-        users.append(args)
+        user = User(args.first_name, args.last_name,
+                    args.username, args.password_hash)
+        reg_user = weconnect.register(user)
 
-        return jsonify({"msg": "User added", "user_data": args})
+        if isinstance(reg_user, User):
+            users.append(args)
+            # Post success
+            return jsonify({"message": "User added", "user_data": args}), 201
+        else:
+            # Unprocessable entity
+            return jsonify({"message": reg_user, "user_data": args}), 422
 
 
 class LoginUser(Resource):
@@ -141,8 +161,14 @@ class LoginUser(Resource):
 
         args = user_request_parser.parse_args()
 
-        # Post success
-        return jsonify({"message": "User logged in", "user_data": args}), 201
+        logged_in_username = weconnect.login(args.username, args.password_hash)
+
+        if logged_in_username == args.username:
+            # Post success
+            return jsonify({"message": "User logged in", "user_data": args}), 201
+        else:
+            # Unprocessable entity
+            return jsonify({"message": logged_in_username, "user_data": args}), 422
 
 
 class ResetPassword(Resource):

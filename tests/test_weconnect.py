@@ -29,7 +29,7 @@ class WeConnectTestCase(TestCase):
 
         user = self.weconnect.register(self.user)
 
-        self.assertTrue(user, msg="User was not created!")
+        self.assertIsInstance(user, User, msg="User was not created!")
 
     def test_user_already_exists(self):
         """Test if username already exists"""
@@ -37,7 +37,7 @@ class WeConnectTestCase(TestCase):
         self.weconnect.register(self.user)
         a_user = self.weconnect.register(self.a_user)
 
-        self.assertFalse(a_user, msg="Username not yet taken!")
+        self.assertEqual(a_user, "User already exists!", msg="Username not yet taken!")
 
     def test_user_login(self):
         """Test user login"""

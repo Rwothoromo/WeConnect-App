@@ -33,7 +33,7 @@ class WeConnect(object):
             if user.username not in self.users:
                 self.users[user.username] = user
                 return user
-            return False
+            return "User already exists!"
         return "Not a User instance!"
 
     def login(self, username, password):
@@ -52,8 +52,9 @@ class WeConnect(object):
                 return self.users[username]
             return "Incorrect username and password combination!"
         return "This username does not exist! Please register!"
-# Begin categories
 
+
+    # Begin categories
     def create_category(self, username, name, description):
         """Create Category.
         Add an instance of the Category class to the categories dictionary
@@ -145,7 +146,8 @@ class WeConnect(object):
             return self.categories
         return "User did not create the category!"
 
-        # Begin locations
+
+    # Begin locations
     def create_location(self, username, name, description):
         """Create Location.
         Add an instance of the Location class to the locations dictionary
@@ -237,7 +239,8 @@ class WeConnect(object):
             return self.locations
         return "User did not create the location!"
 
-# Begin businesses
+
+    # Begin businesses
     def create_business(self, username, name, description, category, location, photo):
         """Create Business.
         Add an instance of the Business class to the businesses dictionary
@@ -272,7 +275,7 @@ class WeConnect(object):
                 # Update businesses in this location
                 self.locations[location].businesses[name] = business
 
-                return self.businesses
+                return business
             return "This business already exists!"
         return "Username does not exist!"
 
@@ -334,7 +337,7 @@ class WeConnect(object):
                 if old_location != location:
                     del self.locations[old_location].businesses[name]
 
-            return self.businesses
+            return updated_business
         return "User did not create the business!"
 
     def delete_business(self, username, name):
@@ -371,7 +374,8 @@ class WeConnect(object):
             return self.businesses
         return "User did not create the business!"
 
-# Begin reviews
+
+    # Begin reviews
     def create_review(self, username, name, description, business):
         """Create Review.
         Add an instance of the Review class to the reviews dictionary
@@ -400,7 +404,7 @@ class WeConnect(object):
                 # Update reviews in this business
                 self.businesses[business].reviews[name] = review
 
-                return self.reviews
+                return review
             return "This review already exists!"
         return "Username does not exist!"
 

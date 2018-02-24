@@ -17,10 +17,10 @@ class TestReview(WeConnectTestCase):
         self.weconnect.create_business(
             'johndoe', 'Buyondo Hardware', 'One stop center for building materials...',
             'Construction', 'Kabale', 'path to photo')
-        reviews = self.weconnect.create_review(
+        review = self.weconnect.create_review(
             'johndoe', 'Good service', 'I even got a soda', 'Buyondo Hardware')
 
-        self.assertTrue(reviews['Good service'], msg='Review was not created')
+        self.assertEqual(review.name, 'Good service', msg='Review was not created')
 
     def test_review_view(self):
         """Test if review is viewed"""

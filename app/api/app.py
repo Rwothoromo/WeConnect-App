@@ -6,7 +6,7 @@ from flask_restful import Api
 
 from v1.resources.hello import HelloWorld
 from v1.resources.user import UserResource, UserCollection, RegisterUser, LoginUser, ResetPassword, LogoutUser
-from v1.resources.business import Business, BusinessCollection, BusinessReviews
+from v1.resources.business import BusinessResource, BusinessCollection, BusinessReviews
 
 app = Flask(__name__)                   # Create Flask WSGI appliction
 api_bp = Blueprint('api', __name__)     # Add Blueprint; how to construct or extend the app
@@ -18,7 +18,7 @@ api.add_resource(HelloWorld, '/')
 api.add_resource(UserCollection, '/users')
 api.add_resource(UserResource, '/users/<string:username>')
 api.add_resource(BusinessCollection, '/businesses')
-api.add_resource(Business, '/businesses/<string:name>')
+api.add_resource(BusinessResource, '/businesses/<string:name>')
 api.add_resource(BusinessReviews, '/businesses/<string:name>/reviews')
 api.add_resource(RegisterUser, '/auth/register')
 api.add_resource(LoginUser, '/auth/login')
