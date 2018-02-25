@@ -5,7 +5,7 @@ from flask import Flask, Blueprint, redirect
 from flask_restful import Api
 
 from v1.resources.hello import HelloWorld
-from v1.resources.user import UserResource, UserCollection, RegisterUser, LoginUser, ResetPassword, LogoutUser
+from v1.resources.auth import UserResource, UserCollection, RegisterUser, LoginUser, ResetPassword, LogoutUser
 from v1.resources.business import BusinessResource, BusinessCollection, BusinessReviews
 
 app = Flask(__name__)                   # Create Flask WSGI appliction

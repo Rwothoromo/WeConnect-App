@@ -1,4 +1,4 @@
-# app/api/resources/user.py
+# app/api/resources/auth.py
 """Contains user logic"""
 
 import random
@@ -14,8 +14,8 @@ from flask_restful.reqparse import RequestParser
 # solution to python 3 relative import errors
 # use the inspect module because for os.path.abspath(__file__), 
 # the __file__ attribute is not always given
-user_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-resources_dir = os.path.dirname(user_dir)
+auth_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+resources_dir = os.path.dirname(auth_dir)
 v1_dir = os.path.dirname(resources_dir)
 api_dir = os.path.dirname(v1_dir)
 app_dir = os.path.dirname(api_dir)
@@ -176,14 +176,14 @@ class LoginUser(Resource):
 
         args = user_request_parser.parse_args()
 
-        logged_in_username = weconnect.login(args.username, args.password_hash)
+        logged_in_user = weconnect.login(args.username, args.password_hash)
 
-        if logged_in_username == args.username:
+        if isinstance(logged_in_user, User):
             # Post success
             return jsonify({"message": "User logged in", "user_data": args})
         else:
             # Unprocessable entity
-            return jsonify({"message": logged_in_username, "user_data": args})
+            return jsonify({"message": logged_in_user, "user_data": args})
 
 
 class ResetPassword(Resource):
