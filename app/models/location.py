@@ -1,7 +1,7 @@
 # app/models/location.py
 """Script for creating Location class objects"""
 
-class Location(object):
+class Location:
     """Location class"""
 
     def __init__(self, name, description):

@@ -1,7 +1,7 @@
 # app/models/review.py
 """Script for creating Review class objects"""
 
-class Review(object):
+class Review:
     """Review class"""
 
     def __init__(self, name, description, business):

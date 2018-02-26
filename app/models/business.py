@@ -1,7 +1,7 @@
 # app/models/business.py
 """Script for creating Business class objects"""
 
-class Business(object):
+class Business:
     """Business class"""
 
     def __init__(self, name, description, category, location, photo):

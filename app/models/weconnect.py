@@ -12,7 +12,7 @@ from app.models.review import Review
 from app.models.user import User
 
 
-class WeConnect(object):
+class WeConnect:
     """WeConnect class"""
 
     def __init__(self):

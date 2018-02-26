@@ -63,12 +63,6 @@ review_request_parser.add_argument(
 review_request_parser.add_argument(
     "business", type=str, required=True, help="Business name must be a valid string")
 
-review_fields = {
-    'name': fields.String,
-    'description': fields.String,
-    'business': fields.String
-}
-
 
 def get_business(name):
     """Return business if name matches"""
@@ -93,11 +87,13 @@ def get_review(name):
 class BusinessCollection(Resource):
     """Operate on a list of Businesses, to view and add them"""
 
+    @token_required
     def get(self):
         """Retrieves all businesses"""
 
         return jsonify(businesses)
 
+    @token_required
     def post(self):
         """Register a business"""
 
@@ -124,6 +120,7 @@ class BusinessCollection(Resource):
 class BusinessResource(Resource):
     """Operate on a single Business, to view, update and delete it"""
 
+    @token_required
     def get(self, name):
         """Get a business"""
 
@@ -133,6 +130,7 @@ class BusinessResource(Resource):
 
         return jsonify(business)
 
+    @token_required
     def put(self, name):
         """Updates a business profile"""
 
@@ -153,6 +151,7 @@ class BusinessResource(Resource):
 
         return jsonify({"error": "Business not found"})
 
+    @token_required
     def delete(self, name):
         """Remove a business"""
 
@@ -176,6 +175,7 @@ class BusinessResource(Resource):
 class BusinessReviews(Resource):
     """Business Reviews"""
 
+    @token_required
     def get(self, name):
         """Get all reviews for a business"""
 
@@ -197,6 +197,7 @@ class BusinessReviews(Resource):
 
         return jsonify({"error": "Business not found"})
 
+    @token_required
     def post(self, name):
         """Add a review for a business"""
 

@@ -10,7 +10,6 @@ from flask import jsonify
 from flask_restful import Resource, fields
 from flask_restful.reqparse import RequestParser
 
-
 # solution to python 3 relative import errors
 # use the inspect module because for os.path.abspath(__file__), 
 # the __file__ attribute is not always given
@@ -115,6 +114,7 @@ class UserResource(Resource):
 
         return jsonify(user)
 
+    @token_required
     def put(self, username):
         """Update a user's details"""
 
@@ -179,8 +179,9 @@ class LoginUser(Resource):
         logged_in_user = weconnect.login(args.username, args.password_hash)
 
         if isinstance(logged_in_user, User):
+            access_token = encode(identity = args.username)
             # Post success
-            return jsonify({"message": "User logged in", "user_data": args})
+            return jsonify({"message": "User logged in", "user_data": args, 'access_token': access_token})
         else:
             # Unprocessable entity
             return jsonify({"message": logged_in_user, "user_data": args})
@@ -189,6 +190,7 @@ class LoginUser(Resource):
 class ResetPassword(Resource):
     """Password reset"""
 
+    @token_required
     def post(self):
         """Password reset"""
 
@@ -215,10 +217,17 @@ class ResetPassword(Resource):
 class LogoutUser(Resource):
     """Logs out a user"""
 
+    @token_required
     def post(self):
         """Logs out a user"""
 
         args = user_request_parser.parse_args()
+        jti = get_raw_jwt()['jti']
 
-        # Post success
-        return jsonify({"message": "User logged out", "user_data": args})
+        try:
+            weconnect.revoke_token(jti)
+            # Post success
+            return jsonify({"message": "Access token has been revoked and User logged out", "user_data": args})
+
+        except:
+            return {'message': 'Something went wrong'}, 500
