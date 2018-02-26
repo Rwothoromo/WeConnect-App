@@ -1,5 +1,5 @@
 # app/models/weconnect.py
-"""Script for creating WeConnect app and managing classes"""
+"""Code for creating WeConnect app and managing classes"""
 
 # Third party imports
 from werkzeug.security import check_password_hash
@@ -13,7 +13,7 @@ from app.models.user import User
 
 
 class WeConnect:
-    """WeConnect class"""
+    """Class for WeConnect app functionality"""
 
     def __init__(self):
         self.businesses = {}

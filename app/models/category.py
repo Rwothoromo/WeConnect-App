@@ -1,8 +1,8 @@
 # app/models/category.py
-"""Script for creating Category class objects"""
+"""Code for creating Category class objects"""
 
 class Category:
-    """Category class"""
+    """Class to create a Category class object"""
 
     def __init__(self, name, description):
         self.name = name
