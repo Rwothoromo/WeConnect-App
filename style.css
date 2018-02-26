@@ -64,14 +64,14 @@ footer {
 }
 
 .home-bg {
-    background-image: url("../../img/home-bg.png");
+    background-image: url("img/home-bg.png");
     height: 1100px;
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
 
 .other-bg {
-    background-image: url("../../img/other-bg.png");
+    background-image: url("img/other-bg.png");
     height: 1100px;
     background-repeat: no-repeat;
     background-size: 100% 100%;
