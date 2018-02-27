@@ -97,23 +97,23 @@ def token_required(function):
             access_token = request.headers['Authorization'].split(' ')[1]
 
             if not access_token:
-                # return jsonify({"message": "No token provided"}), 401
                 return {"message": "No token provided"}, 401
 
             try:
                 decoded_token = jwt.decode(
                     access_token, 'WECONNECTSECRET', algorithms=['HS256'])
-                import ipdb
-                ipdb.set_trace()
+
                 user = get_user_by_id(decoded_token["sub"])
-                request.data = json.loads(request.data)
-                request.data['user'] = user
+                if user:
+                    request.data = json.loads(request.data)
+                    request.data['user'] = user
                 
             except:
-                # return jsonify({"message": "Invalid token provided"}), 401
+                # import ipdb
+                # ipdb.set_trace()
                 return {"message": "Invalid token provided"}, 401
 
-            return function(*args, **kwargs)
+            return function(user, *args, **kwargs)
 
     return decorated_function
 
@@ -122,97 +122,10 @@ def token_required(function):
 # and the view handlers necessary to represent the resource over RESTful HTTP
 
 
-class UserCollection(Resource):
-    """Retrieve all users or create them"""
-
-    @token_required
-    def get(self):
-        """Return all users"""
-
-        # return jsonify(users)
-        return jsonify(users)
-
-    @token_required
-    def post(self):
-        """Create users"""
-
-        # request parsing code checks if the request is valid,
-        # and returns the validated data, and an message otherwise
-        args = user_request_parser.parse_args()
-
-        user = get_user_by_username(args.username)
-        if not user:
-            user_id = len(users) + 1
-            user_object = User(args.first_name, args.last_name,
-                               args.username, args.password_hash)
-            weconnect.register(user_object)
-
-            user = {"user_id": user_id, "user_data": args}
-            users.append(user)
-            # Post success
-            # return jsonify({"message": "User added", "user": user}), 200
-            return {"message": "User added", "user": user}, 200
-
-        # return jsonify({"message": "User already exists"}), 400
-        return {"message": "User already exists"}, 400
-
-
-class UserResource(Resource):
-    """Retrieve, update or delete a single user"""
-
-    @token_required
-    def get(self, user_id):
-        """Return a user's details"""
-
-        user = get_user_by_id(user_id)
-        if not user:
-            # return jsonify({"message": "User not found"}), 404
-            return {"message": "User not found"}, 404
-
-        # return jsonify({"user": user}), 200
-        return {"user": user}, 200
-
-    @token_required
-    def put(self, user_id):
-        """Update a user's details"""
-
-        args = user_request_parser.parse_args()
-        user = get_user_by_id(user_id)
-        if user:
-            user_object = User(args.first_name, args.last_name,
-                               args.username, args.password_hash)
-            weconnect.edit_user(user_object)
-            users.remove(user)
-            user_data = {"user_id": user_id, "user_data": args}
-            users.append(user_data)
-            # Post success
-            # return jsonify({"message": "User updated", "user_data": user_data}), 200
-            return {"message": "User updated", "user_data": user_data}, 200
-
-        # return jsonify({"message": "User not found"}), 404
-        return {"message": "User not found"}, 404
-
-    @token_required
-    def delete(self, user_id):
-        """Delete a user"""
-
-        user = get_user_by_id(user_id)
-        if user:
-            data = user.get("user_data")
-            username = data["username"]
-            weconnect.delete_user(username)
-            users.remove(user)
-            # return jsonify({"message": "User deleted"}), 200
-            return {"message": "User deleted"}, 200
-
-        # return jsonify({"message": "User not found"}), 404
-        return {"message": "User not found"}, 404
-
-
 class RegisterUser(Resource):
     """Register a user"""
 
-    def post(self):
+    def post(self, user):
         """Creates a user account"""
 
         args = user_request_parser.parse_args()
@@ -273,7 +186,7 @@ class ResetPassword(Resource):
     """Password reset"""
 
     @token_required
-    def post(self):
+    def post(self, user):
         """Reset a password if token is valid"""
 
         args = request.get_json()     
@@ -314,15 +227,13 @@ class LogoutUser(Resource):
     """Logs out a user if token is valid"""
 
     @token_required
-    def post(self):
+    def post(self, user):
         """Logs out a user"""
 
         try:
-            if 'access_token' in request.headers:
-                request.headers['access_token'] = None
-                # return jsonify({'message':"Successfully logged out"}), 200
-                return {'message':"Access token revoked"}, 200
+            if 'Authorization' in request.headers:
+                request.headers = None
+                return make_response(jsonify({'message': 'Access token revoked'}), 200)
 
         except:
-            # return jsonify({'message': 'Something went wrong'}), 500
-            return {'message': 'Something went wrong'}, 500
+            return make_response(jsonify({'message': 'Something went wrong'}), 500)

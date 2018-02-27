@@ -9,7 +9,7 @@ from flask import Flask, Blueprint, redirect
 from flask_restful import Api
 
 from v1.resources.hello import HelloWorld
-from v1.resources.auth import UserResource, UserCollection, RegisterUser, LoginUser, ResetPassword, LogoutUser
+from v1.resources.auth import RegisterUser, LoginUser, ResetPassword, LogoutUser
 from v1.resources.business import BusinessResource, BusinessCollection, BusinessReviews
 
 # solution to python 3 relative import errors
@@ -29,8 +29,6 @@ api = Api(api_bp, prefix="/api/v1")
 
 # Add the resource to the API.
 api.add_resource(HelloWorld, '/')
-api.add_resource(UserCollection, '/users')
-api.add_resource(UserResource, '/users/<userId>')
 api.add_resource(BusinessCollection, '/businesses')
 api.add_resource(BusinessResource, '/businesses/<businessId>')
 api.add_resource(BusinessReviews, '/businesses/<businessId>/reviews')

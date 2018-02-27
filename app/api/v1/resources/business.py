@@ -3,7 +3,7 @@
 
 import jwt
 
-from flask import jsonify
+from flask import jsonify, make_response
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 
@@ -91,17 +91,13 @@ class BusinessCollection(Resource):
     """Operate on a list of Businesses, to view and add them"""
 
     @token_required
-    def get(self):
+    def get(self, user):
         """Retrieves all businesses"""
-
-        
-        print(businesses)
-
 
         return jsonify(businesses)
 
     @token_required
-    def post(self):
+    def post(self, user):
         """Register a business"""
 
         # request parsing code checks if the request is valid,
