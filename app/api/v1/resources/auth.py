@@ -105,9 +105,10 @@ def token_required(function):
 
                 user = get_user_by_id(decoded_token["sub"])
                 if user:
-                    request.data = json.loads(request.data) if len(request.data) else {}
+                    request.data = json.loads(
+                        request.data) if len(request.data) else {}
                     request.data['user'] = user
-                
+
             except:
                 return {"message": "Invalid token provided"}, 401
 
@@ -154,7 +155,8 @@ class LoginUser(Resource):
 
         response_data = {"message": "fail", "user": args}
 
-        logged_in_user = weconnect.login(args["username"], args["password_hash"])
+        logged_in_user = weconnect.login(
+            args["username"], args["password_hash"])
 
         if isinstance(logged_in_user, User):
             user = get_user_by_username(args["username"])
@@ -170,12 +172,12 @@ class LoginUser(Resource):
             response_data["user"] = user
             response_data["access_token"] = access_token.decode()
             response = jsonify(response_data)
-            response.status_code = 200 # Post success
+            response.status_code = 200  # Post success
             return response
 
         response_data["message"] = logged_in_user
         response = jsonify(response_data)
-        response.status_code = 400 # Bad request
+        response.status_code = 400  # Bad request
         return response
 
 
@@ -186,7 +188,7 @@ class ResetPassword(Resource):
     def post(self):
         """Reset a password if token is valid"""
 
-        args = request.get_json()     
+        args = request.get_json()
 
         response_data = {"message": "fail", "user": args}
 
@@ -197,7 +199,8 @@ class ResetPassword(Resource):
 
             if args["password_hash"] == user_data["password_hash"]:
                 password_hash = 'Chang3m3' + str(random.randrange(10000))
-                user_object = User(user_data["first_name"], user_data["last_name"], user_data["username"], password_hash)
+                user_object = User(
+                    user_data["first_name"], user_data["last_name"], user_data["username"], password_hash)
                 weconnect.edit_user(user_object)
 
                 users.remove(user)
@@ -208,15 +211,15 @@ class ResetPassword(Resource):
                 response_data["message"] = "User password reset"
                 response_data["user"] = user_data
                 response = jsonify(response_data)
-                response.status_code = 200 # Post update success
+                response.status_code = 200  # Post update success
 
             response = jsonify(response_data)
-            response.status_code = 400 # Bad request
+            response.status_code = 400  # Bad request
             return response
 
         response_data["message"] = "User not found"
         response = jsonify(response_data)
-        response.status_code = 400 # Bad request
+        response.status_code = 400  # Bad request
         return response
 
 

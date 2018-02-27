@@ -39,7 +39,7 @@ businesses = [
         "user_id": 1,
         "business_id": 1,
         "business_data": {
-            "name": "Buyondo Hardware", "description": "One stop center for building materials...", 
+            "name": "Buyondo Hardware", "description": "One stop center for building materials...",
             "category": "Construction", "location": "Kabale", "photo": "photo"
         }
     }
@@ -52,8 +52,8 @@ weconnect.create_category("johndoe", "Construction", "General hardware")
 weconnect.create_location("johndoe", "Kabale", "Opposite Topper's")
 
 # create initial business
-weconnect.create_business("johndoe", "Buyondo Hardware", "One stop center for building materials...", 
-"Construction", "Kabale", "photo")
+weconnect.create_business("johndoe", "Buyondo Hardware", "One stop center for building materials...",
+                          "Construction", "Kabale", "photo")
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
@@ -158,96 +158,92 @@ class BusinessCollection(Resource):
 
             if isinstance(reg_business, Business):
                 business_id = len(businesses) + 1
-                
-                business = {"user_id": user.get("user_id"), "business_id": business_id, "business_data": args}
+
+                business = {"user_id": user.get("user_id"), 
+                            "business_id": business_id, "business_data": args}
                 businesses.append(business)
 
                 return make_response(jsonify({"message": "Business added", "business_data": args}), 200)
 
             return make_response(jsonify({"message": reg_business, "business_data": args}), 400)
 
-        return jsonify({"error": "Business already exists"})
+        return make_response(jsonify({"message": "Business already exists"}), 400)
 
 
 class BusinessResource(Resource):
     """Operate on a single Business, to view, update and delete it"""
 
     @token_required
-    def get(self, name):
+    def get(self, business_id):
         """Get a business"""
 
-        business = get_business(name)
+        business = get_business_by_id(business_id)
         if not business:
-            return jsonify({"error": "Business not found"})
+            return make_response(jsonify({"message": "Business not found"}), 404)
 
-        return jsonify(business)
+        return make_response(jsonify(business), 200)
 
     @token_required
-    def put(self, name):
+    def put(self, business_id):
         """Updates a business profile"""
 
         args = business_request_parser.parse_args()
-        business = get_business(name)
+
+        user = request.data['user']
+
+        business = get_business_by_id(business_id)
+
         if business:
+            user_data = user.get("user_data")
+
             updated_business = weconnect.edit_business(
                 user_data["username"], args.name, args.description, args.category, args.location, args.photo)
 
             if isinstance(updated_business, Business):
                 businesses.remove(business)
-                businesses.append(args)
-                # Post success
-                return jsonify({"message": "Business updated", "business_data": args})
-            else:
-                # Unprocessable entity
-                return jsonify({"message": updated_business, "business_data": args})
+                
+                business = {"user_id": user.get("user_id"), 
+                            "business_id": business_id, "business_data": args}
+                businesses.append(business)
 
-        return jsonify({"error": "Business not found"})
+                return make_response(jsonify({"message": "Business updated", "business": business}), 200)                
 
-    @token_required
-    def delete(self, name):
-        """Remove a business"""
+            return make_response(jsonify({"message": updated_business, "business_data": args}), 400)                
 
-        args = business_request_parser.parse_args()
-        business = get_business(name)
-        if business:
-            businesses_list = weconnect.delete_business(
-                user_data["username"], args.name)
-
-            if name not in businesses_list.keys():
-                businesses.remove(business)
-                # Delete success
-                return jsonify({"message": "Business deleted", "businesses": businesses})
-            else:
-                # Unprocessable entity
-                return jsonify({"message": businesses_list, "business_data": args})
-
-        return jsonify({"error": "Business not found"})
+        return make_response(jsonify({"message": "Business not found"}), 400)
 
 
 class BusinessReviews(Resource):
     """Business Reviews"""
 
     @token_required
-    def get(self, name):
+    def get(self, business_id):
         """Get all reviews for a business"""
 
-        business = get_business(name)
+        
+        args = business_request_parser.parse_args()
+
+        user = request.data['user']
+
+        business = get_business_by_id(business_id)
+
         if business:
             business_object = weconnect.businesses[name]
-            business_reviews = business_object.reviews # a dictionary of reviews
+            business_reviews = business_object.reviews  # a dictionary of reviews
 
             reviews = []
             for review in business_reviews:
-                args = {"name": review.name, "description": review.description, "business": review.business}
+                args = {"name": review.name, "description": review.description,
+                        "business": review.business}
                 reviews.append(args)
 
                 # update all reviews list
                 if not get_review(review.name):
                     all_reviews.append(args)
-                    
+
             return jsonify(reviews)
 
-        return jsonify({"error": "Business not found"})
+        return jsonify({"message": "Business not found"})
 
     @token_required
     def post(self, name):
@@ -256,24 +252,26 @@ class BusinessReviews(Resource):
         business = get_business(name)
         if business:
             business_object = weconnect.businesses[name]
-            business_reviews = business_object.reviews # a dictionary of reviews
+            business_reviews = business_object.reviews  # a dictionary of reviews
 
             args = review_request_parser.parse_args()
 
             # check if review already exists
             if not get_review(args.name):
-                reg_review = weconnect.create_review(user_data["username"], args.name, args.description, args.business)
+                reg_review = weconnect.create_review(
+                    user_data["username"], args.name, args.description, args.business)
 
                 reviews = []
                 for review in business_reviews:
                     if isinstance(reg_review, Review):
-                        args = {"name": review.name, "description": review.description, "business": review.business}
+                        args = {
+                            "name": review.name, "description": review.description, "business": review.business}
                         reviews.append(args)
                         all_reviews.append(args)
 
                 # Post success
                 return jsonify({"message": "Business review added", "review_data": reviews})
 
-            return jsonify({"error": "Business already exists"})
+            return jsonify({"message": "Business already exists"})
 
-        return jsonify({"error": "Business not found"})
+        return jsonify({"message": "Business not found"})
