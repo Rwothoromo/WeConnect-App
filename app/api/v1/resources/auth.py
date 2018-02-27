@@ -113,7 +113,7 @@ def token_required(function):
                 # ipdb.set_trace()
                 return {"message": "Invalid token provided"}, 401
 
-            return function(user, *args, **kwargs)
+            return function(*args, **kwargs)
 
     return decorated_function
 
@@ -125,7 +125,7 @@ def token_required(function):
 class RegisterUser(Resource):
     """Register a user"""
 
-    def post(self, user):
+    def post(self):
         """Creates a user account"""
 
         args = user_request_parser.parse_args()
@@ -139,12 +139,11 @@ class RegisterUser(Resource):
 
             user = {"user_id": user_id, "user_data": args}
             users.append(user)
-            # Post success
-            # return jsonify({"message": "User added", "user": user}), 200
-            return {"message": "User added", "user": user}, 200
+            # Post create success
+            return make_response(jsonify({"message": "User added", "user": user}), 201)
 
-        # return jsonify({"message": "User already exists"}), 400
-        return {"message": "User already exists"}, 400
+        # Bad request
+        return make_response(jsonify({"message": "User already exists", "user": user}), 400)
 
 
 class LoginUser(Resource):
@@ -186,7 +185,7 @@ class ResetPassword(Resource):
     """Password reset"""
 
     @token_required
-    def post(self, user):
+    def post(self):
         """Reset a password if token is valid"""
 
         args = request.get_json()     
@@ -227,7 +226,7 @@ class LogoutUser(Resource):
     """Logs out a user if token is valid"""
 
     @token_required
-    def post(self, user):
+    def post(self):
         """Logs out a user"""
 
         try:
