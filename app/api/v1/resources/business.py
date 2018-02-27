@@ -3,7 +3,7 @@
 
 import jwt
 
-from flask import jsonify, make_response
+from flask import jsonify, make_response, request
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 
@@ -16,17 +16,34 @@ from .auth import token_required
 
 weconnect = WeConnect()
 
-all_reviews = []
-
-# businesses list of business dictionary objects
-businesses = [
-    {"username": "johndoe", "name": "Buyondo Hardware", "description": "One stop center for building materials...",
-     "category": "Construction", "location": "Kabale", "photo": "photo"}
+# users list of user dictionary objects
+users = [
+    {
+        "user_id": 1,
+        "user_data": {
+            "first_name": "john", "last_name": "doe", "username": "johndoe",
+            "password_hash": "password_hash"
+        }
+    }
 ]
 
 # create initial user
 init_user = User("john", "doe", "johndoe", "password_hash")
 weconnect.register(init_user)
+
+all_reviews = []
+
+# businesses list of business dictionary objects
+businesses = [
+    {
+        "user_id": 1,
+        "business_id": 1,
+        "business_data": {
+            "name": "Buyondo Hardware", "description": "One stop center for building materials...", 
+            "category": "Construction", "location": "Kabale", "photo": "photo"
+        }
+    }
+]
 
 # create initial category
 weconnect.create_category("johndoe", "Construction", "General hardware")
@@ -42,8 +59,6 @@ weconnect.create_business("johndoe", "Buyondo Hardware", "One stop center for bu
 # RequestParser and added arguments will know which fields to accept and how to validate those
 business_request_parser = RequestParser(bundle_errors=True)
 business_request_parser.add_argument(
-    "username", type=str, required=True, help="Username must be a valid string")
-business_request_parser.add_argument(
     "name", type=str, required=True, help="Business name must be a valid string")
 business_request_parser.add_argument(
     "description", type=str, required=True, help="Description must be a valid string")
@@ -58,8 +73,6 @@ business_request_parser.add_argument(
 # for reviews
 review_request_parser = RequestParser(bundle_errors=True)
 review_request_parser.add_argument(
-    "username", type=str, required=True, help="Username must be a valid string")
-review_request_parser.add_argument(
     "name", type=str, required=True, help="Review name must be a valid string")
 review_request_parser.add_argument(
     "description", type=str, required=True, help="Description must be a valid string")
@@ -67,13 +80,43 @@ review_request_parser.add_argument(
     "business", type=str, required=True, help="Business name must be a valid string")
 
 
-def get_business(name):
+def get_business_by_id(business_id):
+    """Return business if business id matches"""
+
+    for business in businesses:
+        if business.get("business_id") == business_id:
+            return business
+    return None
+
+
+def get_business_by_name(name):
     """Return business if name matches"""
 
     for business in businesses:
-        if business.get("name") == name:
+        business_data = business.get("business_data")
+        if business_data["name"] == name:
             return business
     return None
+
+
+def get_review_by_id(review_id):
+    """Return review if review id matches"""
+
+    for review in all_reviews:
+        if review.get("review_id") == review_id:
+            return review
+    return None
+
+
+def get_review_by_name(name):
+    """Return review if name matches"""
+
+    for review in all_reviews:
+        review_data = review.get("review_data")
+        if review_data["name"] == name:
+            return review
+    return None
+
 
 def get_review(name):
     """Return review if name matches"""
@@ -91,31 +134,37 @@ class BusinessCollection(Resource):
     """Operate on a list of Businesses, to view and add them"""
 
     @token_required
-    def get(self, user):
+    def get(self):
         """Retrieves all businesses"""
 
-        return jsonify(businesses)
+        return make_response(jsonify(businesses), 200)
 
     @token_required
-    def post(self, user):
+    def post(self):
         """Register a business"""
 
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
         args = business_request_parser.parse_args()
 
-        business = get_business(args.name)
+        user = request.data['user']
+
+        business = get_business_by_name(args.name)
         if not business:
+            user_data = user.get("user_data")
+
             reg_business = weconnect.create_business(
-                args.username, args.name, args.description, args.category, args.location, args.photo)
+                user_data["username"], args.name, args.description, args.category, args.location, args.photo)
 
             if isinstance(reg_business, Business):
-                businesses.append(args)
-                # Post success
-                return jsonify({"message": "Business added", "business_data": args})
-            else:
-                # Unprocessable entity
-                return jsonify({"message": reg_business, "business_data": args})
+                business_id = len(businesses) + 1
+                
+                business = {"user_id": user.get("user_id"), "business_id": business_id, "business_data": args}
+                businesses.append(business)
+
+                return make_response(jsonify({"message": "Business added", "business_data": args}), 200)
+
+            return make_response(jsonify({"message": reg_business, "business_data": args}), 400)
 
         return jsonify({"error": "Business already exists"})
 
@@ -141,7 +190,7 @@ class BusinessResource(Resource):
         business = get_business(name)
         if business:
             updated_business = weconnect.edit_business(
-                args.username, args.name, args.description, args.category, args.location, args.photo)
+                user_data["username"], args.name, args.description, args.category, args.location, args.photo)
 
             if isinstance(updated_business, Business):
                 businesses.remove(business)
@@ -162,7 +211,7 @@ class BusinessResource(Resource):
         business = get_business(name)
         if business:
             businesses_list = weconnect.delete_business(
-                args.username, args.name)
+                user_data["username"], args.name)
 
             if name not in businesses_list.keys():
                 businesses.remove(business)
@@ -213,7 +262,7 @@ class BusinessReviews(Resource):
 
             # check if review already exists
             if not get_review(args.name):
-                reg_review = weconnect.create_review(args.username, args.name, args.description, args.business)
+                reg_review = weconnect.create_review(user_data["username"], args.name, args.description, args.business)
 
                 reviews = []
                 for review in business_reviews:

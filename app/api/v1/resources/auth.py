@@ -105,12 +105,10 @@ def token_required(function):
 
                 user = get_user_by_id(decoded_token["sub"])
                 if user:
-                    request.data = json.loads(request.data)
+                    request.data = json.loads(request.data) if len(request.data) else {}
                     request.data['user'] = user
                 
             except:
-                # import ipdb
-                # ipdb.set_trace()
                 return {"message": "Invalid token provided"}, 401
 
             return function(*args, **kwargs)
