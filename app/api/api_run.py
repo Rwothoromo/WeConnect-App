@@ -7,14 +7,13 @@ import inspect
 
 from flask import Flask, Blueprint, redirect
 from flask_restful import Api
-from flask_jwt_extended import JWTManager
 
 from v1.resources.hello import HelloWorld
 from v1.resources.auth import UserResource, UserCollection, RegisterUser, LoginUser, ResetPassword, LogoutUser
 from v1.resources.business import BusinessResource, BusinessCollection, BusinessReviews
 
 # solution to python 3 relative import errors
-# use the inspect module because for os.path.abspath(__file__), 
+# use the inspect module because for os.path.abspath(__file__),
 # the __file__ attribute is not always given
 api_run_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 api_dir = os.path.dirname(api_run_dir)

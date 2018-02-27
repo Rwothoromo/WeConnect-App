@@ -1,14 +1,17 @@
 # app/api/resources/business.py
 """Contains business logic"""
 
+import jwt
+
 from flask import jsonify
-from flask_restful import Resource, fields
+from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 
 from app.models.weconnect import WeConnect
 from app.models.business import Business
 from app.models.review import Review
 from app.models.user import User
+from .auth import token_required
 
 
 weconnect = WeConnect()
@@ -90,6 +93,10 @@ class BusinessCollection(Resource):
     @token_required
     def get(self):
         """Retrieves all businesses"""
+
+        
+        print(businesses)
+
 
         return jsonify(businesses)
 

@@ -41,6 +41,7 @@ class WeConnect:
         Update an instance of the User class if username exists in users dictionary.
 
         :param user: class instance:
+        :return:     user object
         """
 
         if isinstance(user, User):
@@ -49,6 +50,19 @@ class WeConnect:
                 return user
             return "User does not exist!"
         return "Not a User instance!"
+
+    def delete_user(self, username):
+        """Delete a User
+        Delete a User class if username exists in users dictionary.
+
+        :param user: class instance:
+        :return:     users dictionary
+        """
+
+        if username in self.users.keys():
+            del self.users[username]
+            return self.users
+        return "User does not exist!"
 
     def login(self, username, password):
         """Log in user.
@@ -160,7 +174,6 @@ class WeConnect:
             return self.categories
         return "User did not create the category!"
 
-
     # Begin locations
     def create_location(self, username, name, description):
         """Create Location.
@@ -252,7 +265,6 @@ class WeConnect:
 
             return self.locations
         return "User did not create the location!"
-
 
     # Begin businesses
     def create_business(self, username, name, description, category, location, photo):
@@ -387,7 +399,6 @@ class WeConnect:
 
             return self.businesses
         return "User did not create the business!"
-
 
     # Begin reviews
     def create_review(self, username, name, description, business):
