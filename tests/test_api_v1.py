@@ -33,7 +33,7 @@ class WeConnectApiTestCase(TestCase):
             "password_hash": "password_hash"
             }
 
-        self.user_login_data = {
+        self.user_two_login_data = {
             "username": "jimdan",
             "password_hash": "password_hash"
             }
@@ -70,31 +70,40 @@ class WeConnectApiTestCase(TestCase):
         self.client.post('/api/v1/auth/register', content_type='application/json',
                          data=json.dumps(self.user_two))
         response = self.client.post('/api/v1/auth/login', content_type='application/json',
-                                    data=json.dumps(self.user_login_data))
+                                    data=json.dumps(self.user_two_login_data))
         response_data = json.loads(response.get_data())
 
         self.assertEqual('User logged in', response_data['message'])
         self.assertEqual(response.status_code, 200)
 
-    # def test_api_user_password_reset(self):
-    #     """Test api password reset"""
+    def test_api_user_password_reset(self):
+        """Test api password reset"""
 
-    #     self.client.post('/api/v1/auth/reset-password', content_type='application/json',
-    #                      data=json.dumps(self.user_two))
-    #     response = self.client.post('/api/v1/auth/login', content_type='application/json',
-    #                                 data=json.dumps(self.user_login_data))
-    #     response_data = json.loads(response.get_data())
+        self.client.post('/api/v1/auth/register', content_type='application/json',
+                         data=json.dumps(self.user_two))
+        login = self.client.post('/api/v1/auth/login', content_type='application/json',
+                            data=json.dumps(self.user_two_login_data))
+        login_data = json.loads(login.get_data())
+        access_token = login_data["access_token"]
 
-    #     self.assertEqual('User logged in', response_data['message'])
-    #     self.assertEqual(response.status_code, 200)
+        response = self.client.post('/api/v1/auth/reset-password', headers={'Authorization' : 'Bearer '+access_token})
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual('User password reset', response_data['message'])
+        self.assertEqual(response.status_code, 200)
 
     def test_api_user_logout(self):
         """Test api user logout"""
 
         self.client.post('/api/v1/auth/register', content_type='application/json',
                          data=json.dumps(self.user_two))
-        self.client.post('/api/v1/auth/login', content_type='application/json',
-                                    data=json.dumps(self.user_login_data))
-        response = self.client.post('/api/v1/auth/logout')
+        login = self.client.post('/api/v1/auth/login', content_type='application/json',
+                                    data=json.dumps(self.user_two_login_data))
+        login_data = json.loads(login.get_data())
+        access_token = login_data["access_token"]     
 
+        response = self.client.post('/api/v1/auth/logout', headers={'Authorization' : 'Bearer '+access_token})
+        response_data = json.loads(response.data.decode())        
+
+        self.assertEqual('Access token revoked', response_data['message'])
         self.assertEqual(response.status_code, 200)

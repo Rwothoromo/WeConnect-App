@@ -95,6 +95,8 @@ def token_required(function):
 
         if 'Authorization' in request.headers:
             access_token = request.headers['Authorization'].split(' ')[1]
+            # import ipdb
+            # ipdb.set_trace()
 
             if not access_token:
                 return {"message": "No token provided"}, 401
@@ -191,33 +193,33 @@ class ResetPassword(Resource):
     def post(self):
         """Reset a password if token is valid"""
 
-        args = request.get_json()
 
-        response_data = {"message": "fail", "user": args}
+        response_data = {"message": "fail"}
 
         user = request.data['user']
 
         if user:
             user_data = user.get("user_data")
 
-            if args["password_hash"] == user_data["password_hash"]:
-                password_hash = 'Chang3m3' + str(random.randrange(10000))
-                user_object = User(
-                    user_data["first_name"], user_data["last_name"], user_data["username"], password_hash)
-                weconnect.edit_user(user_object)
+            password_hash = 'Chang3m3' + str(random.randrange(10000))
+            user_object = User(
+                user_data["first_name"], user_data["last_name"], user_data["username"], password_hash)
+            weconnect.edit_user(user_object)
 
-                users.remove(user)
-                args = {"username": "johndoe", "password_hash": password_hash}
-                user_data = {"user_id": user.get("user_id"), "user_data": args}
-                users.append(user_data)
+            users.remove(user)
+            args = {
+                "first_name": user_data["first_name"],
+                "last_name": user_data["last_name"],
+                "username": user_data["username"],
+                "password_hash": password_hash
+                }
+            user_data = {"user_id": user.get("user_id"), "user_data": args}
+            users.append(user_data)
 
-                response_data["message"] = "User password reset"
-                response_data["user"] = user_data
-                response = jsonify(response_data)
-                response.status_code = 200  # Post update success
-
+            response_data["message"] = "User password reset"
+            response_data["user"] = user_data
             response = jsonify(response_data)
-            response.status_code = 400  # Bad request
+            response.status_code = 200  # Post update success
             return response
 
         response_data["message"] = "User not found"
