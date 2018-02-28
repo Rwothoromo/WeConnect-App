@@ -1,4 +1,4 @@
-# app/tests/test_api_v1.py
+# tests/test_api_v1_auth.py
 """This script tests the functionality of WeConnect api v1"""
 
 # third party imports

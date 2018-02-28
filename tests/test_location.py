@@ -1,4 +1,4 @@
-# app/tests/test_location.py
+# tests/test_location.py
 """This script tests the functionality of Location class"""
 
 from tests.test_weconnect import WeConnectTestCase

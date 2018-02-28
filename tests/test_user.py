@@ -1,4 +1,4 @@
-# app/tests/test_user.py
+# tests/test_user.py
 """This script tests the functionality of User class"""
 
 from werkzeug.security import check_password_hash

@@ -1,4 +1,4 @@
-# app/tests/test_weconnect.py
+# tests/test_weconnect.py
 """This script tests the functionality of WeConnect class"""
 
 # third party imports

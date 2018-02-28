@@ -1,4 +1,4 @@
-# app/tests/test_category.py
+# tests/test_category.py
 """This script tests the functionality of Category class"""
 
 from tests.test_weconnect import WeConnectTestCase

@@ -1,4 +1,4 @@
-# app/tests/test_business.py
+# tests/test_business.py
 """This script tests the functionality of Business class"""
 
 from tests.test_weconnect import WeConnectTestCase

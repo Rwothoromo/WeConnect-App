@@ -7,6 +7,8 @@ import inspect
 
 from flask import Flask, Blueprint, redirect
 from flask_restful import Api
+from flasgger import Swagger
+
 
 # solution to python 3 relative import errors
 # use the inspect module because for os.path.abspath(__file__),
@@ -37,6 +39,8 @@ api.add_resource(ResetPassword, '/auth/reset-password')
 api.add_resource(LogoutUser, '/auth/logout')
 
 app.register_blueprint(api_bp)
+
+swagger = Swagger(app)
 
 @app.route('/')
 def main():

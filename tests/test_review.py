@@ -1,4 +1,4 @@
-# app/tests/test_review.py
+# tests/test_review.py
 """This script tests the functionality of Review class"""
 
 from tests.test_weconnect import WeConnectTestCase
