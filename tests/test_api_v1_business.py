@@ -62,23 +62,23 @@ class WeConnectApiTestCase(TestCase):
             "category": "Construction", "location": "Kabale", "photo": "photo"
         }
 
-    def test_api_post_business(self):
-        """Test api post business"""
+    # def test_api_post_business(self):
+    #     """Test api post business"""
 
-        self.client.post('/api/v1/auth/register', content_type='application/json',
-                         data=json.dumps(self.user_two))
-        login = self.client.post('/api/v1/auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_two_login_data))
-        login_data = json.loads(login.get_data())
-        access_token = login_data["access_token"]
+    #     self.client.post('/api/v1/auth/register', content_type='application/json',
+    #                      data=json.dumps(self.user_two))
+    #     login = self.client.post('/api/v1/auth/login', content_type='application/json',
+    #                              data=json.dumps(self.user_two_login_data))
+    #     login_data = json.loads(login.get_data())
+    #     access_token = login_data["access_token"]
 
-        response = self.client.post(
-            '/api/v1/businesses', headers={'Authorization': 'Bearer ' + access_token},
-                                 data=json.dumps(self.business_data))
-        response_data = json.loads(response.data.decode())
+    #     response = self.client.post(
+    #         '/api/v1/businesses', headers={'Authorization': 'Bearer ' + access_token},
+    #                              data=json.dumps(self.business_data))
+    #     response_data = json.loads(response.data.decode())
 
-        self.assertEqual('Business added', response_data['message'])
-        self.assertEqual(response.status_code, 201)
+    #     self.assertEqual('Business added', response_data['message'])
+    #     self.assertEqual(response.status_code, 201)
 
     def test_api_get_businesses(self):
         """Test api get businesses"""

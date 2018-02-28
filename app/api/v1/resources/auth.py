@@ -95,8 +95,6 @@ def token_required(function):
 
         if 'Authorization' in request.headers:
             access_token = request.headers['Authorization'].split(' ')[1]
-            # import ipdb
-            # ipdb.set_trace()
 
             if not access_token:
                 return {"message": "No token provided"}, 401
