@@ -47,6 +47,7 @@ businesses = [
 all_reviews = [
     {
         "user_id": 1,
+        "business_id": 1,
         "review_id": 1,
         "review_data": {
             "name": "extra awesome", "business": "Buyondo Hardware", 
@@ -233,29 +234,10 @@ class BusinessReviews(Resource):
     def get(self, business_id):
         """Get all reviews for a business"""
 
-        user = request.data['user']
-
         business = get_business_by_id(business_id)
 
         if business:
-            business_data = business.get("business_data")
-            business_object = weconnect.businesses[business_data["name"]]
-            business_reviews = business_object.reviews  # a dictionary of reviews
-
-            reviews = []
-            for review in business_reviews.values():
-                if business_data["name"] == review.business:
-                    review_id = len(all_reviews) + 1
-                    review_data = {
-                        "name": review.name, "description": review.description, "business": review.business}
-
-                    args = {"user_id": user.get("user_id"), 
-                            "review_id": review_id, "review_data": review_data}
-                    reviews.append(args)
-
-                    # update all reviews list
-                    if not get_review_by_name(review.name):
-                        all_reviews.append(args)
+            reviews = [review for review in all_reviews if business_id == review.get("business_id")]
 
             return make_response(jsonify(reviews), 200) if reviews else make_response(jsonify({"message": "Business reviews not found"}), 200)
 
@@ -280,11 +262,12 @@ class BusinessReviews(Resource):
 
                 review = []
                 if isinstance(reg_review, Review):
-                    review_id = len(all_reviews) + 1
-                    review_data = {"review_data": args}
-
-                    args = {"user_id": user.get(
-                        "user_id"), "review_id": review_id, "review_data": review_data}
+                    args = {
+                        "user_id": user.get("user_id"),
+                        "business_id": business_id,
+                        "review_id": len(all_reviews) + 1,
+                        "review_data": args
+                        }
                     review.append(args)
                     all_reviews.append(args)
 
