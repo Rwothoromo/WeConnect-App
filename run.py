@@ -1,9 +1,7 @@
 # run.py
 """Weconnect entry point"""
 
-from flask import Flask
-
-app = Flask(__name__)               # Create Flask WSGI appliction
+from app.api.api_run import app
 
 if __name__ == '__main__':
     app.run(debug=True)

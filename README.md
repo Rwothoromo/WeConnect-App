@@ -47,14 +47,14 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `mkvirtualenv venv` on command prompt
 * Run `workon venv` on command prompt
 * Run `pip install -r requirements.txt` on command prompt
-* Run `set FLASK_CONFIG=development` on command prompt
+* Run `set FLASK_CONFIG=production` on command prompt
 * Run `set FLASK_APP=run.py` on command prompt
 * Run `flask run` on command prompt
 * View the app on `http://127.0.0.1:5000/`
 
 ## Use endpoints
 
-* Run `python app/api/api_run.py` on command prompt
+* You can proceed with the above url or run `python app/api/api_run.py` on command prompt
 * View the api on `http://127.0.0.1:5000/api/v1/`
 * Test it's usage with postman
 
