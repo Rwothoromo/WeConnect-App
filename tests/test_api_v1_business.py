@@ -80,17 +80,17 @@ class WeConnectApiTestCase(TestCase):
     #     self.assertEqual('Business added', response_data['message'])
     #     self.assertEqual(response.status_code, 201)
 
-    def test_api_get_businesses(self):
-        """Test api get businesses"""
+    # def test_api_get_businesses(self):
+    #     """Test api get businesses"""
 
-        self.client.post('/api/v1/auth/register', content_type='application/json',
-                         data=json.dumps(self.user_two))
-        login = self.client.post('/api/v1/auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_two_login_data))
-        login_data = json.loads(login.get_data())
-        access_token = login_data["access_token"]
+    #     self.client.post('/api/v1/auth/register', content_type='application/json',
+    #                      data=json.dumps(self.user_two))
+    #     login = self.client.post('/api/v1/auth/login', content_type='application/json',
+    #                              data=json.dumps(self.user_two_login_data))
+    #     login_data = json.loads(login.get_data())
+    #     access_token = login_data["access_token"]
 
-        response = self.client.get(
-            '/api/v1/businesses', headers={'Authorization': 'Bearer ' + access_token})
+    #     response = self.client.get(
+    #         '/api/v1/businesses', headers={'Authorization': 'Bearer ' + access_token})
 
-        self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.status_code, 200)
