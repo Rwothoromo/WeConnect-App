@@ -93,24 +93,24 @@ def token_required(function):
     def decorated_function(*args, **kwargs):
         access_token = None
 
-        if 'Authorization' in request.headers:
-            access_token = request.headers['Authorization'].split(' ')[1]
+        if "Authorization" in request.headers:
+            access_token = request.headers["Authorization"].split(" ")[1]
 
             if not access_token:
                 return {"message": "No token provided"}, 401
-            
+
             if access_token in weconnect.token_blacklist:
                 return {"message": "Invalid token provided"}, 401
 
             try:
                 decoded_token = jwt.decode(
-                    access_token, 'WECONNECTSECRET', algorithms=['HS256'])
+                    access_token, "WECONNECTSECRET", algorithms=["HS256"])
 
                 user = get_user_by_id(decoded_token["sub"])
                 if user:
                     request.data = json.loads(
                         request.data) if len(request.data) else {}
-                    request.data['user'] = user
+                    request.data["user"] = user
 
             except:
                 return {"message": "Invalid token provided"}, 401
@@ -132,11 +132,11 @@ class RegisterUser(Resource):
 
         args = user_request_parser.parse_args()
 
-        user = get_user_by_username(args.username)
+        user = get_user_by_username(args["username"])
         if not user:
             user_id = len(users) + 1
-            user_object = User(args.first_name, args.last_name,
-                               args.username, args.password_hash)
+            user_object = User(args["first_name"], args["last_name"],
+                               args["username"], args["password_hash"])
             weconnect.register(user_object)
 
             user = {"user_id": user_id, "user_data": args}
@@ -169,7 +169,7 @@ class LoginUser(Resource):
                     "exp": datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=60),
                     "iat": datetime.datetime.utcnow(),
                     "sub": user.get("user_id")
-                }, 'WECONNECTSECRET', algorithm='HS256')
+                }, "WECONNECTSECRET", algorithm="HS256")
 
             response_data["message"] = "User logged in"
             response_data["user"] = user
@@ -191,15 +191,14 @@ class ResetPassword(Resource):
     def post(self):
         """Reset a password if token is valid"""
 
-
         response_data = {"message": "fail"}
 
-        user = request.data['user']
+        user = request.data["user"]
 
         if user:
             user_data = user.get("user_data")
 
-            password_hash = 'Chang3m3' + str(random.randrange(10000))
+            password_hash = "Chang3m3" + str(random.randrange(10000))
             user_object = User(
                 user_data["first_name"], user_data["last_name"], user_data["username"], password_hash)
             weconnect.edit_user(user_object)
@@ -210,7 +209,7 @@ class ResetPassword(Resource):
                 "last_name": user_data["last_name"],
                 "username": user_data["username"],
                 "password_hash": password_hash
-                }
+            }
             user_data = {"user_id": user.get("user_id"), "user_data": args}
             users.append(user_data)
 
@@ -234,9 +233,9 @@ class LogoutUser(Resource):
         """Logs out a user"""
 
         try:
-            token = request.headers['Authorization'].split(' ')[1]
+            token = request.headers["Authorization"].split(" ")[1]
             weconnect.token_blacklist.append(token)
-            return make_response(jsonify({'message': 'Access token revoked'}), 200)
+            return make_response(jsonify({"message": "Access token revoked"}), 200)
 
         except:
-            return make_response(jsonify({'message': 'Something went wrong'}), 500)
+            return make_response(jsonify({"message": "Something went wrong"}), 500)

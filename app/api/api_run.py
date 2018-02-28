@@ -13,7 +13,8 @@ from flasgger import Swagger
 # solution to python 3 relative import errors
 # use the inspect module because for os.path.abspath(__file__),
 # the __file__ attribute is not always given
-api_run_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+api_run_dir = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
 api_dir = os.path.dirname(api_run_dir)
 app_dir = os.path.dirname(api_dir)
 sys.path.insert(0, app_dir)
@@ -24,7 +25,10 @@ from app.api.v1.resources.auth import RegisterUser, LoginUser, ResetPassword, Lo
 from app.api.v1.resources.business import BusinessResource, BusinessCollection, BusinessReviews
 
 app = Flask(__name__)                   # Create Flask WSGI appliction
-api_bp = Blueprint('api', __name__)     # Add Blueprint; how to construct or extend the app
+swagger = Swagger(app)
+
+# Add Blueprint; how to construct or extend the app
+api_bp = Blueprint('api', __name__)
 api = Api(api_bp, prefix="/api/v1")
 
 
@@ -40,13 +44,13 @@ api.add_resource(LogoutUser, '/auth/logout')
 
 app.register_blueprint(api_bp)
 
-swagger = Swagger(app)
 
 @app.route('/')
 def main():
     """Redirect to api endpoints"""
 
     return redirect('/api/v1/')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

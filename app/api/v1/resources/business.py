@@ -51,7 +51,7 @@ all_reviews = [
         "business_id": 1,
         "review_id": 1,
         "review_data": {
-            "name": "extra awesome", "business": "Buyondo Hardware", 
+            "name": "extra awesome", "business": "Buyondo Hardware",
             "description": "i was given coffee"
         }
     }
@@ -68,7 +68,8 @@ weconnect.create_business("johndoe", "Buyondo Hardware", "One stop center for bu
                           "Construction", "Kabale", "photo")
 
 # create initial review
-weconnect.create_review("johndoe", "extra awesome", "i was given coffee", "Buyondo Hardware")
+weconnect.create_review("johndoe", "extra awesome",
+                        "i was given coffee", "Buyondo Hardware")
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
@@ -160,17 +161,17 @@ class BusinessCollection(Resource):
 
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
-        args = business_request_parser.parse_args()
-        # args = json.loads(request.get_data())
+        # args = business_request_parser.parse_args()
+        args = json.loads(request.get_data())
 
-        user = request.data['user']
+        user = request.data["user"]
 
-        business = get_business_by_name(args.name)
+        business = get_business_by_name(args["name"])
         if not business:
             user_data = user.get("user_data")
 
             reg_business = weconnect.create_business(
-                user_data["username"], args.name, args.description, args.category, args.location, args.photo)
+                user_data["username"], args["name"], args["description"], args["category"], args["location"], args["photo"])
 
             if isinstance(reg_business, Business):
                 business_id = len(businesses) + 1
@@ -205,7 +206,7 @@ class BusinessResource(Resource):
 
         args = business_request_parser.parse_args()
 
-        user = request.data['user']
+        user = request.data["user"]
 
         business = get_business_by_id(business_id)
 
@@ -239,7 +240,8 @@ class BusinessReviews(Resource):
         business = get_business_by_id(business_id)
 
         if business:
-            reviews = [review for review in all_reviews if business_id == review.get("business_id")]
+            reviews = [
+                review for review in all_reviews if business_id == review.get("business_id")]
 
             return make_response(jsonify(reviews), 200) if reviews else make_response(jsonify({"message": "Business reviews not found"}), 200)
 
@@ -249,7 +251,7 @@ class BusinessReviews(Resource):
     def post(self, business_id):
         """Add a review for a business"""
 
-        user = request.data['user']
+        user = request.data["user"]
 
         business = get_business_by_id(business_id)
 
@@ -269,7 +271,7 @@ class BusinessReviews(Resource):
                         "business_id": business_id,
                         "review_id": len(all_reviews) + 1,
                         "review_data": args
-                        }
+                    }
                     review.append(args)
                     all_reviews.append(args)
 
