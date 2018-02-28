@@ -57,11 +57,6 @@ class WeConnectApiTestCase(TestCase):
             "password_hash": "password_hash"
         }
 
-        self.business_data = {
-            "name": "Buyondo Hardware", "description": "One stop center for building materials...",
-            "category": "Construction", "location": "Kabale", "photo": "photo"
-        }
-
     def test_api_hello(self):
         """Test api hello text"""
 

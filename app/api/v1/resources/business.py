@@ -159,7 +159,8 @@ class BusinessCollection(Resource):
 
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
-        args = business_request_parser.parse_args()
+        # args = business_request_parser.parse_args()
+        args = json.loads(request.get_data())
 
         user = request.data['user']
 
@@ -177,7 +178,7 @@ class BusinessCollection(Resource):
                             "business_id": business_id, "business_data": args}
                 businesses.append(business)
 
-                return make_response(jsonify({"message": "Business added", "business_data": args}), 200)
+                return make_response(jsonify({"message": "Business added", "business_data": args}), 201)
 
             return make_response(jsonify({"message": reg_business, "business_data": args}), 400)
 
