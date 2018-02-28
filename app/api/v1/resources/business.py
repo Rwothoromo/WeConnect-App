@@ -2,6 +2,7 @@
 """Contains business logic"""
 
 import jwt
+import json
 
 from flask import jsonify, make_response, request
 from flask_restful import Resource
@@ -159,8 +160,8 @@ class BusinessCollection(Resource):
 
         # request parsing code checks if the request is valid,
         # and returns the validated data, and an error otherwise
-        # args = business_request_parser.parse_args()
-        args = json.loads(request.get_data())
+        args = business_request_parser.parse_args()
+        # args = json.loads(request.get_data())
 
         user = request.data['user']
 
