@@ -1,7 +1,7 @@
 # app/api/v1/resources/hello.py
 """Contains simple greeting logic"""
 
-from flask import jsonify
+from flask import jsonify, make_response
 from flask_restful import Resource
 
 
@@ -16,4 +16,5 @@ class HelloWorld(Resource):
     def get(self):
         """Return greeting"""
 
-        return jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'})
+        return make_response(jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'}), 200)
+        # return jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'})

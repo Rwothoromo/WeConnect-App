@@ -8,10 +8,6 @@ import inspect
 from flask import Flask, Blueprint, redirect
 from flask_restful import Api
 
-from v1.resources.hello import HelloWorld
-from v1.resources.auth import RegisterUser, LoginUser, ResetPassword, LogoutUser
-from v1.resources.business import BusinessResource, BusinessCollection, BusinessReviews
-
 # solution to python 3 relative import errors
 # use the inspect module because for os.path.abspath(__file__),
 # the __file__ attribute is not always given
@@ -21,6 +17,9 @@ app_dir = os.path.dirname(api_dir)
 sys.path.insert(0, app_dir)
 # sys.path.append(os.path.dirname)
 
+from app.api.v1.resources.hello import HelloWorld
+from app.api.v1.resources.auth import RegisterUser, LoginUser, ResetPassword, LogoutUser
+from app.api.v1.resources.business import BusinessResource, BusinessCollection, BusinessReviews
 
 app = Flask(__name__)                   # Create Flask WSGI appliction
 api_bp = Blueprint('api', __name__)     # Add Blueprint; how to construct or extend the app

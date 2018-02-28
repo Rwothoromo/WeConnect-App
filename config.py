@@ -1,13 +1,13 @@
 # config.py
-
+"""Weconnect app configurations"""
 
 class Config(object):
     """
     Common configurations
     """
-    
+
     SECRET_KEY = 'really secret, is it'
-    
+
     DEBUG = True
 
 
@@ -16,7 +16,7 @@ class DevelopmentConfig(Config):
     Development configurations
     """
 
-    SECRET_KEY = 'whispers in the dark'    
+    SECRET_KEY = 'whispers in the dark'
 
 
 class ProductionConfig(Config):
@@ -31,7 +31,7 @@ class TestingConfig(Config):
     """
     Testing configurations
     """
-    
+
     SECRET_KEY = 'some value'
     TESTING = True
 
