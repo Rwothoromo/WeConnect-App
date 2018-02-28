@@ -21,6 +21,7 @@ class WeConnect:
         self.locations = {}
         self.reviews = {}
         self.users = {}
+        self.token_blacklist = []
 
     def register(self, user):
         """Register user

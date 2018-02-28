@@ -98,6 +98,9 @@ def token_required(function):
 
             if not access_token:
                 return {"message": "No token provided"}, 401
+            
+            if access_token in weconnect.token_blacklist:
+                return {"message": "Invalid token provided"}, 401
 
             try:
                 decoded_token = jwt.decode(
@@ -231,9 +234,9 @@ class LogoutUser(Resource):
         """Logs out a user"""
 
         try:
-            if 'Authorization' in request.headers:
-                request.headers = None
-                return make_response(jsonify({'message': 'Access token revoked'}), 200)
+            token = request.headers['Authorization'].split(' ')[1]
+            weconnect.token_blacklist.append(token)
+            return make_response(jsonify({'message': 'Access token revoked'}), 200)
 
         except:
             return make_response(jsonify({'message': 'Something went wrong'}), 500)
