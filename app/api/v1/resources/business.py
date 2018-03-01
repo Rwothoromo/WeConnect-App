@@ -24,13 +24,13 @@ users = [
         "user_id": 1,
         "user_data": {
             "first_name": "john", "last_name": "doe", "username": "johndoe",
-            "password_hash": "password_hash"
+            "password": "password"
         }
     }
 ]
 
 # create initial user
-init_user = User("john", "doe", "johndoe", "password_hash")
+init_user = User("john", "doe", "johndoe", "password")
 weconnect.register(init_user)
 
 # businesses list of business dictionary objects
@@ -154,7 +154,7 @@ class BusinessCollection(Resource):
     @swag_from('docs/get_businesses.yml')
     def get(self):
         """Retrieves all businesses"""
-        
+
         return make_response(jsonify(businesses), 200)
 
     @token_required
@@ -238,6 +238,15 @@ class BusinessResource(Resource):
 
         return make_response(jsonify({"message": "Business not found"}), 400)
 
+    @token_required
+    def delete(self, business_id):
+        """Delete a business"""
+
+        business = get_business_by_id(business_id)
+        if not business:
+            return make_response(jsonify({"message": "Business not found"}), 404)
+
+        return make_response(jsonify(business), 200)
 
 class BusinessReviews(Resource):
     """Business Reviews"""

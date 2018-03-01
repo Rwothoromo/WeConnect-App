@@ -11,15 +11,15 @@ parameters:
       type: object
       required:
         - "username"
-        - "password_hash"
+        - "password"
       properties:
         username:
           type: "string"
           example: "johndoe"
-        password_hash:
+        password:
           type: "string"
           format: password
-          example: "password_hash"
+          example: "password"
 responses:
   200:
     description: User logged in
@@ -31,14 +31,5 @@ responses:
           enum:
             - {
               "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTk4OTUwODYsImlhdCI6MTUxOTg5MTQ4Niwic3ViIjoxfQ.1HGHyKAqw34MUbjdekuHUEpn0SHntqeYhEnaG1HMv-4",
-              "message": "User logged in",
-              "user": {
-                  "user_data": {
-                      "first_name": "john",
-                      "last_name": "doe",
-                      "password_hash": "password_hash",
-                      "username": "johndoe"
-                  },
-                  "user_id": 1
-                }
+              "message": "User logged in"
               }
