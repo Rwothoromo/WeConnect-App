@@ -1,0 +1,65 @@
+Endpoint that creates a business
+---
+tags:
+  - Business
+parameters:
+  - name: Authorization
+    description: A json web token to be used for authorized requests
+    type: string
+    in: header
+    required: true
+  - name: name
+    description: The unique name of the business
+    type: string
+    in: body
+    required: true
+  - name: description
+    description: The description of the business
+    type: string
+    in: body
+    required: true
+  - name: category
+    description: The category of the business
+    type: string
+    in: body
+    required: true
+  - name: location
+    description: The location of the business
+    type: string
+    in: body
+    required: true
+  - name: photo
+    description: The path to the photo for the business
+    type: string
+    in: body
+    required: true
+responses:
+  201:
+    description: Business added
+    schema:
+      type: object
+    properties:
+      "business":
+        type: object
+    examples:
+      [
+        {
+          "message": "Business added",
+          "business_data": {
+            "name": "Buyondo",
+            "description": "One stop center",
+            "category": "Construction",
+            "location": "Kabale",
+            "photo": "photo"
+          }
+        }
+      ]
+  400:
+    description: Business already exists
+    schema:
+      type: object
+    properties:
+      "message":
+        type: object
+        enum:
+          - "Business already exists"

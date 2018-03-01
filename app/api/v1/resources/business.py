@@ -158,6 +158,7 @@ class BusinessCollection(Resource):
         return make_response(jsonify(businesses), 200)
 
     @token_required
+    @swag_from('docs/post_business.yml')
     def post(self):
         """Register a business"""
 
