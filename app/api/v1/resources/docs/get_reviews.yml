@@ -4,7 +4,7 @@ tags:
   - Business
 parameters:
   - name: Authorization
-    description: A json web token to be used for authorized requests
+    description: A json web token prefixed with 'Bearer '
     type: string
     in: header
     required: true
@@ -20,33 +20,17 @@ responses:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              [
-                {
-                  "user_id": 1,
-                  "business_id": 1,
-                  "review_id": 1,
-                  "review_data": {
-                    "description": "i was given alot of meat",
-                    "name": "extra meat"
-                  }
-                }
-              ]
-              }
-                
-            - {
-              "message": "Business reviews not found"
-              }
+            - "Business reviews not found"
+        reviews:
+          type: array
   404:
     description: Business not found
     schema:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Business not found"
-              }
+            - "Business not found"

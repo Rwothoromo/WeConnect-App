@@ -36,19 +36,15 @@ responses:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "User added"
-              }
+            - "User added"
   409:
     description: User already exists
     schema: 
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "User already exists"
-              }
+            - "User already exists"

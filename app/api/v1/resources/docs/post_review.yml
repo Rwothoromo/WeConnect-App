@@ -4,7 +4,7 @@ tags:
   - Business
 parameters:
   - name: Authorization
-    description: A json web token to be used for authorized requests
+    description: A json web token prefixed with 'Bearer '
     type: string
     in: header
     required: true
@@ -13,6 +13,22 @@ parameters:
     type: integer
     in: path
     required: true
+  - name: body
+    description: business review data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "name"
+        - "description"
+      properties:
+        name:
+          type: "string"
+          example: "Well stocked"
+        description:
+          type: "string"
+          example: "They had a broad variety of construction materials"
 responses:
   201:
     description: Business review added
@@ -20,30 +36,24 @@ responses:
       type: object
       properties:
         business:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Business review added"
-              }
+            - "Business review added"
   404:
     description: Business not found
     schema:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Business not found"
-              }
+            - "Business not found"
   409:
     description: Business already exists
     schema:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Business review by that name already exists"
-              }
+            - "Business review by that name already exists"

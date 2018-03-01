@@ -227,7 +227,7 @@ class ResetPassword(Resource):
             users.append(user_data)
 
             response_data["message"] = "User password reset"
-            response_data["new password"] = password
+            response_data["new_password"] = password
             response = jsonify(response_data)
             response.status_code = 200  # Post update success
 

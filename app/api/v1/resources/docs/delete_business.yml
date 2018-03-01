@@ -4,7 +4,7 @@ tags:
   - Business
 parameters:
   - name: Authorization
-    description: A json web token to be used for authorized requests
+    description: A json web token prefixed with 'Bearer '
     in: header
     type: string
     required: true
@@ -21,19 +21,15 @@ responses:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Business deleted"
-              }
+            - "Business deleted"
   404:
     description: Business not found
     schema: 
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Business not found"
-              }
+            - "Business not found"

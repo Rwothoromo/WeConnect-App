@@ -4,7 +4,7 @@ tags:
   - Business
 parameters:
   - name: Authorization
-    description: A json web token to be used for authorized requests
+    description: A json web token prefixed with 'Bearer '
     type: string
     in: header
     required: true
@@ -19,28 +19,14 @@ responses:
     schema:
       type: object
       properties:
-        message:
-          type: json
-          enum:
-            - {
-                "user_id": 1,
-                "business_id": 1,
-                "business_data": {
-                  "name": "Buyondo Hardware",
-                  "description": "One stop center for building materials...",
-                  "category": "Construction",
-                  "location": "Kabale",
-                  "photo": "photo"
-                }
-              }
+        business:
+          type: array
   404:
     description: Business not found
     schema:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Business not found"
-              }
+            - "Business not found"

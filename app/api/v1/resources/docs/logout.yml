@@ -4,7 +4,7 @@ tags:
   - User
 parameters:
   - name: Authorization
-    description: A json web token to be used for authorized requests
+    description: A json web token prefixed with 'Bearer '
     type: string
     in: header
     required: true
@@ -15,19 +15,15 @@ responses:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Access token revoked"
-              }
+            - "Access token revoked"
   500:
     description: Something went wrong
     schema:
       type: object
       properties:
         message:
-          type: json
+          type: string
           enum:
-            - {
-              "message": "Something went wrong"
-              }
+            - "Something went wrong"
