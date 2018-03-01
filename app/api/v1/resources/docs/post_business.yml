@@ -39,7 +39,7 @@ parameters:
 
 responses:
   201:
-    description: User passed
+    description: Business added
     schema: 
       type: object
       properties:
