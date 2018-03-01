@@ -143,6 +143,7 @@ class RegisterUser(Resource):
         user = get_user_by_username(args["username"])
         if not user:
             user_id = len(users) + 1
+
             user_object = User(args["first_name"], args["last_name"],
                                args["username"], args["password"])
             weconnect.register(user_object)
@@ -226,7 +227,7 @@ class ResetPassword(Resource):
             users.append(user_data)
 
             response_data["message"] = "User password reset"
-            response_data["new password"] = password
+            response_data["new_password"] = password
             response = jsonify(response_data)
             response.status_code = 200  # Post update success
 

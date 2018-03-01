@@ -1,33 +1,35 @@
-Endpoint that resets the user password
+Endpoint that deletes a business
 ---
 tags:
-  - User
+  - Business
 parameters:
   - name: Authorization
     description: A json web token prefixed with 'Bearer '
-    type: string
     in: header
+    type: string
     required: true
+  - name: business_id
+    description: business id
+    type: integer
+    in: path
+    required: true
+
 responses:
   200:
-    description: User password reset
-    schema:
+    description: Business deleted
+    schema: 
       type: object
       properties:
         message:
           type: string
           enum:
-            - "User password reset"
-        new_password:
-          type: string
-          enum:
-            - "new password"
-  400:
-    description: User not found
-    schema:
+            - "Business deleted"
+  404:
+    description: Business not found
+    schema: 
       type: object
       properties:
         message:
           type: string
           enum:
-            - "User not found"
+            - "Business not found"
