@@ -1,0 +1,74 @@
+Endpoint that creates a user
+---
+tags:
+  - User
+parameters:
+  - name: body
+    description: user registration data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "first_name"
+        - "last_name"
+        - "username"
+        - "password_hash"
+      properties:
+        first_name:
+          type: "string"
+          example: "jack"
+        last_name:
+          type: "string"
+          example: "dan"
+        username:
+          type: "string"
+          example: "jackdan"
+        password_hash:
+          type: "string"
+          format: password
+          example: "chicken pie"
+
+responses:
+  201:
+    description: User passed
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "User added"
+        user:
+          type: json
+          enum:
+            - {
+              "user_id": 2,
+              "user_data": {
+                "first_name": "jack",
+                "last_name": "dan",
+                "username": "jackdan",
+                "password_hash": "password_hash"
+                }
+              }
+  400:
+    description: User already exists
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "User already exists"
+        user:
+          type: json
+          enum:
+            - {
+              "user_id": 1,
+              "user_data": {
+                "first_name": "john",
+                "last_name": "doe",
+                "username": "johndoe",
+                "password_hash": "password_hash"
+                }
+              }

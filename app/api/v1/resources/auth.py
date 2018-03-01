@@ -15,6 +15,7 @@ import jwt
 from flask import jsonify, request, make_response
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
+from flasgger import swag_from
 
 
 # solution to python 3 relative import messages
@@ -127,6 +128,7 @@ def token_required(function):
 class RegisterUser(Resource):
     """Register a user"""
 
+    @swag_from('docs/post_user.yml')
     def post(self):
         """Creates a user account"""
 

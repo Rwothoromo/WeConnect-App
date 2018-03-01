@@ -16,6 +16,8 @@ WeConnect brings businesses and users together, and allows users to review busin
 5. Users can give reviews about a business.
 6. Users can search for businesses based on business location or business category.
 
+[View on Heroku](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/)
+
 | EndPoint                                              | Functionality                                    |
 | ----------------------------------------------------- | ------------------------------------------------ |
 | [POST\   /api/v1/auth/register](#)                    | Creates a user account                           |

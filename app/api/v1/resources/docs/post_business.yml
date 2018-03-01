@@ -5,61 +5,78 @@ tags:
 parameters:
   - name: Authorization
     description: A json web token to be used for authorized requests
-    type: string
     in: header
-    required: true
-  - name: name
-    description: The unique name of the business
     type: string
+    required: true
+  - name: body
+    description: business creation data
     in: body
     required: true
-  - name: description
-    description: The description of the business
-    type: string
-    in: body
-    required: true
-  - name: category
-    description: The category of the business
-    type: string
-    in: body
-    required: true
-  - name: location
-    description: The location of the business
-    type: string
-    in: body
-    required: true
-  - name: photo
-    description: The path to the photo for the business
-    type: string
-    in: body
-    required: true
+    schema:
+      type: object
+      required:
+        - "name"
+        - "description"
+        - "category"
+        - "location"
+        - "photo"
+      properties:
+        name:
+          type: "string"
+          example: "Buyondo Hardware"
+        description:
+          type: "string"
+          example: "One stop center for building materials..."
+        category:
+          type: "string"
+          example: "Construction"
+        location:
+          type: "string"
+          example: "Kabale"
+        photo:
+          type: "string"
+          example: "photo"
+
 responses:
   201:
-    description: Business added
-    schema:
+    description: User passed
+    schema: 
       type: object
-    properties:
-      "business":
-        type: object
-    examples:
-      [
-        {
-          "message": "Business added",
-          "business_data": {
-            "name": "Buyondo",
-            "description": "One stop center",
-            "category": "Construction",
-            "location": "Kabale",
-            "photo": "photo"
-          }
-        }
-      ]
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business added"
+        business_data:
+          type: json
+          enum:
+            - {
+                "name": "Buyondo Hardware",
+                "description": "One stop center for building materials...",
+                "category": "Construction",
+                "location": "Kabale",
+                "photo": "photo"
+                }
   400:
     description: Business already exists
-    schema:
+    schema: 
       type: object
-    properties:
-      "message":
-        type: object
-        enum:
-          - "Business already exists"
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business already exists"
+        user:
+          type: json
+          enum:
+            - {
+              "user_id": 1,
+              "business_id": 1,
+              "business_data": {
+                "name": "Buyondo Hardware",
+                "description": "One stop center for building materials...",
+                "category": "Construction",
+                "location": "Kabale",
+                "photo": "photo"
+                }
+              }
