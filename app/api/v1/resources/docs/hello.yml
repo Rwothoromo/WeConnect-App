@@ -1,0 +1,14 @@
+Endpoint that welcomes users
+---
+tags:
+  - WeConnect
+responses:
+  200:
+    description: Welcome message
+    schema:
+      type: object
+      properties:
+        weconnect:
+          type: json
+          enum:
+            - {'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'}

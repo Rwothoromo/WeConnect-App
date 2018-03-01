@@ -13,7 +13,7 @@ from app.models.weconnect import WeConnect
 from app.models.business import Business
 from app.models.review import Review
 from app.models.user import User
-from .auth import token_required
+from .auth import token_required, string_empty
 
 
 weconnect = WeConnect()
@@ -166,6 +166,9 @@ class BusinessCollection(Resource):
         # and returns the validated data, and an error otherwise
         # args = business_request_parser.parse_args()
         args = json.loads(request.get_data())
+        for key, value in args.items():
+            if string_empty(value):
+                return make_response(jsonify({"message": key+" must be supplied"}), 400)
 
         user = request.data["user"]
 
@@ -208,6 +211,9 @@ class BusinessResource(Resource):
         """Updates a business profile"""
 
         args = business_request_parser.parse_args()
+        for key, value in args.items():
+            if string_empty(value):
+                return make_response(jsonify({"message": key+" must be supplied"}), 400)
 
         user = request.data["user"]
 
@@ -260,6 +266,9 @@ class BusinessReviews(Resource):
 
         if business:
             args = review_request_parser.parse_args()
+            for key, value in args.items():
+                if string_empty(value):
+                    return make_response(jsonify({"message": key+" must be supplied"}), 400)
 
             # check if review already exists
             if not get_review_by_name(args.name):

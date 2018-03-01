@@ -56,10 +56,12 @@ weconnect.register(init_user)
 user_request_parser = RequestParser(bundle_errors=True)
 
 user_request_parser.add_argument(
-    "first_name", type=str, help="First name must be a valid string")
+    "first_name", type=str, required=True,
+    help="First name must be a valid string")
 
 user_request_parser.add_argument(
-    "last_name", type=str, help="Last name must be a valid string")
+    "last_name", type=str, required=True,
+    help="Last name must be a valid string")
 
 user_request_parser.add_argument(
     "username", type=str, required=True,
@@ -69,6 +71,12 @@ user_request_parser.add_argument(
     "password_hash", type=str, required=True,
     help="Password is required")
 
+def string_empty(string_var):
+    """Return true if string is empty"""
+
+    if not isinstance(string_var, str) or string_var in [' ', '']:
+        return True
+    return False
 
 def get_user_by_id(user_id):
     """Return user if user id matches"""
@@ -133,6 +141,9 @@ class RegisterUser(Resource):
         """Creates a user account"""
 
         args = user_request_parser.parse_args()
+        for key, value in args.items():
+            if string_empty(value):
+                return make_response(jsonify({"message": key+" must be supplied"}), 400)
 
         user = get_user_by_username(args["username"])
         if not user:
@@ -158,6 +169,9 @@ class LoginUser(Resource):
         """Logs in a user and create a token for them"""
 
         args = request.get_json()
+        for key, value in args.items():
+            if string_empty(value):
+                return make_response(jsonify({"message": key+" must be supplied"}), 400)
 
         response_data = {"message": "fail", "user": args}
 
