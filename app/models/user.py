@@ -1,5 +1,4 @@
 # app/models/user.py
-"""Code for creating User class objects"""
 
 # Third party imports
 from flask_login import UserMixin
