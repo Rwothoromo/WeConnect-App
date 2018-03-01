@@ -39,19 +39,7 @@ responses:
           type: string
           enum:
             - "User added"
-        user:
-          type: json
-          enum:
-            - {
-              "user_id": 2,
-              "user_data": {
-                "first_name": "jack",
-                "last_name": "dan",
-                "username": "jackdan",
-                "password": "password"
-                }
-              }
-  400:
+  409:
     description: User already exists
     schema: 
       type: object
@@ -60,15 +48,3 @@ responses:
           type: string
           enum:
             - "User already exists"
-        user:
-          type: json
-          enum:
-            - {
-              "user_id": 1,
-              "user_data": {
-                "first_name": "john",
-                "last_name": "doe",
-                "username": "johndoe",
-                "password": "password"
-                }
-              }
