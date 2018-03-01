@@ -13,7 +13,7 @@ env:
 # command to run tests
 script:
   - pytest
-  - coverage manage.py test
+  - coverage run manage.py test
   - coverage report
 after_success:
   - coveralls
