@@ -1,7 +1,6 @@
 # app/api/resources/business.py
 """Contains business logic"""
 
-import jwt
 import json
 
 from flask import jsonify, make_response, request
@@ -13,7 +12,7 @@ from app.models.weconnect import WeConnect
 from app.models.business import Business
 from app.models.review import Review
 from app.models.user import User
-from .auth import token_required, string_empty, users
+from .auth import token_required, string_empty
 
 
 weconnect = WeConnect()
@@ -115,7 +114,7 @@ class BusinessCollection(Resource):
 
         if not businesses:
             return make_response(jsonify({"message": "No business found"}), 200)
-        return make_response(jsonify(businesses), 200)        
+        return make_response(jsonify(businesses), 200)
 
     @token_required
     @swag_from('docs/post_business.yml')
@@ -128,7 +127,7 @@ class BusinessCollection(Resource):
         args = json.loads(request.get_data())
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key+" must be supplied"}), 400)
+                return make_response(jsonify({"message": key + " must be supplied"}), 400)
 
         user = request.data["user"]
 
@@ -137,11 +136,14 @@ class BusinessCollection(Resource):
             user_data = user.get("user_data")
 
             # recreate user
-            user_object = User(user_data["first_name"], user_data["last_name"], user_data["username"], user_data["password"])
+            user_object = User(
+                user_data["first_name"], user_data["last_name"],
+                user_data["username"], user_data["password"])
             weconnect.register(user_object)
 
             reg_business = weconnect.create_business(
-                user_data["username"], args["name"], args["description"], args["category"], args["location"], args["photo"])
+                user_data["username"], args["name"], args["description"],
+                args["category"], args["location"], args["photo"])
 
             if isinstance(reg_business, Business):
                 business_id = len(businesses) + 1
@@ -150,9 +152,11 @@ class BusinessCollection(Resource):
                             "business_id": business_id, "business_data": args}
                 businesses.append(business)
 
-                return make_response(jsonify({"message": "Business added", "business_data": args}), 201)
+                return make_response(
+                    jsonify({"message": "Business added", "business_data": args}), 201)
 
-            return make_response(jsonify({"message": reg_business, "business_data": args}), 400)
+            return make_response(
+                jsonify({"message": reg_business, "business_data": args}), 400)
 
         return make_response(jsonify({"message": "Business already exists"}), 400)
 
@@ -177,7 +181,7 @@ class BusinessResource(Resource):
         args = business_request_parser.parse_args()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key+" must be supplied"}), 400)
+                return make_response(jsonify({"message": key + " must be supplied"}), 400)
 
         user = request.data["user"]
 
@@ -187,7 +191,8 @@ class BusinessResource(Resource):
             user_data = user.get("user_data")
 
             updated_business = weconnect.edit_business(
-                user_data["username"], args.name, args.description, args.category, args.location, args.photo)
+                user_data["username"], args.name, args.description,
+                args.category, args.location, args.photo)
 
             if isinstance(updated_business, Business):
                 businesses.remove(business)
@@ -196,7 +201,8 @@ class BusinessResource(Resource):
                             "business_id": business_id, "business_data": args}
                 businesses.append(business)
 
-                return make_response(jsonify({"message": "Business updated", "business": business}), 200)
+                return make_response(
+                    jsonify({"message": "Business updated", "business": business}), 200)
 
             return make_response(jsonify({"message": updated_business, "business_data": args}), 400)
 
@@ -212,6 +218,7 @@ class BusinessResource(Resource):
 
         return make_response(jsonify(business), 200)
 
+
 class BusinessReviews(Resource):
     """Business Reviews"""
 
@@ -225,7 +232,9 @@ class BusinessReviews(Resource):
             reviews = [
                 review for review in all_reviews if business_id == review.get("business_id")]
 
-            return make_response(jsonify(reviews), 200) if reviews else make_response(jsonify({"message": "Business reviews not found"}), 200)
+            if reviews:
+                return make_response(jsonify(reviews), 200)
+            return make_response(jsonify({"message": "Business reviews not found"}), 200)
 
         return make_response(jsonify({"message": "Business not found"}), 400)
 
@@ -241,7 +250,7 @@ class BusinessReviews(Resource):
             args = review_request_parser.parse_args()
             for key, value in args.items():
                 if string_empty(value):
-                    return make_response(jsonify({"message": key+" must be supplied"}), 400)
+                    return make_response(jsonify({"message": key + " must be supplied"}), 400)
 
             # check if review already exists
             if not get_review_by_name(args.name):
@@ -261,8 +270,10 @@ class BusinessReviews(Resource):
                     all_reviews.append(args)
 
                 # Post create success
-                return make_response(jsonify({"message": "Business review added", "review": review}), 201)
+                return make_response(
+                    jsonify({"message": "Business review added", "review": review}), 201)
 
-            return make_response(jsonify({"message": "Business review by that name already exists", "review": args}), 400)
+            return make_response(
+                jsonify({"message": "Business review by that name already exists", "review": args}), 400)
 
         return make_response(jsonify({"message": "Business not found"}), 400)
