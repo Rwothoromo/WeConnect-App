@@ -13,7 +13,7 @@ parameters:
         - "first_name"
         - "last_name"
         - "username"
-        - "password_hash"
+        - "password"
       properties:
         first_name:
           type: "string"
@@ -24,7 +24,7 @@ parameters:
         username:
           type: "string"
           example: "jackdan"
-        password_hash:
+        password:
           type: "string"
           format: password
           example: "chicken pie"
@@ -48,7 +48,7 @@ responses:
                 "first_name": "jack",
                 "last_name": "dan",
                 "username": "jackdan",
-                "password_hash": "password_hash"
+                "password": "password"
                 }
               }
   400:
@@ -69,6 +69,6 @@ responses:
                 "first_name": "john",
                 "last_name": "doe",
                 "username": "johndoe",
-                "password_hash": "password_hash"
+                "password": "password"
                 }
               }
