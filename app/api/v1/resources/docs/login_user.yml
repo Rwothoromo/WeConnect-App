@@ -15,24 +15,25 @@ parameters:
       properties:
         username:
           type: "string"
-          example: "johndoe"
+          example: "jackdan"
         password:
           type: "string"
           format: password
-          example: "password"
+          example: "chicken pie"
 responses:
   200:
     description: User logged in
     schema:
       type: object
       properties:
-        user:
-          type: json
+        message:
+          type: string
           enum:
-            - {
-              "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTk4OTUwODYsImlhdCI6MTUxOTg5MTQ4Niwic3ViIjoxfQ.1HGHyKAqw34MUbjdekuHUEpn0SHntqeYhEnaG1HMv-4",
-              "message": "User logged in"
-              }
+            - "User logged in"
+        access_token:
+          type: string
+          enum:
+            - "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTk4OTUwODYsImlhdCI6MTUxOTg5MTQ4Niwic3ViIjoxfQ.1HGHyKAqw34MUbjdekuHUEpn0SHntqeYhEnaG1HMv-4"
   409:
     description: User login failed
     schema: 

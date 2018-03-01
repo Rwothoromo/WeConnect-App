@@ -8,7 +8,7 @@ responses:
     schema:
       type: object
       properties:
-        weconnect:
-          type: json
+        WeConnect:
+          type: string
           enum:
-            - {'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'}
+            - "WeConnect brings businesses and users together, and allows users to review businesses."
