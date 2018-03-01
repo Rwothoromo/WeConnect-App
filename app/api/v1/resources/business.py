@@ -183,6 +183,7 @@ class BusinessReviews(Resource):
     """Business Reviews"""
 
     @token_required
+    @swag_from('docs/get_reviews.yml')
     def get(self, business_id):
         """Get all reviews for a business"""
 
@@ -199,6 +200,7 @@ class BusinessReviews(Resource):
         return make_response(jsonify({"message": "Business not found"}), 400)
 
     @token_required
+    @swag_from('docs/post_review.yml')
     def post(self, business_id):
         """Add a review for a business"""
 

@@ -1,4 +1,4 @@
-Endpoint that retrieves a business
+Endpoint that posts a business review
 ---
 tags:
   - Business
@@ -14,24 +14,16 @@ parameters:
     in: path
     required: true
 responses:
-  200:
-    description: A business
+  201:
+    description: Business review added
     schema:
       type: object
       properties:
-        message:
+        business:
           type: json
           enum:
             - {
-                "user_id": 1,
-                "business_id": 1,
-                "business_data": {
-                  "name": "Buyondo Hardware",
-                  "description": "One stop center for building materials...",
-                  "category": "Construction",
-                  "location": "Kabale",
-                  "photo": "photo"
-                }
+              "message": "Business review added"
               }
   404:
     description: Business not found
@@ -43,4 +35,15 @@ responses:
           enum:
             - {
               "message": "Business not found"
+              }
+  409:
+    description: Business already exists
+    schema:
+      type: object
+      properties:
+        message:
+          type: json
+          enum:
+            - {
+              "message": "Business review by that name already exists"
               }

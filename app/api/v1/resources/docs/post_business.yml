@@ -44,25 +44,19 @@ responses:
       type: object
       properties:
         message:
-          type: string
-          enum:
-            - "Business added"
-        business_data:
           type: json
           enum:
             - {
-                "name": "Buyondo Hardware",
-                "description": "One stop center for building materials...",
-                "category": "Construction",
-                "location": "Kabale",
-                "photo": "photo"
-                }
+              "message": "Business added"
+              }
   409:
     description: Business already exists
     schema: 
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - Business already exists
+            - {
+              "message": "Business already exists"
+              }

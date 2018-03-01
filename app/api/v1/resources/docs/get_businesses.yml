@@ -14,10 +14,11 @@ responses:
     schema:
       type: object
       properties:
-        business:
+        message:
           type: json
           enum:
-            - [
+            - {
+              [
                 {
                   "user_id": 1,
                   "business_id": 1,
@@ -30,3 +31,7 @@ responses:
                   }
                 }
               ]
+              }
+            - {
+              "message": "No business found"
+              }

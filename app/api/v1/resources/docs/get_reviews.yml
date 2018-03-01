@@ -1,4 +1,4 @@
-Endpoint that retrieves a business
+Endpoint that retrieves a business' reviews
 ---
 tags:
   - Business
@@ -15,7 +15,7 @@ parameters:
     required: true
 responses:
   200:
-    description: A business
+    description: A business review
     schema:
       type: object
       properties:
@@ -23,15 +23,21 @@ responses:
           type: json
           enum:
             - {
-                "user_id": 1,
-                "business_id": 1,
-                "business_data": {
-                  "name": "Buyondo Hardware",
-                  "description": "One stop center for building materials...",
-                  "category": "Construction",
-                  "location": "Kabale",
-                  "photo": "photo"
+              [
+                {
+                  "user_id": 1,
+                  "business_id": 1,
+                  "review_id": 1,
+                  "review_data": {
+                    "description": "i was given alot of meat",
+                    "name": "extra meat"
+                  }
                 }
+              ]
+              }
+                
+            - {
+              "message": "Business reviews not found"
               }
   404:
     description: Business not found

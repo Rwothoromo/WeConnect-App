@@ -21,15 +21,19 @@ responses:
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - Business deleted
+            - {
+              "message": "Business deleted"
+              }
   404:
     description: Business not found
     schema: 
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - Business not found
+            - {
+              "message": "Business not found"
+              }

@@ -49,24 +49,28 @@ responses:
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - Business updated
+            - {
+              "message": "Business updated"
+              }
   404:
     description: Business not found
     schema: 
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - Business not found
+            - {"message": "Business not found"}
   409:
     description: Business already exists
     schema: 
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - Business by that name already exists
+            - {
+              "message": "Business by that name already exists"
+              }
