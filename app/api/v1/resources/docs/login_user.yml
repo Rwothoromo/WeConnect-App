@@ -33,3 +33,13 @@ responses:
               "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTk4OTUwODYsImlhdCI6MTUxOTg5MTQ4Niwic3ViIjoxfQ.1HGHyKAqw34MUbjdekuHUEpn0SHntqeYhEnaG1HMv-4",
               "message": "User logged in"
               }
+  409:
+    description: User login failed
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Incorrect username and password combination!"
+            - "This username does not exist! Please register!"

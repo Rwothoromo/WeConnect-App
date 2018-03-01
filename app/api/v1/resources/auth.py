@@ -37,7 +37,8 @@ from app.models.user import User
 
 weconnect = WeConnect()
 
-secret_key = os.environ.get('SECRET_KEY') if os.environ.get('SECRET_KEY') else 'MEGAtron35648'
+secret_key = os.environ.get('SECRET_KEY') if os.environ.get(
+    'SECRET_KEY') else 'MEGAtron35648'
 
 # users list of user dictionary objects
 users = []
@@ -61,12 +62,14 @@ user_request_parser.add_argument(
     "password", type=str, required=True,
     help="Password is required")
 
+
 def string_empty(string_var):
     """Return true if string is empty"""
 
     if not isinstance(string_var, str) or string_var in [' ', '']:
         return True
     return False
+
 
 def get_user_by_id(user_id):
     """Return user if user id matches"""
@@ -108,7 +111,7 @@ def token_required(function):
                 user = get_user_by_id(decoded_token["sub"])
                 if user:
                     request.data = json.loads(
-                        request.data) if len(request.data) else {}
+                        request.data) if request.data else {}
                     request.data["user"] = user
 
             except:
@@ -135,7 +138,7 @@ class RegisterUser(Resource):
         args = user_request_parser.parse_args()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key+" must be supplied"}), 400)
+                return make_response(jsonify({"message": key + " must be supplied"}), 400)
 
         user = get_user_by_username(args["username"])
         if not user:
@@ -163,7 +166,7 @@ class LoginUser(Resource):
         args = request.get_json()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key+" must be supplied"}), 400)
+                return make_response(jsonify({"message": key + " must be supplied"}), 400)
 
         response_data = {"message": "Login failed"}
 
@@ -196,6 +199,7 @@ class ResetPassword(Resource):
     """Password reset"""
 
     @token_required
+    @swag_from('docs/reset_password.yml')
     def post(self):
         """Reset a password if token is valid"""
 
@@ -225,7 +229,7 @@ class ResetPassword(Resource):
             response_data["new password"] = password
             response = jsonify(response_data)
             response.status_code = 200  # Post update success
-            
+
             token = request.headers["Authorization"].split(" ")[1]
             weconnect.token_blacklist.append(token)
 
@@ -241,6 +245,7 @@ class LogoutUser(Resource):
     """Logs out a user if token is valid"""
 
     @token_required
+    @swag_from('docs/logout.yml')
     def post(self):
         """Logs out a user"""
 

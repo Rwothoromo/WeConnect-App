@@ -63,7 +63,7 @@ class WeConnectApiTestCase(TestCase):
         }
 
         self.prefix = '/api/v1/'
-    
+
     def test_api_hello(self):
         """Test api hello text"""
 
@@ -77,7 +77,7 @@ class WeConnectApiTestCase(TestCase):
     def test_api_user_registration(self):
         """Test api user registration"""
 
-        response = self.client.post(self.prefix+'auth/register', content_type='application/json',
+        response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
                                     data=json.dumps(self.user_one))
         response_data = json.loads(response.data.decode())
 
@@ -87,9 +87,9 @@ class WeConnectApiTestCase(TestCase):
     def test_api_user_login(self):
         """Test api user login"""
 
-        self.client.post(self.prefix+'auth/register', content_type='application/json',
+        self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.user_two))
-        response = self.client.post(self.prefix+'auth/login', content_type='application/json',
+        response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                     data=json.dumps(self.user_two_login_data))
         response_data = json.loads(response.get_data())
 
@@ -99,15 +99,15 @@ class WeConnectApiTestCase(TestCase):
     def test_api_user_logout(self):
         """Test api user logout"""
 
-        self.client.post(self.prefix+'auth/register', content_type='application/json',
+        self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.user_two))
-        login = self.client.post(self.prefix+'auth/login', content_type='application/json',
+        login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                  data=json.dumps(self.user_two_login_data))
         login_data = json.loads(login.get_data())
         access_token = login_data["access_token"]
 
         response = self.client.post(
-            self.prefix+'auth/logout', headers={'Authorization': 'Bearer ' + access_token})
+            self.prefix + 'auth/logout', headers={'Authorization': 'Bearer ' + access_token})
         response_data = json.loads(response.data.decode())
 
         self.assertEqual('Access token revoked', response_data['message'])
@@ -116,14 +116,14 @@ class WeConnectApiTestCase(TestCase):
     def test_api_user_password_reset(self):
         """Test api password reset"""
 
-        self.client.post(self.prefix+'auth/register', content_type='application/json',
+        self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.user_three))
-        login = self.client.post(self.prefix+'auth/login', content_type='application/json',
+        login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                  data=json.dumps(self.user_three_login_data))
         login_data = json.loads(login.get_data())
         access_token = login_data["access_token"]
 
-        response = self.client.post(self.prefix+'auth/reset-password',
+        response = self.client.post(self.prefix + 'auth/reset-password',
                                     headers={'Authorization': 'Bearer ' + access_token})
         response_data = json.loads(response.data.decode())
 
