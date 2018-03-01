@@ -1,8 +1,6 @@
 # app/api/resources/business.py
 """Contains business logic"""
 
-import json
-
 from flask import jsonify, make_response, request
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
@@ -21,7 +19,8 @@ all_reviews = []
 # RequestParser and added arguments will know which fields to accept and how to validate those
 business_request_parser = RequestParser(bundle_errors=True)
 business_request_parser.add_argument(
-    "name", type=str, required=True, help="Business name must be a valid string")
+    "name", type=str, required=True,
+    help="Business name must be a valid string")
 business_request_parser.add_argument(
     "description", type=str, required=True, help="Description must be a valid string")
 business_request_parser.add_argument(
@@ -117,6 +116,8 @@ class BusinessCollection(Resource):
         business = get_business_by_name(args["name"])
         if not business:
             business_id = len(businesses) + 1
+            business_id = business_id if not get_business_by_id(
+                business_id) else business_id + 1
             business = {"user_id": user.get("user_id"),
                         "business_id": business_id, "business_data": args}
             businesses.append(business)
@@ -157,8 +158,8 @@ class BusinessResource(Resource):
         if business:
             if not get_business_by_name(args.name):
                 businesses.remove(business)
-                business = {"user_id": user.get("user_id"), 
-                        "business_id": business_id, "business_data": args}
+                business = {"user_id": user.get("user_id"),
+                            "business_id": business_id, "business_data": args}
                 businesses.append(business)
                 return make_response(jsonify({"message": "Business updated"}), 200)
 
@@ -216,11 +217,14 @@ class BusinessReviews(Resource):
 
             # check if review already exists
             if not get_review_by_name(args.name):
+                review_id = len(all_reviews) + 1
+                review_id = review_id if not get_review_by_id(
+                    review_id) else review_id + 1
 
                 review = {
                     "user_id": user.get("user_id"),
                     "business_id": business_id,
-                    "review_id": len(all_reviews) + 1,
+                    "review_id": review_id,
                     "review_data": args
                 }
                 all_reviews.append(review)
