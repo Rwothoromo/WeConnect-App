@@ -17,4 +17,3 @@ class HelloWorld(Resource):
         """Return greeting"""
 
         return make_response(jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'}), 200)
-        # return jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'})

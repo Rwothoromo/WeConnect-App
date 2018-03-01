@@ -1,0 +1,44 @@
+Endpoint that logs in a user
+---
+tags:
+  - User
+parameters:
+  - name: body
+    description: user login data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "username"
+        - "password_hash"
+      properties:
+        username:
+          type: "string"
+          example: "johndoe"
+        password_hash:
+          type: "string"
+          format: password
+          example: "password_hash"
+responses:
+  200:
+    description: User logged in
+    schema:
+      type: object
+      properties:
+        user:
+          type: json
+          enum:
+            - {
+              "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTk4OTUwODYsImlhdCI6MTUxOTg5MTQ4Niwic3ViIjoxfQ.1HGHyKAqw34MUbjdekuHUEpn0SHntqeYhEnaG1HMv-4",
+              "message": "User logged in",
+              "user": {
+                  "user_data": {
+                      "first_name": "john",
+                      "last_name": "doe",
+                      "password_hash": "password_hash",
+                      "username": "johndoe"
+                  },
+                  "user_id": 1
+                }
+              }

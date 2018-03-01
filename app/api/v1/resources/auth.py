@@ -153,6 +153,7 @@ class RegisterUser(Resource):
 class LoginUser(Resource):
     """Login a user"""
 
+    @swag_from('docs/login_user.yml')
     def post(self):
         """Logs in a user and create a token for them"""
 
