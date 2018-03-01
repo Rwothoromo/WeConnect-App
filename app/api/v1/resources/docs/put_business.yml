@@ -1,4 +1,4 @@
-Endpoint that creates a business
+Endpoint that updates a business
 ---
 tags:
   - Business
@@ -7,6 +7,11 @@ parameters:
     description: A json web token to be used for authorized requests
     in: header
     type: string
+    required: true
+  - name: business_id
+    description: business id
+    type: integer
+    in: path
     required: true
   - name: body
     description: business creation data
@@ -39,24 +44,23 @@ parameters:
 
 responses:
   201:
-    description: Business added
+    description: Business updated
     schema: 
       type: object
       properties:
         message:
           type: string
           enum:
-            - "Business added"
-        business_data:
-          type: json
+            - Business updated
+  404:
+    description: Business not found
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
           enum:
-            - {
-                "name": "Buyondo Hardware",
-                "description": "One stop center for building materials...",
-                "category": "Construction",
-                "location": "Kabale",
-                "photo": "photo"
-                }
+            - Business not found
   409:
     description: Business already exists
     schema: 
@@ -65,4 +69,4 @@ responses:
         message:
           type: string
           enum:
-            - Business already exists
+            - Business by that name already exists

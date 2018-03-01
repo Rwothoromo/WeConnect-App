@@ -123,13 +123,14 @@ class BusinessCollection(Resource):
             return make_response(
                 jsonify({"message": "Business added"}), 201)
 
-        return make_response(jsonify({"message": "Business already exists"}), 400)
+        return make_response(jsonify({"message": "Business already exists"}), 409)
 
 
 class BusinessResource(Resource):
     """Operate on a single Business, to view, update and delete it"""
 
     @token_required
+    @swag_from('docs/get_business.yml')
     def get(self, business_id):
         """Get a business"""
 
@@ -140,6 +141,7 @@ class BusinessResource(Resource):
         return make_response(jsonify(business), 200)
 
     @token_required
+    @swag_from('docs/put_business.yml')
     def put(self, business_id):
         """Updates a business profile"""
 
@@ -155,17 +157,17 @@ class BusinessResource(Resource):
         if business:
             if not get_business_by_name(args.name):
                 businesses.remove(business)
-                business = {"user_id": user.get(
-                    "user_id"), "business_id": business_id, "business_data": args}
+                business = {"user_id": user.get("user_id"), 
+                        "business_id": business_id, "business_data": args}
                 businesses.append(business)
-                return make_response(
-                    jsonify({"message": "Business updated", "business": business}), 200)
+                return make_response(jsonify({"message": "Business updated"}), 200)
 
-            return make_response(jsonify({"message": "Business by that name exists"}), 409)
+            return make_response(jsonify({"message": "Business by that name already exists"}), 409)
 
-        return make_response(jsonify({"message": "Business not found"}), 400)
+        return make_response(jsonify({"message": "Business not found"}), 404)
 
     @token_required
+    @swag_from('docs/delete_business.yml')
     def delete(self, business_id):
         """Delete a business"""
 
@@ -174,7 +176,7 @@ class BusinessResource(Resource):
             return make_response(jsonify({"message": "Business not found"}), 404)
 
         businesses.remove(business)
-        return make_response(jsonify({"message": "Business deleted", "business": business}), 200)
+        return make_response(jsonify({"message": "Business deleted"}), 200)
 
 
 class BusinessReviews(Resource):
