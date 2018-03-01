@@ -7,6 +7,7 @@ import json
 from flask import jsonify, make_response, request
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
+from flasgger import swag_from
 
 from app.models.weconnect import WeConnect
 from app.models.business import Business
@@ -150,9 +151,10 @@ class BusinessCollection(Resource):
     """Operate on a list of Businesses, to view and add them"""
 
     @token_required
+    @swag_from('docs/get_businesses.yml')
     def get(self):
         """Retrieves all businesses"""
-
+        
         return make_response(jsonify(businesses), 200)
 
     @token_required
