@@ -222,9 +222,13 @@ class ResetPassword(Resource):
             users.append(user_data)
 
             response_data["message"] = "User password reset"
-            response_data["user"] = user_data
+            response_data["new password"] = password
             response = jsonify(response_data)
             response.status_code = 200  # Post update success
+            
+            token = request.headers["Authorization"].split(" ")[1]
+            weconnect.token_blacklist.append(token)
+
             return response
 
         response_data["message"] = "User not found"

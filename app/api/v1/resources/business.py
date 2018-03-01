@@ -13,64 +13,22 @@ from app.models.weconnect import WeConnect
 from app.models.business import Business
 from app.models.review import Review
 from app.models.user import User
-from .auth import token_required, string_empty
+from .auth import token_required, string_empty, users
 
 
 weconnect = WeConnect()
 
-# users list of user dictionary objects
-users = [
-    {
-        "user_id": 1,
-        "user_data": {
-            "first_name": "john", "last_name": "doe", "username": "johndoe",
-            "password": "password"
-        }
-    }
-]
-
-# create initial user
-init_user = User("john", "doe", "johndoe", "password")
-weconnect.register(init_user)
-
 # businesses list of business dictionary objects
-businesses = [
-    {
-        "user_id": 1,
-        "business_id": 1,
-        "business_data": {
-            "name": "Buyondo Hardware", "description": "One stop center for building materials...",
-            "category": "Construction", "location": "Kabale", "photo": "photo"
-        }
-    }
-]
+businesses = []
 
 # all reviews list of review dictionary objects
-all_reviews = [
-    {
-        "user_id": 1,
-        "business_id": 1,
-        "review_id": 1,
-        "review_data": {
-            "name": "extra awesome", "business": "Buyondo Hardware",
-            "description": "i was given coffee"
-        }
-    }
-]
+all_reviews = []
 
 # create initial category
 weconnect.create_category("johndoe", "Construction", "General hardware")
 
 # create initial location
 weconnect.create_location("johndoe", "Kabale", "Opposite Topper's")
-
-# create initial business
-weconnect.create_business("johndoe", "Buyondo Hardware", "One stop center for building materials...",
-                          "Construction", "Kabale", "photo")
-
-# create initial review
-weconnect.create_review("johndoe", "extra awesome",
-                        "i was given coffee", "Buyondo Hardware")
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
@@ -155,7 +113,9 @@ class BusinessCollection(Resource):
     def get(self):
         """Retrieves all businesses"""
 
-        return make_response(jsonify(businesses), 200)
+        if not businesses:
+            return make_response(jsonify({"message": "No business found"}), 200)
+        return make_response(jsonify(businesses), 200)        
 
     @token_required
     @swag_from('docs/post_business.yml')
@@ -175,6 +135,10 @@ class BusinessCollection(Resource):
         business = get_business_by_name(args["name"])
         if not business:
             user_data = user.get("user_data")
+
+            # recreate user
+            user_object = User(user_data["first_name"], user_data["last_name"], user_data["username"], user_data["password"])
+            weconnect.register(user_object)
 
             reg_business = weconnect.create_business(
                 user_data["username"], args["name"], args["description"], args["category"], args["location"], args["photo"])
