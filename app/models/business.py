@@ -1,5 +1,4 @@
 # app/models/business.py
-"""Code for creating Business class objects"""
 
 class Business:
     """Class to create a Business class object"""

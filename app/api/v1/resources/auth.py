@@ -37,38 +37,36 @@ from app.models.user import User
 
 weconnect = WeConnect()
 
-# users list of user dictionary objects
-users = [
-    {
-        "user_id": 1,
-        "user_data": {
-            "first_name": "john", "last_name": "doe", "username": "johndoe",
-            "password_hash": "password_hash"
-        }
-    }
-]
+secret_key = os.environ.get('SECRET_KEY') if os.environ.get('SECRET_KEY') else 'MEGAtron35648'
 
-# create initial user
-init_user = User("john", "doe", "johndoe", "password_hash")
-weconnect.register(init_user)
+# users list of user dictionary objects
+users = []
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
 user_request_parser = RequestParser(bundle_errors=True)
 
 user_request_parser.add_argument(
-    "first_name", type=str, help="First name must be a valid string")
+    "first_name", type=str, required=True,
+    help="First name must be a valid string")
 
 user_request_parser.add_argument(
-    "last_name", type=str, help="Last name must be a valid string")
+    "last_name", type=str, required=True,
+    help="Last name must be a valid string")
 
 user_request_parser.add_argument(
     "username", type=str, required=True,
     help="Username must be a valid string")
 
 user_request_parser.add_argument(
-    "password_hash", type=str, required=True,
+    "password", type=str, required=True,
     help="Password is required")
 
+def string_empty(string_var):
+    """Return true if string is empty"""
+
+    if not isinstance(string_var, str) or string_var in [' ', '']:
+        return True
+    return False
 
 def get_user_by_id(user_id):
     """Return user if user id matches"""
@@ -105,7 +103,7 @@ def token_required(function):
 
             try:
                 decoded_token = jwt.decode(
-                    access_token, "WECONNECTSECRET", algorithms=["HS256"])
+                    access_token, secret_key, algorithms=["HS256"])
 
                 user = get_user_by_id(decoded_token["sub"])
                 if user:
@@ -117,6 +115,8 @@ def token_required(function):
                 return {"message": "Invalid token provided"}, 401
 
             return function(*args, **kwargs)
+        else:
+            return {"message": "No token provided"}, 401
 
     return decorated_function
 
@@ -133,21 +133,24 @@ class RegisterUser(Resource):
         """Creates a user account"""
 
         args = user_request_parser.parse_args()
+        for key, value in args.items():
+            if string_empty(value):
+                return make_response(jsonify({"message": key+" must be supplied"}), 400)
 
         user = get_user_by_username(args["username"])
         if not user:
             user_id = len(users) + 1
             user_object = User(args["first_name"], args["last_name"],
-                               args["username"], args["password_hash"])
+                               args["username"], args["password"])
             weconnect.register(user_object)
 
             user = {"user_id": user_id, "user_data": args}
             users.append(user)
             # Post create success
-            return make_response(jsonify({"message": "User added", "user": user}), 201)
+            return make_response(jsonify({"message": "User added"}), 201)
 
         # Bad request
-        return make_response(jsonify({"message": "User already exists", "user": user}), 400)
+        return make_response(jsonify({"message": "User already exists"}), 409)
 
 
 class LoginUser(Resource):
@@ -158,24 +161,26 @@ class LoginUser(Resource):
         """Logs in a user and create a token for them"""
 
         args = request.get_json()
+        for key, value in args.items():
+            if string_empty(value):
+                return make_response(jsonify({"message": key+" must be supplied"}), 400)
 
-        response_data = {"message": "fail", "user": args}
+        response_data = {"message": "Login failed"}
 
         logged_in_user = weconnect.login(
-            args["username"], args["password_hash"])
+            args["username"], args["password"])
 
         if isinstance(logged_in_user, User):
             user = get_user_by_username(args["username"])
 
             access_token = jwt.encode(
                 {
-                    "exp": datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=60),
+                    "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
                     "iat": datetime.datetime.utcnow(),
                     "sub": user.get("user_id")
-                }, "WECONNECTSECRET", algorithm="HS256")
+                }, secret_key, algorithm="HS256")
 
             response_data["message"] = "User logged in"
-            response_data["user"] = user
             response_data["access_token"] = access_token.decode()
             response = jsonify(response_data)
             response.status_code = 200  # Post success
@@ -201,9 +206,9 @@ class ResetPassword(Resource):
         if user:
             user_data = user.get("user_data")
 
-            password_hash = "Chang3m3" + str(random.randrange(10000))
+            password = "Chang3m3" + str(random.randrange(10000))
             user_object = User(
-                user_data["first_name"], user_data["last_name"], user_data["username"], password_hash)
+                user_data["first_name"], user_data["last_name"], user_data["username"], password)
             weconnect.edit_user(user_object)
 
             users.remove(user)
@@ -211,15 +216,19 @@ class ResetPassword(Resource):
                 "first_name": user_data["first_name"],
                 "last_name": user_data["last_name"],
                 "username": user_data["username"],
-                "password_hash": password_hash
+                "password": password
             }
             user_data = {"user_id": user.get("user_id"), "user_data": args}
             users.append(user_data)
 
             response_data["message"] = "User password reset"
-            response_data["user"] = user_data
+            response_data["new password"] = password
             response = jsonify(response_data)
             response.status_code = 200  # Post update success
+            
+            token = request.headers["Authorization"].split(" ")[1]
+            weconnect.token_blacklist.append(token)
+
             return response
 
         response_data["message"] = "User not found"

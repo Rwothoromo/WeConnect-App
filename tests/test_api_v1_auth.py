@@ -26,39 +26,44 @@ class WeConnectApiTestCase(TestCase):
     def setUp(self):
         self.client = app.test_client()
 
-        self.user_registration_data = {
+        self.user_one = {
             "first_name": "jack",
             "last_name": "dan",
             "username": "jackdan",
-            "password_hash": "password_hash"
+            "password": "password"
+        }
+
+        self.user_one_login_data = {
+            "username": "jackdan",
+            "password": "password"
         }
 
         self.user_two_login_data = {
             "username": "jimdan",
-            "password_hash": "password_hash"
+            "password": "password"
         }
 
         self.user_two = {
             "first_name": "jim",
             "last_name": "dan",
             "username": "jimdan",
-            "password_hash": "password_hash"
+            "password": "password"
         }
 
         self.user_three_login_data = {
             "username": "eli",
-            "password_hash": "password_hash"
+            "password": "password"
         }
 
         self.user_three = {
             "first_name": "eli",
             "last_name": "rwt",
             "username": "eli",
-            "password_hash": "password_hash"
+            "password": "password"
         }
 
         self.prefix = '/api/v1/'
-
+    
     def test_api_hello(self):
         """Test api hello text"""
 
@@ -73,7 +78,7 @@ class WeConnectApiTestCase(TestCase):
         """Test api user registration"""
 
         response = self.client.post(self.prefix+'auth/register', content_type='application/json',
-                                    data=json.dumps(self.user_registration_data))
+                                    data=json.dumps(self.user_one))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual('User added', response_data['message'])

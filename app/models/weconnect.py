@@ -1,5 +1,4 @@
 # app/models/weconnect.py
-"""Code for creating WeConnect app and managing classes"""
 
 # Third party imports
 from werkzeug.security import check_password_hash

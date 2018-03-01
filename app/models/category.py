@@ -1,5 +1,4 @@
 # app/models/category.py
-"""Code for creating Category class objects"""
 
 class Category:
     """Class to create a Category class object"""

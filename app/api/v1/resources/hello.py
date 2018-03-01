@@ -3,6 +3,7 @@
 
 from flask import jsonify, make_response
 from flask_restful import Resource
+from flasgger import swag_from
 
 
 # When we write our Resources, Flask-RESTful generates the routes
@@ -13,6 +14,7 @@ class HelloWorld(Resource):
     """HelloWorld resource which extends Resource"""
 
     # define what the get http verb will do
+    @swag_from('docs/hello.yml')
     def get(self):
         """Return greeting"""
 
