@@ -143,6 +143,7 @@ class RegisterUser(Resource):
         user = get_user_by_username(args["username"])
         if not user:
             user_id = len(users) + 1
+            
             user_object = User(args["first_name"], args["last_name"],
                                args["username"], args["password"])
             weconnect.register(user_object)

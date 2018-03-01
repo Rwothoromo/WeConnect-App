@@ -15,19 +15,19 @@ responses:
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - "Access token revoked"
-        new password:
-          type: string
-          enum:
-            - "password"
+            - {
+              "message": "Access token revoked"
+              }
   500:
     description: Something went wrong
     schema:
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - "Something went wrong"
+            - {
+              "message": "Something went wrong"
+              }

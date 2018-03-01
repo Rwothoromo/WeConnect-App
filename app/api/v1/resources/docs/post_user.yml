@@ -31,20 +31,24 @@ parameters:
 
 responses:
   201:
-    description: User passed
+    description: User added
     schema: 
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - "User added"
+            - {
+              "message": "User added"
+              }
   409:
     description: User already exists
     schema: 
       type: object
       properties:
         message:
-          type: string
+          type: json
           enum:
-            - "User already exists"
+            - {
+              "message": "User already exists"
+              }
