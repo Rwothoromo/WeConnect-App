@@ -156,7 +156,10 @@ class BusinessResource(Resource):
         business = get_business_by_id(business_id)
 
         if business:
-            if not get_business_by_name(args.name):
+            # to avoid duplicating a business name
+            business_by_name = get_business_by_name(args.name)
+            business_by_name_id = business_by_name["business_id"]
+            if business_by_name_id == business_id:
                 businesses.remove(business)
                 business = {"user_id": user.get("user_id"),
                             "business_id": business_id, "business_data": args}
