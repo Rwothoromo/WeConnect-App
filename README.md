@@ -20,17 +20,17 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 | EndPoint                                             | Functionality                                    |
 | ---------------------------------------------------- | ------------------------------------------------ |
-| [POST   /api/v1/auth/register](#)                    | Creates a user account                           |
-| [POST   /api/v1/auth/login](#)                       | Logs in a user                                   |
-| [POST   /api/v1/auth/logout](#)                      | Logs out a user                                  |
-| [POST   /api/v1/auth/reset-password](#)              | Password reset                                   |
-| [POST   /api/v1/businesses](#)                       | Register a business                              |
-| [PUT    /api/v1/businesses/\<businessId>](#)         | Updates a business profile                       |
-| [DELETE /api/v1/businesses/\<businessId>](#)         | Remove a business                                |
-| [GET    /api/v1/businesses](#)                       | Retrieves all businesses                         |
-| [GET    /api/v1/businesses/\<businessId>](#)         | Get a business                                   |
-| [POST   /api/v1/businesses/\<businessId>/reviews](#) | Add a review for a business by the logged in user|
-| [GET    /api/v1/businesses/\<businessId>/reviews](#) | Get all reviews for a business                   |
+| [POST   /api/v1/auth/register](http://127.0.0.1:5000/apidocs/#!/User/post_api_v1_auth_register)                    | Creates a user account                           |
+| [POST   /api/v1/auth/login](http://127.0.0.1:5000/apidocs/#!/User/post_api_v1_auth_login)                       | Logs in a user                                   |
+| [POST   /api/v1/auth/logout](http://127.0.0.1:5000/apidocs/#!/User/post_api_v1_auth_logout)                      | Logs out a user                                  |
+| [POST   /api/v1/auth/reset-password](http://127.0.0.1:5000/apidocs/#!/User/post_api_v1_auth_reset_password)              | Password reset                                   |
+| [POST   /api/v1/businesses](http://127.0.0.1:5000/apidocs/#!/Business/post_api_v1_businesses)                       | Register a business                              |
+| [PUT    /api/v1/businesses/\<businessId>](http://127.0.0.1:5000/apidocs/#!/Business/put_api_v1_businesses_business_id)         | Updates a business profile                       |
+| [DELETE /api/v1/businesses/\<businessId>](http://127.0.0.1:5000/apidocs/#!/Business/delete_api_v1_businesses_business_id)         | Remove a business                                |
+| [GET    /api/v1/businesses](http://127.0.0.1:5000/apidocs/#!/Business/get_api_v1_businesses)                       | Retrieves all businesses                         |
+| [GET    /api/v1/businesses/\<businessId>](http://127.0.0.1:5000/apidocs/#!/Business/get_api_v1_businesses_business_id)         | Get a business                                   |
+| [POST   /api/v1/businesses/\<businessId>/reviews](http://127.0.0.1:5000/apidocs/#!/Business/post_api_v1_businesses_business_id_reviews) | Add a review for a business by the logged in user|
+| [GET    /api/v1/businesses/\<businessId>/reviews](http://127.0.0.1:5000/apidocs/#!/Business/get_api_v1_businesses_business_id_reviews) | Get all reviews for a business                   |
 
 ## Technologies
 
