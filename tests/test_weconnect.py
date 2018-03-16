@@ -37,7 +37,8 @@ class WeConnectTestCase(TestCase):
         self.weconnect.register(self.user)
         a_user = self.weconnect.register(self.a_user)
 
-        self.assertEqual(a_user, "User already exists!", msg="Username not yet taken!")
+        self.assertEqual(a_user, "User already exists!",
+                         msg="Username not yet taken!")
 
     def test_user_login(self):
         """Test user login"""
@@ -61,4 +62,18 @@ class WeConnectTestCase(TestCase):
 
         user = self.weconnect.register("bad input")
 
-        self.assertEqual(user, "Not a User instance!", msg="User was not created!")
+        self.assertEqual(user, "Not a User instance!")
+
+    def test_user_edit_fails_for_bad_input(self):
+        """Test user edit fails"""
+
+        user = self.weconnect.edit_user("bad input")
+
+        self.assertEqual(user, "Not a User instance!")
+
+    def test_user_delete_fails_for_non_user(self):
+        """Test user delete fails"""
+
+        user = self.weconnect.delete_user("non user")
+
+        self.assertEqual(user, "User does not exist!")
