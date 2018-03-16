@@ -81,7 +81,6 @@ class WeConnect:
             return "Incorrect username and password combination!"
         return "This username does not exist! Please register!"
 
-
     # Begin categories
     def create_category(self, username, name, description):
         """Create Category.
@@ -137,7 +136,7 @@ class WeConnect:
         """
 
         # Update the description
-        if self.users[username].categories[name]:
+        if name in self.users[username].categories.keys():
             if not all(isinstance(i, str) for i in [name, description]):
                 raise TypeError("Input should be a string!")
 
@@ -161,10 +160,7 @@ class WeConnect:
         :return:         categories dictionary
         """
 
-        if self.users[username].categories[name]:
-            if not isinstance(name, str):
-                raise TypeError("Input should be a string!")
-
+        if name in self.users[username].categories.keys():
             # Delete this category from WeConnect
             del self.categories[name]
 
@@ -229,7 +225,7 @@ class WeConnect:
         """
 
         # Update the description
-        if self.users[username].locations[name]:
+        if name in self.users[username].locations.keys():
             if not all(isinstance(i, str) for i in [name, description]):
                 raise TypeError("Input should be a string!")
 
@@ -253,7 +249,7 @@ class WeConnect:
         :return:         locations dictionary
         """
 
-        if self.users[username].locations[name]:
+        if name in self.users[username].locations.keys():
             if not isinstance(name, str):
                 raise TypeError("Input should be a string!")
 

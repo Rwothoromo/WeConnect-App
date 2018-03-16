@@ -17,6 +17,7 @@ class WeConnectTestCase(TestCase):
         self.users = self.weconnect.users
         self.user = User("john", "doe", "johndoe", "password to hash one")
         self.a_user = User("jane", "doe", "johndoe", "password to hash two")
+        self.b_user = User("jane", "doe", "janedoe", "password to hash three")
 
     def test_weconnect_instance(self):
         """Test if WeConnect instance is created"""
