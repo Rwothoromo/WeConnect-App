@@ -10,9 +10,6 @@ install:
 env:
   - ENV_VAR=testing
 
-before_script:
-  - cat .coverage
-
 # command to run tests
 script:
   - pytest
