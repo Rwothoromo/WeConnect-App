@@ -81,7 +81,6 @@ class TestCategory(WeConnectTestCase):
         self.weconnect.register(self.user)
         self.weconnect.create_category(
             'johndoe', 'Construction', 'General hardware and construction materials')
-        self.weconnect.view_category('johndoe', 'Construction')
 
         self.assertEqual("Category does not exist!",
                          self.weconnect.view_category('johndoe', 'Fake category'))

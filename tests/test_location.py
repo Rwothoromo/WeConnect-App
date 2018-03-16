@@ -77,7 +77,6 @@ class TestLocation(WeConnectTestCase):
         self.weconnect.register(self.user)
         self.weconnect.create_location(
             'johndoe', 'Kabale', 'Kabale road')
-        self.weconnect.view_location('johndoe', 'Kabale')
 
         self.assertEqual("Location does not exist!",
                          self.weconnect.view_location('johndoe', 'Fake location'))

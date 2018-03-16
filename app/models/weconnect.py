@@ -97,7 +97,7 @@ class WeConnect:
             if not all(isinstance(i, str) for i in [name, description]):
                 raise TypeError("Input should be a string!")
 
-            if name not in self.categories:
+            if name not in self.categories.keys():
                 category = Category(name, description)
 
                 # Update categories in WeConnect
@@ -120,7 +120,7 @@ class WeConnect:
         :return:         The value of key matching the category name
         """
         if username in self.users.keys():
-            if name in self.categories:
+            if name in self.categories.keys():
                 return self.categories[name]
             return "Category does not exist!"
         return "Username does not exist!"
@@ -186,7 +186,7 @@ class WeConnect:
             if not all(isinstance(i, str) for i in [name, description]):
                 raise TypeError("Input should be a string!")
 
-            if name not in self.locations:
+            if name not in self.locations.keys():
                 location = Location(name, description)
 
                 # Update locations in WeConnect
@@ -209,7 +209,7 @@ class WeConnect:
         :return:         The value of key matching the location name
         """
         if username in self.users.keys():
-            if name in self.locations:
+            if name in self.locations.keys():
                 return self.locations[name]
             return "Location does not exist!"
         return "Username does not exist!"
@@ -278,7 +278,7 @@ class WeConnect:
             if not all(isinstance(i, str) for i in [name, description, category, location, photo]):
                 raise TypeError("Input should be a string!")
 
-            if name not in self.businesses:
+            if name not in self.businesses.keys():
                 business = Business(name, description,
                                     category, location, photo)
 
@@ -308,7 +308,7 @@ class WeConnect:
         :return:         The value of key matching the business name
         """
         if username in self.users.keys():
-            if name in self.businesses:
+            if name in self.businesses.keys():
                 return self.businesses[name]
             return "Business does not exist!"
         return "Username does not exist!"
@@ -328,7 +328,7 @@ class WeConnect:
             if not all(isinstance(i, str) for i in [name, description, category, location, photo]):
                 raise TypeError("Input should be a string!")
 
-            if self.users[username].businesses[name]:
+            if name in self.users[username].businesses.keys():
                 updated_business = Business(
                     name, description, category, location, photo)
 
@@ -356,7 +356,8 @@ class WeConnect:
                 if old_location != location:
                     del self.locations[old_location].businesses[name]
 
-            return updated_business
+                return updated_business
+
         return "User did not create the business!"
 
     def delete_business(self, username, name):
@@ -372,8 +373,7 @@ class WeConnect:
             if not isinstance(name, str):
                 raise TypeError("Input should be a string!")
 
-            if self.users[username].businesses[name]:
-
+            if name in self.users[username].businesses.keys():
                 this_business = self.users[username].businesses[name]
                 old_category = this_business.category
                 old_location = this_business.location
@@ -390,7 +390,7 @@ class WeConnect:
                 # Delete this business from the previous location
                 del self.locations[old_location].businesses[name]
 
-            return self.businesses
+                return self.businesses
         return "User did not create the business!"
 
     # Begin reviews
@@ -410,7 +410,7 @@ class WeConnect:
             if not all(isinstance(i, str) for i in [name, description, business]):
                 raise TypeError("Input should be a string!")
 
-            if name not in self.reviews:
+            if name not in self.reviews.keys():
                 review = Review(name, description, business)
 
                 # Update reviews in WeConnect
@@ -436,7 +436,7 @@ class WeConnect:
         :return:         The value of key matching the review name
         """
         if username in self.users.keys():
-            if name in self.reviews:
+            if name in self.reviews.keys():
                 return self.reviews[name]
             return "Review does not exist!"
         return "Username does not exist!"
