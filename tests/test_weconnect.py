@@ -55,3 +55,10 @@ class WeConnectTestCase(TestCase):
         self.assertEqual(
             wrong_username, "This username does not exist! Please register!",
             msg="Login successful!")
+
+    def test_user_registration_fails_for_bad_input(self):
+        """Test user registration fails"""
+
+        user = self.weconnect.register("bad input")
+
+        self.assertEqual(user, "Not a User instance!", msg="User was not created!")
