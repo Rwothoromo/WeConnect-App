@@ -10,12 +10,13 @@ install:
 env:
   - ENV_VAR=testing
 
+before_script:
+  - cat .coverage
+
 # command to run tests
 script:
   - pytest
   - coverage run manage.py test
   - coverage report
-  - py.test coveralls/tests.py --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
-after_script: cat ./coverage/lcov.info
 after_success:
   - coveralls
