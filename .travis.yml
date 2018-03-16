@@ -17,6 +17,7 @@ before_script:
 script:
   - pytest
   - coverage run manage.py test
-  - coverage report
+  - coverage report -m
+  - coverage html
 after_success:
   - coveralls
