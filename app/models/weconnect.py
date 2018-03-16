@@ -250,9 +250,6 @@ class WeConnect:
         """
 
         if name in self.users[username].locations.keys():
-            if not isinstance(name, str):
-                raise TypeError("Input should be a string!")
-
             # Delete this location from WeConnect
             del self.locations[name]
 
