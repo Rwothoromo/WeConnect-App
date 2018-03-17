@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/Rwothoromo/WeConnect-App.svg?branch=master)](https://travis-ci.org/Rwothoromo/WeConnect-App)
 [![CircleCI](https://circleci.com/gh/Rwothoromo/WeConnect-App/tree/master.svg?style=svg)](https://circleci.com/gh/Rwothoromo/WeConnect-App/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/Rwothoromo/WeConnect-App/badge.svg?branch=master)](https://coveralls.io/github/Rwothoromo/WeConnect-App?branch=master)
-<a href="https://codeclimate.com/github/codeclimate/codeclimate/maintainability"><img src="https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability" /></a>
-<a href="https://codeclimate.com/github/codeclimate/codeclimate/test_coverage"><img src="https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage" /></a>
+[![Maintainability](https://api.codeclimate.com/v1/badges/a5415dbb6881457126bd/maintainability)](https://codeclimate.com/github/Rwothoromo/WeConnect-App/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a5415dbb6881457126bd/test_coverage)](https://codeclimate.com/github/Rwothoromo/WeConnect-App/test_coverage)
 
 # WeConnect-App
 
