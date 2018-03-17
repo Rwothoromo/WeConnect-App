@@ -7,6 +7,7 @@ class Config(object):
     """
 
     SECRET_KEY = 'really secret, is it'
+    CC_TEST_REPORTER_ID = 'b1291fa23eaa46259ebf81dedc73ffb661fc2bc3d67378004cef34bf375ad739'
 
     DEBUG = True
 
