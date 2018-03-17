@@ -16,7 +16,6 @@ flake8==3.5.0
 flasgger==0.8.1
 Flask==0.12.2
 Flask-API==1.0
-Flask-JWT-Extended==3.7.1
 Flask-Login==0.4.1
 Flask-RESTful==0.3.6
 flask-restplus==0.10.1
