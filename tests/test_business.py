@@ -131,7 +131,7 @@ class TestLocation(WeConnectTestCase):
             'Construction', 'Kabale', 'path to photo')
 
         self.assertRaises(
-            TypeError, self.weconnect.edit_business, 'johndoe', 'Kabale', 2)
+            TypeError, self.weconnect.edit_business, 'johndoe', 'Buyondo Hardware', 2, 3, 4, 5)
         self.assertEqual("User did not create the business!", self.weconnect.edit_business(
             'janedoe', 'Buyondo Hardware', 'One stop center for building',
             'Construction', 'Kabale', 'path to photo'))
@@ -151,5 +151,7 @@ class TestLocation(WeConnectTestCase):
             'janedoe', 'Buyondo Hardware', 'One stop center for building',
             'Construction', 'Kabale', 'path to photo')
 
+        self.assertRaises(
+            TypeError, self.weconnect.delete_business, 'johndoe', 2)
         self.assertEqual("User did not create the business!", self.weconnect.delete_business(
             'janedoe', 'Bondo'))
