@@ -67,7 +67,7 @@ class WeConnectApiTestCase(TestCase):
     def test_api_hello(self):
         """Test api hello text"""
 
-        response = self.client.get(self.prefix)
+        response = self.client.get('/', follow_redirects=True) #self.client.get(self.prefix)
         response_data = json.loads(response.data.decode())
 
         self.assertEqual('WeConnect brings businesses and users together, and allows users to review businesses.',
