@@ -81,7 +81,7 @@ class TestReview(WeConnectTestCase):
         self.weconnect.register(self.user)
 
         self.assertRaises(
-            TypeError, self.weconnect.create_review, 'johndoe', 1, 2)
+            TypeError, self.weconnect.create_review, 'johndoe', 1, 2, 3)
 
     def test_review_creation_fails_for_non_user(self):
         """Test if review creation fails for non user"""

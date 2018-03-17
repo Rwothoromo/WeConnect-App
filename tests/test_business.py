@@ -42,16 +42,23 @@ class TestLocation(WeConnectTestCase):
         self.weconnect.register(self.user)
         self.weconnect.create_category(
             'johndoe', 'Construction', 'General hardware and construction materials')
+        self.weconnect.create_category(
+            'johndoe', 'Carpentry', 'General hardware and construction materials')
         self.weconnect.create_location('johndoe', 'Kabale', 'Kabale road')
+        self.weconnect.create_location('johndoe', 'Kampala', 'Kampala road')
         self.weconnect.create_business(
             'johndoe', 'Buyondo Hardware', 'One stop center for building materials...',
-            'Construction', 'Kabale', 'path to photo')
+            'Carpentry', 'Kabale', 'path to photo')
         updated_business = self.weconnect.edit_business(
             'johndoe', 'Buyondo Hardware', 'We provide all your building needs',
-            'Construction', 'Kabale', 'path to photo')
+            'Construction', 'Kampala', 'path to photo')
 
         self.assertEqual('We provide all your building needs',
                          updated_business.description, msg='Business was not edited')
+        self.assertFalse(
+            'Buyondo Hardware' in self.weconnect.categories['Carpentry'].businesses.keys())
+        self.assertFalse(
+            'Buyondo Hardware' in self.weconnect.locations['Kabale'].businesses.keys())
 
     def test_business_deletion(self):
         """Test if business is deleted"""

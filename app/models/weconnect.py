@@ -480,7 +480,7 @@ class WeConnect:
         :return:         reviews dictionary
         """
 
-        if name in self.users[username].reviews.keys():
+        if name in self.users[username].reviews.keys():    
             old_business = self.reviews[name].business
 
             # Delete this review from WeConnect
