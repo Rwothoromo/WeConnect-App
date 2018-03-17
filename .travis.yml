@@ -14,8 +14,7 @@ env:
 script:
   - pytest
   - coverage run manage.py test
-  - coverage report -m --skip-covered --omit="*/travis*"
+  - coverage report -m
   - coverage html
-  - coverage html --omit="*/travis*"
 after_success:
   - coveralls
