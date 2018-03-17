@@ -58,34 +58,9 @@ class WeConnectTestCase(TestCase):
             wrong_username, "This username does not exist! Please register!",
             msg="Login successful!")
 
-    def test_user_delete(self):
-        """Test user delete"""
-
-        user = self.weconnect.register(self.user)
-        user_dict = self.weconnect.delete_user("johndoe")
-
-        self.assertIsInstance(user_dict, dict)
-
     def test_user_registration_fails_for_bad_input(self):
         """Test user registration fails"""
 
         user = self.weconnect.register("bad input")
 
         self.assertEqual(user, "Not a User instance!")
-
-    def test_user_edit_fails_for_bad_input(self):
-        """Test user edit fails"""
-
-        user = self.weconnect.edit_user("bad input")
-        user1 = User("fake", "user", "fakeuser", "password")
-        fake_user = self.weconnect.edit_user(user1)
-
-        self.assertEqual(user, "Not a User instance!")
-        self.assertEqual(fake_user, "User does not exist!")
-
-    def test_user_delete_fails_for_non_user(self):
-        """Test user delete fails"""
-
-        user = self.weconnect.delete_user("non user")
-
-        self.assertEqual(user, "User does not exist!")

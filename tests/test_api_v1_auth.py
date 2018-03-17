@@ -129,3 +129,13 @@ class WeConnectApiTestCase(TestCase):
 
         self.assertEqual('User password reset', response_data['message'])
         self.assertEqual(response.status_code, 200)
+
+    def test_api_user_registration_fails(self):
+        """Test api user registration fails"""
+
+        response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
+                                    data=json.dumps(self.user_one))
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual("User already exists", response_data['message'])
+        self.assertEqual(response.status_code, 409)

@@ -66,10 +66,7 @@ user_request_parser.add_argument(
 def string_empty(string_var):
     """Return true if string is empty"""
 
-    if not isinstance(string_var, str) or string_var in [' ', '']:
-        return True
-    return False
-
+    return not isinstance(string_var, str) or string_var in [' ', '']
 
 def get_user_by_id(user_id):
     """Return user if user id matches"""
