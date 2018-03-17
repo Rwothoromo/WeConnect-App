@@ -109,7 +109,7 @@ class BusinessCollection(Resource):
         args = business_request_parser.parse_args()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key + " must be supplied"}), 400)
+                return make_response(jsonify({"message": key + " must be a string"}), 400)
 
         user = request.data["user"]
 
@@ -149,7 +149,7 @@ class BusinessResource(Resource):
         args = business_request_parser.parse_args()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key + " must be supplied"}), 400)
+                return make_response(jsonify({"message": key + " must be a string"}), 400)
 
         user = request.data["user"]
 
@@ -216,7 +216,7 @@ class BusinessReviews(Resource):
             args = review_request_parser.parse_args()
             for key, value in args.items():
                 if string_empty(value):
-                    return make_response(jsonify({"message": key + " must be supplied"}), 400)
+                    return make_response(jsonify({"message": key + " must be a string"}), 400)
 
             # check if review already exists
             if not get_review_by_name(args.name):

@@ -68,7 +68,7 @@ def string_empty(string_var):
 
     return not isinstance(string_var, str) or string_var in [' ', '']
 
-def get_user_by_id(user_id):
+def get_user_by_id(user_id): # pragma: no cover
     """Return user if user id matches"""
 
     for user in users:
@@ -87,7 +87,7 @@ def get_user_by_username(username):
     return None
 
 
-def token_required(function):
+def token_required(function): # pragma: no cover
     @wraps(function)
     def decorated_function(*args, **kwargs):
         access_token = None
@@ -135,7 +135,7 @@ class RegisterUser(Resource):
         args = user_request_parser.parse_args()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key + " must be supplied"}), 400)
+                return make_response(jsonify({"message": key + " must be a string"}), 400)
 
         user = get_user_by_username(args["username"])
         if not user:
@@ -164,7 +164,7 @@ class LoginUser(Resource):
         args = request.get_json()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key + " must be supplied"}), 400)
+                return make_response(jsonify({"message": key + " must be a string"}), 400)
 
         response_data = {"message": "Login failed"}
 
@@ -204,38 +204,31 @@ class ResetPassword(Resource):
         response_data = {"message": "fail"}
 
         user = request.data["user"]
+        user_data = user.get("user_data")
 
-        if user:
-            user_data = user.get("user_data")
+        password = "Chang3m3" + str(random.randrange(10000))
+        user_object = User(
+            user_data["first_name"], user_data["last_name"], user_data["username"], password)
+        weconnect.edit_user(user_object)
 
-            password = "Chang3m3" + str(random.randrange(10000))
-            user_object = User(
-                user_data["first_name"], user_data["last_name"], user_data["username"], password)
-            weconnect.edit_user(user_object)
+        users.remove(user)
+        args = {
+            "first_name": user_data["first_name"],
+            "last_name": user_data["last_name"],
+            "username": user_data["username"],
+            "password": password
+        }
+        user_data = {"user_id": user.get("user_id"), "user_data": args}
+        users.append(user_data)
 
-            users.remove(user)
-            args = {
-                "first_name": user_data["first_name"],
-                "last_name": user_data["last_name"],
-                "username": user_data["username"],
-                "password": password
-            }
-            user_data = {"user_id": user.get("user_id"), "user_data": args}
-            users.append(user_data)
-
-            response_data["message"] = "User password reset"
-            response_data["new_password"] = password
-            response = jsonify(response_data)
-            response.status_code = 200  # Post update success
-
-            token = request.headers["Authorization"].split(" ")[1]
-            weconnect.token_blacklist.append(token)
-
-            return response
-
-        response_data["message"] = "User not found"
+        response_data["message"] = "User password reset"
+        response_data["new_password"] = password
         response = jsonify(response_data)
-        response.status_code = 400  # Bad request
+        response.status_code = 200  # Post update success
+
+        token = request.headers["Authorization"].split(" ")[1]
+        weconnect.token_blacklist.append(token)
+
         return response
 
 
@@ -247,10 +240,6 @@ class LogoutUser(Resource):
     def post(self):
         """Logs out a user"""
 
-        try:
-            token = request.headers["Authorization"].split(" ")[1]
-            weconnect.token_blacklist.append(token)
-            return make_response(jsonify({"message": "Access token revoked"}), 200)
-
-        except:
-            return make_response(jsonify({"message": "Something went wrong"}), 500)
+        token = request.headers["Authorization"].split(" ")[1]
+        weconnect.token_blacklist.append(token)
+        return make_response(jsonify({"message": "Access token revoked"}), 200)

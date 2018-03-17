@@ -21,10 +21,8 @@ class TestUser(WeConnectTestCase):
         self.assertIsInstance(updated_user, User, msg='Not a User instance')
         self.assertTrue(check_password_hash(
             updated_user.password_hash, 'new password'), msg='Password mismatch')
-        self.assertListEqual(['jonathan', 'doyle', self.user.username],
-                             [updated_user.first_name, updated_user.last_name,
-                                 updated_user.username],
-                             msg='User was not edited')
+        self.assertListEqual(['jonathan', 'doyle', self.user.username], [
+            updated_user.first_name, updated_user.last_name, updated_user.username], msg='User was not edited')
 
     def test_user_delete(self):
         """Test user delete"""
