@@ -14,7 +14,7 @@ env:
 script:
   - pytest
   - coverage run manage.py test
-  - coverage report -m --skip-covered
+  - coverage report -m --omit home --skip-covered
   - coverage html
 after_success:
   - coveralls

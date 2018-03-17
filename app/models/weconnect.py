@@ -453,7 +453,7 @@ class WeConnect:
         """
 
         # Update the description
-        if self.users[username].reviews[name]:
+        if name in self.users[username].reviews.keys():
             if not all(isinstance(i, str) for i in [name, description]):
                 raise TypeError("Input should be a string!")
 
@@ -480,10 +480,7 @@ class WeConnect:
         :return:         reviews dictionary
         """
 
-        if self.users[username].reviews[name]:
-            if not isinstance(name, str):
-                raise TypeError("Input should be a string!")
-
+        if name in self.users[username].reviews.keys():
             old_business = self.reviews[name].business
 
             # Delete this review from WeConnect
