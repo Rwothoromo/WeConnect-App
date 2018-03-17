@@ -17,3 +17,4 @@ script:
   - coverage report
 after_success:
   - coveralls
+  - codeclimate-test-reporter --file .coverage
