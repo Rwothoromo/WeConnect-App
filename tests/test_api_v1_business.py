@@ -85,6 +85,12 @@ class WeConnectApiBusinessTestCase(TestCase):
             "name": "extra game"
         }
 
+        self.review2 = {
+            "business": "Bondo",
+            "description": '',
+            "name": ''
+        }
+
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.user_one))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
@@ -275,14 +281,22 @@ class WeConnectApiBusinessTestCase(TestCase):
                                          'Authorization': 'Bearer ' + self.access_token},
                                      content_type='application/json',
                                      data=json.dumps(self.review1))
+        response2 = self.client.post(self.prefix + 'businesses/1/reviews',
+                                     headers={
+                                         'Authorization': 'Bearer ' + self.access_token},
+                                     content_type='application/json',
+                                     data=json.dumps(self.review2))
         response_data = json.loads(response.data.decode())
         response_data1 = json.loads(response1.data.decode())
+        response_data2 = json.loads(response2.data.decode())
 
         self.assertEqual("Business not found", response_data['message'])
         self.assertEqual(response.status_code, 404)
         self.assertEqual(
             "Business review by that name already exists", response_data1['message'])
         self.assertEqual(response1.status_code, 409)
+        self.assertEqual("name must be a string", response_data2['message'])
+        self.assertEqual(response2.status_code, 400)
 
     def test_api_view_business_reviews(self):
         """Test api business get reviews"""
@@ -324,13 +338,13 @@ class WeConnectApiBusinessTestCase(TestCase):
                          data=json.dumps(self.review1))
         response = self.client.get(self.prefix + 'businesses/2/reviews',
                                    headers={'Authorization': 'Bearer ' + self.access_token})
-        response2 = self.client.get(self.prefix + 'businesses/8/reviews',
+        response1 = self.client.get(self.prefix + 'businesses/8/reviews',
                                     headers={'Authorization': 'Bearer ' + self.access_token})
         response_data = json.loads(response.data.decode())
-        response_data2 = json.loads(response2.data.decode())
+        response_data1 = json.loads(response1.data.decode())
 
         self.assertEqual("Business reviews not found",
                          response_data['message'])
         self.assertEqual(response.status_code, 200)
-        self.assertEqual("Business not found", response_data2['message'])
-        self.assertEqual(response2.status_code, 404)
+        self.assertEqual("Business not found", response_data1['message'])
+        self.assertEqual(response1.status_code, 404)
