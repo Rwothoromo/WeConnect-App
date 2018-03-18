@@ -1,5 +1,6 @@
 # app/models/location.py
 
+
 class Location:
     """Class to create a Location class object"""
 

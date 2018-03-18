@@ -27,32 +27,32 @@ from app.api.v1.resources.business import BusinessResource, BusinessCollection, 
 app = Flask(__name__)                   # Create Flask WSGI appliction
 
 app.config['SWAGGER'] = {
-            'swagger': '2.0',
-            'title': 'WeConnect API',
-            'description': "This API allows users to create and review businesses",
-            'basePath': '',
-            'version': '1',
-            'contact': {
-                'Developer': 'Elijah Rwothoromo',
-                'Profile': 'https://github.com/Rwothoromo'
-            },
-            'license': {
-            },
-            'tags': [
-                {
-                    'name': 'User',
-                    'description': 'The API user'
-                },
-                {
-                    'name': 'Business',
-                    'description': 'A business can be added, updated, reviewed or deleted by a user'
-                },
-                {
-                    'name': 'WeConnect',
-                    'description': 'WeConnect brings businesses and users together, and allows users to review businesses'
-                },
-            ]
-        }
+    'swagger': '2.0',
+    'title': 'WeConnect API',
+    'description': "This API allows users to create and review businesses",
+    'basePath': '',
+    'version': '1',
+    'contact': {
+        'Developer': 'Elijah Rwothoromo',
+        'Profile': 'https://github.com/Rwothoromo'
+    },
+    'license': {
+    },
+    'tags': [
+        {
+            'name': 'User',
+            'description': 'The API user'
+        },
+        {
+            'name': 'Business',
+            'description': 'A business can be added, updated, reviewed or deleted by a user'
+        },
+        {
+            'name': 'WeConnect',
+            'description': 'WeConnect brings businesses and users together, and allows users to review businesses'
+        },
+    ]
+}
 
 swagger = Swagger(app)
 
@@ -81,5 +81,5 @@ def main():
     return redirect('/api/v1/')
 
 
-if __name__ == '__main__': # pragma: no cover
+if __name__ == '__main__':  # pragma: no cover
     app.run()

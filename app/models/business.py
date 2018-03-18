@@ -1,5 +1,6 @@
 # app/models/business.py
 
+
 class Business:
     """Class to create a Business class object"""
 

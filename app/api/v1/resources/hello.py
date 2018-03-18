@@ -18,4 +18,4 @@ class HelloWorld(Resource):
     def get(self):
         """Return greeting"""
 
-        return make_response(jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses.'}), 200)
+        return make_response(jsonify({'WeConnect': 'WeConnect brings businesses and users together, and allows users to review businesses'}), 200)

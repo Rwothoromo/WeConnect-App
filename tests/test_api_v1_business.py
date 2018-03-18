@@ -115,8 +115,7 @@ class WeConnectApiBusinessTestCase(TestCase):
         """Test api business creation fails"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json', data=json.dumps(self.business1))
         response = self.client.post(self.prefix + 'businesses',
                                     headers={
@@ -166,8 +165,8 @@ class WeConnectApiBusinessTestCase(TestCase):
         """Test api business update"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.business1))
         response = self.client.put(self.prefix + 'businesses/1',
@@ -184,13 +183,13 @@ class WeConnectApiBusinessTestCase(TestCase):
         """Test api business update fails"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.business1))
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.business3))
         response = self.client.put(self.prefix + 'businesses/1',
@@ -244,8 +243,8 @@ class WeConnectApiBusinessTestCase(TestCase):
         """Test api business post reviews"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.business1))
         response = self.client.post(self.prefix + 'businesses/1/reviews',
@@ -262,13 +261,13 @@ class WeConnectApiBusinessTestCase(TestCase):
         """Test api business post reviews fails"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.business1))
         self.client.post(self.prefix + 'businesses/1/reviews',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.review1))
         response = self.client.post(self.prefix + 'businesses/12/reviews',
@@ -302,17 +301,17 @@ class WeConnectApiBusinessTestCase(TestCase):
         """Test api business get reviews"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.business1))
         self.client.post(self.prefix + 'businesses/1/reviews',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.review1))
         response = self.client.get(self.prefix + 'businesses/1/reviews',
-                                    headers={'Authorization': 'Bearer ' + self.access_token})
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
         response_data = json.loads(response.data.decode())
 
         self.assertIsInstance(response_data, list)
@@ -322,18 +321,18 @@ class WeConnectApiBusinessTestCase(TestCase):
         """Test api business get reviews fails"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.business1))
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.business2))
         self.client.post(self.prefix + 'businesses/1/reviews',
-                         headers={'Authorization': 'Bearer ' +
-                                  self.access_token},
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
                          data=json.dumps(self.review1))
         response = self.client.get(self.prefix + 'businesses/2/reviews',

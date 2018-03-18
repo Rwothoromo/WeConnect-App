@@ -1,5 +1,6 @@
 # app/models/review.py
 
+
 class Review:
     """Class to create a Review class object"""
 

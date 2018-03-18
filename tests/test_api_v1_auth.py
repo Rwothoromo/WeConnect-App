@@ -91,8 +91,9 @@ class WeConnectApiTestCase(TestCase):
         response = self.client.get('/', follow_redirects=True)
         response_data = json.loads(response.data.decode())
 
-        self.assertEqual('WeConnect brings businesses and users together, and allows users to review businesses.',
-                         response_data['WeConnect'])
+        self.assertEqual(
+            'WeConnect brings businesses and users together, and allows users to review businesses',
+            response_data['WeConnect'])
         self.assertEqual(response.status_code, 200)
 
     def test_api_user_registration(self):
@@ -154,14 +155,14 @@ class WeConnectApiTestCase(TestCase):
     def test_api_user_registration_fails(self):
         """Test api user registration fails"""
 
-        self.client.post(self.prefix + 'auth/register', content_type='application/json', 
-                            data=json.dumps(self.user_two))
-        response=self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                data=json.dumps(self.user_two))
-        response1=self.client.post(self.prefix + 'auth/register', content_type='application/json',
+        self.client.post(self.prefix + 'auth/register', content_type='application/json',
+                         data=json.dumps(self.user_two))
+        response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
+                                    data=json.dumps(self.user_two))
+        response1 = self.client.post(self.prefix + 'auth/register', content_type='application/json',
                                      data=json.dumps(self.user_bad))
-        response_data=json.loads(response.data.decode())
-        response_data1=json.loads(response1.data.decode())
+        response_data = json.loads(response.data.decode())
+        response_data1 = json.loads(response1.data.decode())
 
         self.assertEqual("User already exists", response_data['message'])
         self.assertEqual(response.status_code, 409)
@@ -174,15 +175,15 @@ class WeConnectApiTestCase(TestCase):
 
         self.client.post(self.prefix + 'auth/register',
                          content_type='application/json', data=json.dumps(self.user_three))
-        response=self.client.post(self.prefix + 'auth/login', content_type='application/json',
+        response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                     data=json.dumps(self.user_bad_login_data))
-        response1=self.client.post(self.prefix + 'auth/login', content_type='application/json',
+        response1 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                      data=json.dumps(self.user_bad_login_data1))
-        response2=self.client.post(self.prefix + 'auth/login', content_type='application/json',
+        response2 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                      data=json.dumps(self.user_bad_login_data2))
-        response_data=json.loads(response.get_data())
-        response_data1=json.loads(response1.get_data())
-        response_data2=json.loads(response2.get_data())
+        response_data = json.loads(response.get_data())
+        response_data1 = json.loads(response1.get_data())
+        response_data2 = json.loads(response2.get_data())
 
         self.assertEqual("username must be a string", response_data['message'])
         self.assertEqual(response.status_code, 400)
