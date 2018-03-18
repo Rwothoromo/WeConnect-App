@@ -21,7 +21,7 @@ from app.api.api_run import app
 
 
 class WeConnectApiTestCase(TestCase):
-    """Test user and business api logic"""
+    """Test user api logic"""
 
     def setUp(self):
         self.client = app.test_client()
