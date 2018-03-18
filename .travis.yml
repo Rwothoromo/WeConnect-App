@@ -11,7 +11,7 @@ env:
 # command to run tests
 script:
   - pytest
-  - coverage run --source='myapp' manage.py test
+  - coverage run --source='app' manage.py test
   - coverage report
 
 # generate code climate report
