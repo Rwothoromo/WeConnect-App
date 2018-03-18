@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/Rwothoromo/WeConnect-App.svg?branch=master)](https://travis-ci.org/Rwothoromo/WeConnect-App)
 [![CircleCI](https://circleci.com/gh/Rwothoromo/WeConnect-App/tree/master.svg?style=svg)](https://circleci.com/gh/Rwothoromo/WeConnect-App/tree/master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/77986672d52f482abca70e59e314beba)](https://www.codacy.com/app/Rwothoromo/WeConnect-App?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Rwothoromo/WeConnect-App&amp;utm_campaign=Badge_Grade)
-[![Coverage Status](https://coveralls.io/repos/github/Rwothoromo/WeConnect-App/badge.svg?branch=master)](https://coveralls.io/github/Rwothoromo/WeConnect-App?branch=master)
+<a href='https://coveralls.io/github/Rwothoromo/WeConnect-App?branch=master'><img src='https://coveralls.io/repos/github/Rwothoromo/WeConnect-App/badge.svg?branch=master' alt='Coverage Status' /></a>
 [![Maintainability](https://api.codeclimate.com/v1/badges/a5415dbb6881457126bd/maintainability)](https://codeclimate.com/github/Rwothoromo/WeConnect-App/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a5415dbb6881457126bd/test_coverage)](https://codeclimate.com/github/Rwothoromo/WeConnect-App/test_coverage)
 
