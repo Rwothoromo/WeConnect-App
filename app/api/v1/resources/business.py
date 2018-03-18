@@ -200,7 +200,7 @@ class BusinessReviews(Resource):
                 return make_response(jsonify(reviews), 200)
             return make_response(jsonify({"message": "Business reviews not found"}), 200)
 
-        return make_response(jsonify({"message": "Business not found"}), 400)
+        return make_response(jsonify({"message": "Business not found"}), 404)
 
     @token_required
     @swag_from('docs/post_review.yml')
@@ -238,4 +238,4 @@ class BusinessReviews(Resource):
             return make_response(
                 jsonify({"message": "Business review by that name already exists"}), 409)
 
-        return make_response(jsonify({"message": "Business not found"}), 400)
+        return make_response(jsonify({"message": "Business not found"}), 404)
