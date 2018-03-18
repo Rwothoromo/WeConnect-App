@@ -92,61 +92,36 @@ class WeConnectApiBusinessTestCase(TestCase):
         login_data = json.loads(login.data.decode())
         self.access_token = login_data["access_token"]
 
-
     def test_api_business_creation(self):
         """Test api business creation"""
 
         response = self.client.post(self.prefix + 'businesses',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    headers={
+                                        'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
                                     data=json.dumps(self.business1))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual("Business added", response_data['message'])
         self.assertEqual(response.status_code, 201)
-    
-    def test_api_businesses_view(self):
-        """Test api businesses viewing"""
-
-        response = self.client.get(self.prefix + 'businesses',
-                                    headers={'Authorization': 'Bearer ' + self.access_token})
-        
-        self.assertEqual(response.status_code, 200)
-    
-    def test_api_business_view(self):
-        """Test api business view a business"""
-
-        response = self.client.get(self.prefix + 'businesses/1',
-                                    headers={'Authorization': 'Bearer ' + self.access_token})
-
-        self.assertEqual(response.status_code, 200)
-    
-    def test_api_business_edit(self):
-        """Test api business update"""
-
-        response = self.client.put(self.prefix + 'businesses/1',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
-                                    content_type='application/json',
-                                    data=json.dumps(self.business1_edit))
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual("Business updated", response_data['message'])
-        self.assertEqual(response.status_code, 200)
 
     def test_api_business_creation_fails(self):
         """Test api business creation fails"""
 
         self.client.post(self.prefix + 'businesses',
-                        headers={'Authorization': 'Bearer ' + self.access_token},
-                        content_type='application/json', data=json.dumps(self.business1))
+                         headers={'Authorization': 'Bearer ' +
+                                  self.access_token},
+                         content_type='application/json', data=json.dumps(self.business1))
         response = self.client.post(self.prefix + 'businesses',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    headers={
+                                        'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
                                     data=json.dumps(self.business1))
         response1 = self.client.post(self.prefix + 'businesses',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
-                                    content_type='application/json',
-                                    data=json.dumps(self.business2))
+                                     headers={
+                                         'Authorization': 'Bearer ' + self.access_token},
+                                     content_type='application/json',
+                                     data=json.dumps(self.business2))
         response_data = json.loads(response.data.decode())
         response_data1 = json.loads(response1.data.decode())
 
@@ -154,47 +129,106 @@ class WeConnectApiBusinessTestCase(TestCase):
         self.assertEqual(response.status_code, 409)
         self.assertEqual("name must be a string", response_data1['message'])
         self.assertEqual(response1.status_code, 400)
-    
+
+    def test_api_businesses_view(self):
+        """Test api businesses viewing"""
+
+        response = self.client.get(self.prefix + 'businesses',
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_api_business_view(self):
+        """Test api business view a business"""
+
+        response = self.client.get(self.prefix + 'businesses/1',
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
+
+        self.assertEqual(response.status_code, 200)
+
     def test_api_business_view_fails(self):
         """Test api fails to view a business"""
 
         response = self.client.get(self.prefix + 'businesses/9',
-                                    headers={'Authorization': 'Bearer ' + self.access_token})
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
         response_data = json.loads(response.data.decode())
-        
+
         self.assertEqual("Business not found", response_data['message'])
         self.assertEqual(response.status_code, 404)
+
+    def test_api_business_edit(self):
+        """Test api business update"""
+
+        self.client.post(self.prefix + 'businesses',
+                        headers={'Authorization': 'Bearer ' + self.access_token},
+                        content_type='application/json',
+                        data=json.dumps(self.business1))
+        response = self.client.put(self.prefix + 'businesses/1',
+                                   headers={
+                                       'Authorization': 'Bearer ' + self.access_token},
+                                   content_type='application/json',
+                                   data=json.dumps(self.business1_edit))
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual("Business updated", response_data['message'])
+        self.assertEqual(response.status_code, 200)
 
     def test_api_business_edit_fails(self):
         """Test api business update fails"""
 
         self.client.post(self.prefix + 'businesses',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
-                                    content_type='application/json',
-                                    data=json.dumps(self.business1))
+                         headers={'Authorization': 'Bearer ' +
+                                  self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business1))
         self.client.post(self.prefix + 'businesses',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
-                                    content_type='application/json',
-                                    data=json.dumps(self.business3))
+                         headers={'Authorization': 'Bearer ' +
+                                  self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business3))
         response = self.client.put(self.prefix + 'businesses/1',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
-                                    content_type='application/json',
-                                    data=json.dumps(self.business1_edit1))
+                                   headers={
+                                       'Authorization': 'Bearer ' + self.access_token},
+                                   content_type='application/json',
+                                   data=json.dumps(self.business1_edit1))
         response1 = self.client.put(self.prefix + 'businesses/4',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    headers={
+                                        'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
                                     data=json.dumps(self.business1_edit))
         response2 = self.client.put(self.prefix + 'businesses/1',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    headers={
+                                        'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
                                     data=json.dumps(self.business2))
         response_data = json.loads(response.data.decode())
         response_data1 = json.loads(response1.data.decode())
         response_data2 = json.loads(response2.data.decode())
 
-        self.assertEqual("Business by that name already exists", response_data['message'])
+        self.assertEqual("Business by that name already exists",
+                         response_data['message'])
         self.assertEqual(response.status_code, 409)
         self.assertEqual("Business not found", response_data1['message'])
         self.assertEqual(response1.status_code, 404)
         self.assertEqual("name must be a string", response_data2['message'])
         self.assertEqual(response2.status_code, 400)
+
+    def test_api_business_delete(self):
+        """Test api business deletion"""
+
+        response = self.client.delete(self.prefix + 'businesses/1',
+                                      headers={'Authorization': 'Bearer ' + self.access_token})
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual("Business deleted", response_data['message'])
+        self.assertEqual(response.status_code, 200)
+    
+    def test_api_business_delete_fails(self):
+        """Test api business deletion fails to non existent business"""
+
+        response = self.client.delete(self.prefix + 'businesses/7',
+                                      headers={'Authorization': 'Bearer ' + self.access_token})
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual("Business not found", response_data['message'])
+        self.assertEqual(response.status_code, 404)
