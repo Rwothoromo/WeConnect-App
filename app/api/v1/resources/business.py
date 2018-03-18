@@ -77,14 +77,6 @@ def get_review_by_name(name):
     return False
 
 
-def get_review(name):
-    """Return review if name matches"""
-
-    for review in all_reviews:
-        if review.get("name") == name:
-            return review
-    return False
-
 # When we write our Resources, Flask-RESTful generates the routes
 # and the view handlers necessary to represent the resource over RESTful HTTP
 
