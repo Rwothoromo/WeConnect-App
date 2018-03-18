@@ -16,6 +16,6 @@ script:
   - coverage run manage.py test
   - coverage report
 after_script:
-  - codeclimate-test-reporter < coverage/lcov.info
+  - codeclimate-test-reporter
 after_success:
   - coveralls
