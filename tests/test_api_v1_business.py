@@ -47,12 +47,36 @@ class WeConnectApiBusinessTestCase(TestCase):
             "photo": "photo"
         }
 
+        self.business1_edit = {
+            "name": "Bondo",
+            "description": "yummy foods and deliveries",
+            "category": "Eateries",
+            "location": "Kabale",
+            "photo": "photo"
+        }
+
+        self.business1_edit1 = {
+            "name": "Boondocks",
+            "description": "yummy foods and deliveries",
+            "category": "Eateries",
+            "location": "Kabale",
+            "photo": "photo"
+        }
+
         self.business2 = {
             "name": '',
             "description": '',
             "category": '',
             "location": '',
             "photo": ''
+        }
+
+        self.business3 = {
+            "name": "Boondocks",
+            "description": "your favorite movies",
+            "category": "Entertainment",
+            "location": "Kabale",
+            "photo": "photo"
         }
 
         self.review1 = {
@@ -88,6 +112,18 @@ class WeConnectApiBusinessTestCase(TestCase):
                                     headers={'Authorization': 'Bearer ' + self.access_token})
         
         self.assertEqual(response.status_code, 200)
+    
+    def test_api_business_edit(self):
+        """Test api business update"""
+
+        response = self.client.put(self.prefix + 'businesses/1',
+                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.business1_edit))
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual("Business updated", response_data['message'])
+        self.assertEqual(response.status_code, 200)
 
     def test_api_business_creation_fails(self):
         """Test api business creation fails"""
@@ -110,3 +146,30 @@ class WeConnectApiBusinessTestCase(TestCase):
         self.assertEqual(response.status_code, 409)
         self.assertEqual("name must be a string", response_data1['message'])
         self.assertEqual(response1.status_code, 400)
+
+    def test_api_business_edit_fails(self):
+        """Test api business update fails"""
+
+        self.client.post(self.prefix + 'businesses',
+                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.business1))
+        self.client.post(self.prefix + 'businesses',
+                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.business3))
+        response = self.client.put(self.prefix + 'businesses/1',
+                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.business1_edit1))
+        response1 = self.client.put(self.prefix + 'businesses/4',
+                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.business1_edit))
+        response_data = json.loads(response.data.decode())
+        response_data1 = json.loads(response1.data.decode())
+
+        self.assertEqual("Business by that name already exists", response_data['message'])
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual("Business not found", response_data1['message'])
+        self.assertEqual(response1.status_code, 404)

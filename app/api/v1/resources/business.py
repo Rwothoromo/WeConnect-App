@@ -45,7 +45,7 @@ def get_business_by_id(business_id):
     for business in businesses:
         if business.get("business_id") == business_id:
             return business
-    return None
+    return False
 
 
 def get_business_by_name(name):
@@ -55,7 +55,7 @@ def get_business_by_name(name):
         business_data = business.get("business_data")
         if business_data["name"] == name:
             return business
-    return None
+    return False
 
 
 def get_review_by_id(review_id):
@@ -64,7 +64,7 @@ def get_review_by_id(review_id):
     for review in all_reviews:
         if review.get("review_id") == review_id:
             return review
-    return None
+    return False
 
 
 def get_review_by_name(name):
@@ -74,7 +74,7 @@ def get_review_by_name(name):
         review_data = review.get("review_data")
         if review_data["name"] == name:
             return review
-    return None
+    return False
 
 
 def get_review(name):
@@ -83,7 +83,7 @@ def get_review(name):
     for review in all_reviews:
         if review.get("name") == name:
             return review
-    return None
+    return False
 
 # When we write our Resources, Flask-RESTful generates the routes
 # and the view handlers necessary to represent the resource over RESTful HTTP
@@ -158,8 +158,7 @@ class BusinessResource(Resource):
         if business:
             # to avoid duplicating a business name
             business_by_name = get_business_by_name(args.name)
-            business_by_name_id = get_business_by_id(business_by_name['business_id'])
-            if business_by_name_id == business_id:
+            if business_by_name['business_id'] == business_id:
                 businesses.remove(business)
                 business = {"user_id": user.get("user_id"),
                             "business_id": business_id, "business_data": args}

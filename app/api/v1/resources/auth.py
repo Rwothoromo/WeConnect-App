@@ -74,7 +74,7 @@ def get_user_by_id(user_id): # pragma: no cover
     for user in users:
         if user.get("user_id") == user_id:
             return user
-    return None
+    return False
 
 
 def get_user_by_username(username):
@@ -84,7 +84,7 @@ def get_user_by_username(username):
         user_data = user.get("user_data")
         if user_data["username"] == username:
             return user
-    return None
+    return False
 
 
 def token_required(function): # pragma: no cover
