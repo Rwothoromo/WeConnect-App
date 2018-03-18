@@ -113,6 +113,14 @@ class WeConnectApiBusinessTestCase(TestCase):
         
         self.assertEqual(response.status_code, 200)
     
+    def test_api_business_view(self):
+        """Test api business view a business"""
+
+        response = self.client.get(self.prefix + 'businesses/1',
+                                    headers={'Authorization': 'Bearer ' + self.access_token})
+
+        self.assertEqual(response.status_code, 200)
+    
     def test_api_business_edit(self):
         """Test api business update"""
 
@@ -146,6 +154,16 @@ class WeConnectApiBusinessTestCase(TestCase):
         self.assertEqual(response.status_code, 409)
         self.assertEqual("name must be a string", response_data1['message'])
         self.assertEqual(response1.status_code, 400)
+    
+    def test_api_business_view_fails(self):
+        """Test api fails to view a business"""
+
+        response = self.client.get(self.prefix + 'businesses/9',
+                                    headers={'Authorization': 'Bearer ' + self.access_token})
+        response_data = json.loads(response.data.decode())
+        
+        self.assertEqual("Business not found", response_data['message'])
+        self.assertEqual(response.status_code, 404)
 
     def test_api_business_edit_fails(self):
         """Test api business update fails"""
@@ -166,10 +184,17 @@ class WeConnectApiBusinessTestCase(TestCase):
                                     headers={'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
                                     data=json.dumps(self.business1_edit))
+        response2 = self.client.put(self.prefix + 'businesses/1',
+                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.business2))
         response_data = json.loads(response.data.decode())
         response_data1 = json.loads(response1.data.decode())
+        response_data2 = json.loads(response2.data.decode())
 
         self.assertEqual("Business by that name already exists", response_data['message'])
         self.assertEqual(response.status_code, 409)
         self.assertEqual("Business not found", response_data1['message'])
         self.assertEqual(response1.status_code, 404)
+        self.assertEqual("name must be a string", response_data2['message'])
+        self.assertEqual(response2.status_code, 400)
