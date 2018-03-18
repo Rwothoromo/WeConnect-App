@@ -81,5 +81,5 @@ def main():
     return redirect('/api/v1/')
 
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == '__main__': # pragma: no cover
     app.run()
