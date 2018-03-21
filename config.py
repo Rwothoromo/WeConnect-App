@@ -1,16 +1,20 @@
 # instance/config.py
 """Weconnect app configurations"""
 
+import os
+
 class Config(object):
     """
     Common configurations
     """
 
-    DEBUG = True
-    CSRF_ENABLED = True # protect against CSRF attacks
-
-    SECRET_KEY = 'really secret, is it'
+    SECRET_KEY = 'some value'
     SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/weconnect_db'
+    
+    TESTING = False
+    DEBUG = False
+    CSRF_ENABLED = True # protect against CSRF attacks
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevelopmentConfig(Config):
@@ -18,6 +22,7 @@ class DevelopmentConfig(Config):
     Development configurations
     """
 
+    DEBUG = True
     SQLALCHEMY_ECHO = True
 
 
@@ -34,6 +39,7 @@ class TestingConfig(Config):
     Testing configurations
     """
 
+    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/test_weconnect_db'
     TESTING = True
 
 

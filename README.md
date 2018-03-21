@@ -36,11 +36,13 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 ## Technologies
 
-* Python 3.6 or 2.7
+* Python 3.6
+* PostgreSQL 10
 
 ## Requirements
 
 * Install [Python](https://www.python.org/downloads/)
+* Install [PostgreSQL](https://www.postgresql.org/download/)
 * Run `pip install virtualenv` on command prompt
 * Run `pip install virtualenvwrapper-win` on command prompt
 * Run `set WORKON_HOME=%USERPROFILES%\Envs` on command prompt
@@ -51,6 +53,7 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `mkvirtualenv venv` on command prompt
 * Run `workon venv` on command prompt
 * Run `pip install -r requirements.txt` on command prompt
+* Create PostgreSQL databases `weconnect_db` and `test_weconnect_db`
 * Run `set FLASK_CONFIG=production` on command prompt
 * Run `set FLASK_APP=run.py` on command prompt
 * Run `flask run` on command prompt
