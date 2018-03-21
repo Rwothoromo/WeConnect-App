@@ -34,6 +34,8 @@ business_request_parser.add_argument(
 # for reviews
 review_request_parser = RequestParser(bundle_errors=True)
 review_request_parser.add_argument(
+    "business", type=str, required=True, help="Business name must be a valid string")
+review_request_parser.add_argument(
     "name", type=str, required=True, help="Review name must be a valid string")
 review_request_parser.add_argument(
     "description", type=str, required=True, help="Description must be a valid string")
@@ -202,9 +204,10 @@ class BusinessReviews(Resource):
         user = request.data["user"]
 
         business = get_business_by_id(business_id)
+        args = review_request_parser.parse_args()
+        business_by_name = get_business_by_name(args.business)
 
-        if business:
-            args = review_request_parser.parse_args()
+        if business and business_by_name:
             for key, value in args.items():
                 if string_empty(value):
                     return make_response(jsonify({"message": key + " must be a string"}), 400)
