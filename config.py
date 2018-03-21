@@ -1,4 +1,4 @@
-# config.py
+# instance/config.py
 """Weconnect app configurations"""
 
 class Config(object):
@@ -6,9 +6,11 @@ class Config(object):
     Common configurations
     """
 
-    SECRET_KEY = 'really secret, is it'
-
     DEBUG = True
+    CSRF_ENABLED = True # protect against CSRF attacks
+
+    SECRET_KEY = 'really secret, is it'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/weconnect_db'
 
 
 class DevelopmentConfig(Config):
@@ -16,7 +18,7 @@ class DevelopmentConfig(Config):
     Development configurations
     """
 
-    SECRET_KEY = 'whispers in the dark'
+    SQLALCHEMY_ECHO = True
 
 
 class ProductionConfig(Config):
@@ -32,7 +34,6 @@ class TestingConfig(Config):
     Testing configurations
     """
 
-    SECRET_KEY = 'some value'
     TESTING = True
 
 
