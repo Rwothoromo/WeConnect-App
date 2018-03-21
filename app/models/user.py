@@ -4,9 +4,29 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 
+from app.db import db
 
-class User(UserMixin):
+
+class User(UserMixin, db.Model):
     """Class to create a User class object"""
+
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(50), nullable=False, unique=True)
+    password_hash = db.Column(db.String(256), nullable=False)
+    businesses = db.relationship(
+        'Business', backref='user', cascade='all, delete-orphan')
+    reviews = db.relationship('Review', backref='user',
+                              cascade='all, delete-orphan')
+    categories = db.relationship(
+        'Category', backref='user', cascade='all, delete-orphan')
+    locations = db.relationship(
+        'Review', backref='user', cascade='all, delete-orphan')
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def __init__(self, first_name, last_name, username, password):
         self.first_name = first_name
@@ -17,3 +37,6 @@ class User(UserMixin):
         self.reviews = {}
         self.categories = {}
         self.locations = {}
+
+    def __repr__(self):
+        return '<User: {}>'.format(self.username)

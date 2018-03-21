@@ -1,9 +1,6 @@
 # app/models/blacklist.py
 
-from app import db
-from sqlalchemy.dialects.postgresql import JSON
-
-from datetime import datetime
+from app.db import db
 
 
 class Blacklist(db.Model):
@@ -13,12 +10,11 @@ class Blacklist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     token = db.Column(db.String(500), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def __init__(self, token):
         self.token = token
-        self.created_at = datetime.now()
 
     # Represent the object when it is queried
     def __repr__(self):
-        return '<id: token: {}'.format(self.token)
+        return '<Token: {}'.format(self.token)
