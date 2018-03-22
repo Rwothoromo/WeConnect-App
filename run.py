@@ -1,7 +1,12 @@
 # run.py
 """Weconnect entry point"""
 
-from app.api.api_run import app
+import os
 
-if __name__ == '__main__': # pragma: no cover
+from app import create_app
+
+config_name = os.getenv('FLASK_CONFIG')
+app = create_app(config_name)
+
+if __name__ == '__main__':
     app.run()

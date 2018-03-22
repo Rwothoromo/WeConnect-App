@@ -105,3 +105,4 @@ ENV/
 
 # local files and folders
 instance/
+migrations/

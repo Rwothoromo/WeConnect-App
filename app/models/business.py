@@ -1,8 +1,8 @@
 # app/models/business.py
 
-from flask import session
+# from flask import session
 
-from app.db import db
+from app import db
 
 
 class Business(db.Model):
@@ -28,7 +28,7 @@ class Business(db.Model):
         self.location = location
         self.photo = photo
         self.reviews = {}
-        self.created_by = session["user_id"]
+        self.created_by = 1 # session["user_id"]
 
     def __repr__(self):
         return '<Business: {}>'.format(self.name)

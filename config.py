@@ -1,7 +1,6 @@
 # instance/config.py
 """Weconnect app configurations"""
 
-import os
 
 class Config(object):
     """
