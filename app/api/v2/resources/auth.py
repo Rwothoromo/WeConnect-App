@@ -30,7 +30,7 @@ app_dir = os.path.dirname(api_dir)
 sys.path.insert(0, app_dir)
 # sys.path.append(os.path.dirname)
 
-from app import db
+from app.db import db
 from app.models.weconnect import WeConnect
 from app.models.user import User
 

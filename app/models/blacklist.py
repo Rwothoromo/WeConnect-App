@@ -1,6 +1,6 @@
 # app/models/blacklist.py
 
-from app import db
+from app.db import db
 
 
 class Blacklist(db.Model):

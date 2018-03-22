@@ -2,7 +2,7 @@
 
 # from flask import session
 
-from app import db
+from app.db import db
 
 
 class Category(db.Model):

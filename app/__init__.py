@@ -12,6 +12,7 @@ from flasgger import Swagger
 
 # local imports
 from config import app_config
+from app.db import db
 
 from app.api.v2.resources.hello import HelloWorld
 from app.api.v2.resources.auth import RegisterUser, LoginUser # , ResetPassword, LogoutUser
@@ -50,7 +51,8 @@ app.config['SWAGGER'] = {
 
 swagger = Swagger(app)
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
+db.init_app(app)
 
 # Add Blueprint; how to construct or extend the app
 api_bp = Blueprint('api', __name__)
