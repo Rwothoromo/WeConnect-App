@@ -1,7 +1,6 @@
 import unittest
 
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import redirect
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
@@ -28,6 +27,12 @@ def test():
     # if result.wasSuccessful() return 0 else 1
     # return the opposite boolean
     return not result.wasSuccessful()
+
+@app.route('/')
+def main():
+    """Redirect to api endpoints"""
+
+    return redirect('/api/v2/')
 
 if __name__ == '__main__':
     manager.run()
