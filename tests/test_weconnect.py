@@ -7,6 +7,7 @@ from unittest import TestCase
 # local imports
 from app.models.weconnect import WeConnect
 from app.models.user import User
+from app import db
 
 
 class WeConnectTestCase(TestCase):
@@ -18,6 +19,8 @@ class WeConnectTestCase(TestCase):
         self.user = User("john", "doe", "johndoe", "password to hash one")
         self.a_user = User("jane", "doe", "johndoe", "password to hash two")
         self.b_user = User("jane", "doe", "janedoe", "password to hash three")
+
+        db.create_all()
 
     def test_weconnect_instance(self):
         """Test if WeConnect instance is created"""
@@ -64,3 +67,7 @@ class WeConnectTestCase(TestCase):
         user = self.weconnect.register("bad input")
 
         self.assertEqual(user, "Not a User instance!")
+
+    def tearDown(self):
+        db.session.close()
+        db.drop_all()
