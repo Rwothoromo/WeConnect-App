@@ -16,7 +16,7 @@ from flask import jsonify, request, make_response, session
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 # solution to python 3 relative import messages
@@ -178,47 +178,36 @@ class LoginUser(Resource):
         return response
 
 
-# class ResetPassword(Resource):
-#     """Password reset"""
+class ResetPassword(Resource):
+    """Password reset"""
 
-#     @token_required
-#     @swag_from('docs/reset_password.yml')
-#     def post(self):
-#         """Reset a password if token is valid"""
+    @token_required
+    @swag_from('docs/reset_password.yml')
+    def post(self):
+        """Reset a password if token is valid"""
 
-#         response_data = {"message": "fail"}
+        response_data = {"message": "fail"}
 
-#         user = request.data["user"]
-#         user_data = user.get("user_data")
+        user_data = request.data["user"]
+        user = User.query.filter_by(id=user_data.id).first()
 
-#         password = "Chang3m3" + str(random.randrange(10000))
-#         user_object = User(
-#             user_data["first_name"], user_data["last_name"], user_data["username"], password)
-#         weconnect.edit_user(user_object)
+        password = "Chang3m3" + str(random.randrange(10000))
+        user.password_hash = generate_password_hash(password)
+        db.session.commit()
 
-#         users.remove(user)
-#         args = {
-#             "first_name": user_data["first_name"],
-#             "last_name": user_data["last_name"],
-#             "username": user_data["username"],
-#             "password": password
-#         }
-#         user_data = {"user_id": user.get("user_id"), "user_data": args}
-#         users.append(user_data)
+        response_data["message"] = "User password reset"
+        response_data["new_password"] = password
+        response = jsonify(response_data)
+        response.status_code = 200  # Post update success
 
-#         response_data["message"] = "User password reset"
-#         response_data["new_password"] = password
-#         response = jsonify(response_data)
-#         response.status_code = 200  # Post update success
+        session["user_id"] = None
+        token = request.headers["Authorization"].split(" ")[1]
+        token_blacklist = Blacklist(token)
 
-#         session["user_id"] = None
-#         token = request.headers["Authorization"].split(" ")[1]
-#         token_blacklist = Blacklist(token)
+        db.session.add(token_blacklist)
+        db.session.commit()
 
-#         db.session.add(token_blacklist)
-#         db.session.commit()
-
-#         return response
+        return response
 
 
 class LogoutUser(Resource):
