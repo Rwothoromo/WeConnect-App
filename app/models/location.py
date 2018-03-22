@@ -1,6 +1,6 @@
 # app/models/location.py
 
-# from flask import session
+from flask import session
 
 from app.db import db
 
@@ -20,7 +20,7 @@ class Location(db.Model):
         self.name = name
         self.description = description
         self.businesses = {}
-        self.created_by = 1 # session["user_id"]
+        self.created_by = session["user_id"]
 
     def __repr__(self):
         return '<Location: {}>'.format(self.name)

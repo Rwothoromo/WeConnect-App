@@ -1,6 +1,6 @@
 # app/models/review.py
 
-# from flask import session
+from flask import session
 
 from app.db import db
 
@@ -21,7 +21,7 @@ class Review(db.Model):
         self.name = name
         self.description = description
         self.business = business
-        self.created_by = 1  # session["user_id"]
+        self.created_by = session["user_id"]
 
     def __repr__(self):
         return '<Review: {}>'.format(self.name)
