@@ -16,6 +16,7 @@ from flask import jsonify, request, make_response, session
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
+from werkzeug.security import check_password_hash
 
 
 # solution to python 3 relative import messages
@@ -31,17 +32,13 @@ sys.path.insert(0, app_dir)
 # sys.path.append(os.path.dirname)
 
 from app.db import db
-from app.models.weconnect import WeConnect
+from app.models.blacklist import Blacklist
 from app.models.user import User
 
-
-weconnect = WeConnect()
 
 secret_key = os.environ.get('SECRET_KEY') if os.environ.get(
     'SECRET_KEY') else 'MEGAtron35648'
 
-# users list of user dictionary objects
-users = []
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
 user_request_parser = RequestParser(bundle_errors=True)
@@ -68,26 +65,8 @@ def string_empty(string_var):
 
     return not isinstance(string_var, str) or string_var in [' ', '']
 
-def get_user_by_id(user_id): # pragma: no cover
-    """Return user if user id matches"""
 
-    for user in users:
-        if user.get("user_id") == user_id:
-            return user
-    return False
-
-
-def get_user_by_username(username):
-    """Return user id if username matches"""
-
-    for user in users:
-        user_data = user.get("user_data")
-        if user_data["username"] == username:
-            return user
-    return False
-
-
-def token_required(function): # pragma: no cover
+def token_required(function):  # pragma: no cover
     @wraps(function)
     def decorated_function(*args, **kwargs):
         access_token = None
@@ -98,14 +77,14 @@ def token_required(function): # pragma: no cover
             if not access_token:
                 return {"message": "No token provided"}, 401
 
-            if access_token in weconnect.token_blacklist:
+            if Blacklist.query.filter_by(token=access_token).first():
                 return {"message": "Invalid token provided"}, 401
 
             try:
                 decoded_token = jwt.decode(
                     access_token, secret_key, algorithms=["HS256"])
 
-                user = get_user_by_id(decoded_token["sub"])
+                user = User.query.filter_by(id=decoded_token["sub"]).first()
                 if user:
                     request.data = json.loads(
                         request.data) if request.data else {}
@@ -138,12 +117,14 @@ class RegisterUser(Resource):
                 return make_response(jsonify({"message": key + " must be a string"}), 400)
 
         username = args["username"].lower()
-        
+
         user = User.query.filter_by(username=username).first()
         if not user:
             user_object = User(args["first_name"], args["last_name"],
                                username, args["password"])
-            weconnect.register(user_object)
+
+            db.session.add(user_object)
+            db.session.commit()
 
             # Post create success
             return make_response(jsonify({"message": "User added"}), 201)
@@ -166,69 +147,78 @@ class LoginUser(Resource):
 
         response_data = {"message": "Login failed"}
 
-        logged_in_user = weconnect.login(
-            args["username"], args["password"])
+        username = args["username"].lower()
 
-        if isinstance(logged_in_user, User):
-            user = get_user_by_username(args["username"])
+        user = User.query.filter_by(username=username).first()
+        if user:
+            if check_password_hash(user.password_hash, args["password"]):
+                access_token = jwt.encode(
+                    {
+                        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                        "iat": datetime.datetime.utcnow(),
+                        "sub": user.id
+                    }, secret_key, algorithm="HS256")
 
-            access_token = jwt.encode(
-                {
-                    "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                    "iat": datetime.datetime.utcnow(),
-                    "sub": user.get("user_id")
-                }, secret_key, algorithm="HS256")
-            # session["user_id"] = user.get("user_id")
+                session["user_id"] = user.id
 
-            response_data["message"] = "User logged in"
-            response_data["access_token"] = access_token.decode()
+                response_data["message"] = "User logged in"
+                response_data["access_token"] = access_token.decode()
+                response = jsonify(response_data)
+                response.status_code = 200  # Post success
+                return response
+
+            response_data["message"] = "Incorrect username and password combination!"
             response = jsonify(response_data)
-            response.status_code = 200  # Post success
+            response.status_code = 400  # Bad request
             return response
 
-        response_data["message"] = logged_in_user
+        response_data["message"] = "This username does not exist! Please register!"
         response = jsonify(response_data)
         response.status_code = 400  # Bad request
         return response
 
 
-class ResetPassword(Resource):
-    """Password reset"""
+# class ResetPassword(Resource):
+#     """Password reset"""
 
-    @token_required
-    @swag_from('docs/reset_password.yml')
-    def post(self):
-        """Reset a password if token is valid"""
+#     @token_required
+#     @swag_from('docs/reset_password.yml')
+#     def post(self):
+#         """Reset a password if token is valid"""
 
-        response_data = {"message": "fail"}
+#         response_data = {"message": "fail"}
 
-        user = request.data["user"]
-        user_data = user.get("user_data")
+#         user = request.data["user"]
+#         user_data = user.get("user_data")
 
-        password = "Chang3m3" + str(random.randrange(10000))
-        user_object = User(
-            user_data["first_name"], user_data["last_name"], user_data["username"], password)
-        weconnect.edit_user(user_object)
+#         password = "Chang3m3" + str(random.randrange(10000))
+#         user_object = User(
+#             user_data["first_name"], user_data["last_name"], user_data["username"], password)
+#         weconnect.edit_user(user_object)
 
-        users.remove(user)
-        args = {
-            "first_name": user_data["first_name"],
-            "last_name": user_data["last_name"],
-            "username": user_data["username"],
-            "password": password
-        }
-        user_data = {"user_id": user.get("user_id"), "user_data": args}
-        users.append(user_data)
+#         users.remove(user)
+#         args = {
+#             "first_name": user_data["first_name"],
+#             "last_name": user_data["last_name"],
+#             "username": user_data["username"],
+#             "password": password
+#         }
+#         user_data = {"user_id": user.get("user_id"), "user_data": args}
+#         users.append(user_data)
 
-        response_data["message"] = "User password reset"
-        response_data["new_password"] = password
-        response = jsonify(response_data)
-        response.status_code = 200  # Post update success
+#         response_data["message"] = "User password reset"
+#         response_data["new_password"] = password
+#         response = jsonify(response_data)
+#         response.status_code = 200  # Post update success
 
-        token = request.headers["Authorization"].split(" ")[1]
-        weconnect.token_blacklist.append(token)
+#         session["user_id"] = None
+#         token = request.headers["Authorization"].split(" ")[1]
+#         token_blacklist = Blacklist(token)
 
-        return response
+#         db.session.add(token_blacklist)
+#         db.session.commit()
+
+#         return response
 
 
 class LogoutUser(Resource):
@@ -239,7 +229,11 @@ class LogoutUser(Resource):
     def post(self):
         """Logs out a user"""
 
-        # session["user_id"] = Null
+        session["user_id"] = None
         token = request.headers["Authorization"].split(" ")[1]
-        weconnect.token_blacklist.append(token)
+        token_blacklist = Blacklist(token)
+
+        db.session.add(token_blacklist)
+        db.session.commit()
+
         return make_response(jsonify({"message": "Access token revoked"}), 200)
