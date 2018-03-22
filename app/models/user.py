@@ -17,14 +17,18 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(256), nullable=False)
-    businesses = db.relationship(
-        'Business', backref='user', cascade='all, delete-orphan')
-    reviews = db.relationship('Review', backref='user',
-                              cascade='all, delete-orphan')
-    categories = db.relationship(
-        'Category', backref='user', cascade='all, delete-orphan')
-    locations = db.relationship(
-        'Review', backref='user', cascade='all, delete-orphan')
+    # businesses = db.relationship(
+    #     'Business', backref='user', cascade='all, delete-orphan')
+    # reviews = db.relationship('Review', backref='user',
+    #                           cascade='all, delete-orphan')
+    # categories = db.relationship(
+    #     'Category', backref='user', cascade='all, delete-orphan')
+    # locations = db.relationship(
+    #     'Review', backref='user', cascade='all, delete-orphan')
+    businesses = db.Column(db.String(500))
+    reviews = db.Column(db.String(500))
+    categories = db.Column(db.String(500))
+    locations = db.Column(db.String(500))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 

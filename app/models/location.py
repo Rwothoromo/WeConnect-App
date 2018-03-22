@@ -13,8 +13,9 @@ class Location:
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(256), nullable=False)
-    businesses = db.relationship(
-        'Business', backref='location', cascade='all, delete-orphan')
+    # businesses = db.relationship(
+    #     'Business', backref='location', cascade='all, delete-orphan')
+    businesses = db.Column(db.String(500))
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 

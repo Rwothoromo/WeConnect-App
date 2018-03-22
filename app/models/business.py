@@ -16,8 +16,9 @@ class Business(db.Model):
     category = db.Column(db.Integer, db.ForeignKey('categories.id'))
     location = db.Column(db.Integer, db.ForeignKey('locations.id'))
     photo = db.Column(db.String(256))
-    reviews = db.relationship(
-        'Review', backref='business', cascade='all, delete-orphan')
+    # reviews = db.relationship(
+    #     'Review', backref='business', cascade='all, delete-orphan')
+    reviews = db.Column(db.String(500))
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
