@@ -1,0 +1,58 @@
+Endpoint that creates a business
+---
+tags:
+  - Business
+parameters:
+  - name: Authorization
+    description: A json web token prefixed with 'Bearer '
+    in: header
+    type: string
+    required: true
+  - name: body
+    description: business creation data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "name"
+        - "description"
+        - "category"
+        - "location"
+        - "photo"
+      properties:
+        name:
+          type: "string"
+          example: "Buyondo Hardware"
+        description:
+          type: "string"
+          example: "One stop center for building materials..."
+        category:
+          type: "string"
+          example: "Construction"
+        location:
+          type: "string"
+          example: "Kabale"
+        photo:
+          type: "string"
+          example: "photo"
+
+responses:
+  201:
+    description: Business added
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business added"
+  409:
+    description: Business already exists
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business already exists"

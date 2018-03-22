@@ -1,0 +1,59 @@
+Endpoint that posts a business review
+---
+tags:
+  - Business
+parameters:
+  - name: Authorization
+    description: A json web token prefixed with 'Bearer '
+    type: string
+    in: header
+    required: true
+  - name: business_id
+    description: business id
+    type: integer
+    in: path
+    required: true
+  - name: body
+    description: business review data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "name"
+        - "description"
+      properties:
+        name:
+          type: "string"
+          example: "Well stocked"
+        description:
+          type: "string"
+          example: "They had a broad variety of construction materials"
+responses:
+  201:
+    description: Business review added
+    schema:
+      type: object
+      properties:
+        business:
+          type: string
+          enum:
+            - "Business review added"
+  404:
+    description: Business not found
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business not found"
+  409:
+    description: Business already exists
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business review by that name already exists"
