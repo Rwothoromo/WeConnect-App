@@ -4,6 +4,7 @@
 from werkzeug.security import check_password_hash
 
 # local imports
+from app import db
 from app.models.business import Business
 from app.models.category import Category
 from app.models.location import Location
@@ -32,6 +33,10 @@ class WeConnect:
         if isinstance(user, User):
             if user.username not in self.users:
                 self.users[user.username] = user
+
+                db.session.add(user)
+                db.session.commit()
+                
                 return user
             return "User already exists!"
         return "Not a User instance!"

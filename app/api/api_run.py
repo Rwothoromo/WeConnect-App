@@ -20,9 +20,8 @@ app_dir = os.path.dirname(api_dir)
 sys.path.insert(0, app_dir)
 # sys.path.append(os.path.dirname)
 
-from app.api.v1.resources.hello import HelloWorld
-from app.api.v1.resources.auth import RegisterUser, LoginUser, ResetPassword, LogoutUser
-from app.api.v1.resources.business import BusinessResource, BusinessCollection, BusinessReviews
+from app.api.v2.resources.auth import RegisterUser, LoginUser, ResetPassword, LogoutUser
+from app.api.v2.resources.business import BusinessResource, BusinessCollection, BusinessReviews
 
 app = Flask(__name__)                   # Create Flask WSGI appliction
 
@@ -31,7 +30,7 @@ app.config['SWAGGER'] = {
     'title': 'WeConnect API',
     'description': "This API allows users to create and review businesses",
     'basePath': '',
-    'version': '1',
+    'version': '2',
     'contact': {
         'Developer': 'Elijah Rwothoromo',
         'Profile': 'https://github.com/Rwothoromo'
@@ -58,11 +57,10 @@ swagger = Swagger(app)
 
 # Add Blueprint; how to construct or extend the app
 api_bp = Blueprint('api', __name__)
-api = Api(api_bp, prefix="/api/v1")
+api = Api(api_bp, prefix="/api/v2")
 
 
 # Add the resource to the API.
-api.add_resource(HelloWorld, '/')
 api.add_resource(BusinessCollection, '/businesses')
 api.add_resource(BusinessResource, '/businesses/<int:business_id>')
 api.add_resource(BusinessReviews, '/businesses/<int:business_id>/reviews')
@@ -78,8 +76,8 @@ app.register_blueprint(api_bp)
 def main():
     """Redirect to api endpoints"""
 
-    return redirect('/api/v1/')
+    return redirect('/api/v2/')
 
 
-if __name__ == '__main__': # pragma: no cover
+if __name__ == '__main__':  # pragma: no cover
     app.run()

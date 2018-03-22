@@ -30,7 +30,7 @@ app_dir = os.path.dirname(api_dir)
 sys.path.insert(0, app_dir)
 # sys.path.append(os.path.dirname)
 
-
+from app import db
 from app.models.weconnect import WeConnect
 from app.models.user import User
 
@@ -137,16 +137,14 @@ class RegisterUser(Resource):
             if string_empty(value):
                 return make_response(jsonify({"message": key + " must be a string"}), 400)
 
-        user = get_user_by_username(args["username"])
+        username = args["username"].lower()
+        
+        user = User.query.filter_by(username=username).first()
         if not user:
-            user_id = len(users) + 1
-
             user_object = User(args["first_name"], args["last_name"],
-                               args["username"], args["password"])
+                               username, args["password"])
             weconnect.register(user_object)
 
-            user = {"user_id": user_id, "user_data": args}
-            users.append(user)
             # Post create success
             return make_response(jsonify({"message": "User added"}), 201)
 
