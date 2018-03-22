@@ -14,14 +14,3 @@ from config import app_config
 app = Flask(__name__)
 app.config.from_object(app_config[os.environ['FLASK_CONFIG']])
 db = SQLAlchemy(app)
-# db.init_app(app)
-Migrate(app, db)
-db.create_all()
-
-# temporary route
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
-
-if __name__ == '__main__':
-    app.run()

@@ -16,11 +16,19 @@ class Business(db.Model):
     category = db.Column(db.Integer, db.ForeignKey('categories.id'))
     location = db.Column(db.Integer, db.ForeignKey('locations.id'))
     photo = db.Column(db.String(256))
-    # reviews = db.relationship(
-    #     'Review', backref='business', cascade='all, delete-orphan')
-    reviews = db.Column(db.String(500))
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    # reviews = db.relationship(
+    #     'Review', backref='business', lazy='dynamic', cascade='all, delete-orphan')
+
+    """
+    backref creates a new property on the Review model such that 
+    review.business gets the business assigned to that review.
+    
+    lazy means data will be loaded from the database dynamically,
+    which is ideal for managing large collections.
+    """
 
     def __init__(self, name, description, category, location, photo):
         self.name = name
@@ -29,7 +37,7 @@ class Business(db.Model):
         self.location = location
         self.photo = photo
         self.reviews = {}
-        self.created_by = 1 # session["user_id"]
+        self.created_by = 1  # session["user_id"]
 
     def __repr__(self):
         return '<Business: {}>'.format(self.name)

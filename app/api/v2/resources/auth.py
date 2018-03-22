@@ -12,7 +12,7 @@ from functools import wraps
 
 import jwt
 
-from flask import jsonify, request, make_response
+from flask import jsonify, request, make_response, session
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
@@ -180,6 +180,7 @@ class LoginUser(Resource):
                     "iat": datetime.datetime.utcnow(),
                     "sub": user.get("user_id")
                 }, secret_key, algorithm="HS256")
+            # session["user_id"] = user.get("user_id")
 
             response_data["message"] = "User logged in"
             response_data["access_token"] = access_token.decode()
@@ -240,6 +241,7 @@ class LogoutUser(Resource):
     def post(self):
         """Logs out a user"""
 
+        # session["user_id"] = Null
         token = request.headers["Authorization"].split(" ")[1]
         weconnect.token_blacklist.append(token)
         return make_response(jsonify({"message": "Access token revoked"}), 200)
