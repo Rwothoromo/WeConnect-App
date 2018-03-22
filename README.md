@@ -57,10 +57,6 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `set DATABASE_URL=postgresql://db_user:password@localhost/weconnect_db`
 * Run `set FLASK_CONFIG=development` on command prompt
 * Run `set FLASK_APP=run.py` on command prompt
-* Run `python` on command prompt then type the following
-    - `>>> from app import db`
-    - `>>> db.create_all()`
-    - `>>> exit()`
 * Run `flask run` on command prompt
 * View the app on `http://127.0.0.1:5000/`
 
