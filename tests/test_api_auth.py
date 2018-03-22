@@ -9,22 +9,11 @@ from tests.test_api_base import WeConnectApiTestBase
 class WeConnectApiAuthTestCase(WeConnectApiTestBase):
     """Test user api logic"""
 
-    def test_api_hello(self):
-        """Test api hello text"""
-
-        response = self.client.get(self.prefix)
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual(
-            'WeConnect brings businesses and users together, and allows users to review businesses',
-            response_data['WeConnect'])
-        self.assertEqual(response.status_code, 200)
-
     def test_api_user_registration(self):
         """Test api user registration"""
 
         response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                    data=json.dumps(self.user_one))
+                                    data=json.dumps(self.user_two))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual('User added', response_data['message'])

@@ -89,8 +89,78 @@ class WeConnectApiTestBase(TestCase):
             "password": "password"
         }
 
+        self.business1 = {
+            "name": "Bondo",
+            "description": "yummy",
+            "category": "Eateries",
+            "location": "Kabale",
+            "photo": "photo"
+        }
+
+        self.business1_edit = {
+            "name": "Bondo",
+            "description": "yummy foods and deliveries",
+            "category": "Eateries",
+            "location": "Kabale",
+            "photo": "photo"
+        }
+
+        self.business1_edit1 = {
+            "name": "Boondocks",
+            "description": "yummy foods and deliveries",
+            "category": "Eateries",
+            "location": "Kabale",
+            "photo": "photo"
+        }
+
+        self.business2 = {
+            "name": '',
+            "description": '',
+            "category": '',
+            "location": '',
+            "photo": ''
+        }
+
+        self.business3 = {
+            "name": "Boondocks",
+            "description": "your favorite movies",
+            "category": "Entertainment",
+            "location": "Kabale",
+            "photo": "photo"
+        }
+
+        self.review1 = {
+            "business": "Bondo",
+            "description": "i was given meat yo",
+            "name": "extra game"
+        }
+
+        self.review2 = {
+            "business": "Bondo",
+            "description": '',
+            "name": ''
+        }
+
         with self.app.app_context():
             db.create_all()
+        
+        self.client.post(self.prefix + 'auth/register', content_type='application/json',
+                         data=json.dumps(self.user_one))
+        login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
+                                 data=json.dumps(self.user_one_login_data))
+        login_data = json.loads(login.data.decode())
+        self.access_token = login_data["access_token"]
+    
+    def test_api_hello(self):
+        """Test api hello text"""
+
+        response = self.client.get(self.prefix)
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual(
+            'WeConnect brings businesses and users together, and allows users to review businesses',
+            response_data['WeConnect'])
+        self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
         with self.app.app_context():
