@@ -1,6 +1,7 @@
 # instance/config.py
 """Weconnect app configurations"""
 
+import os
 
 class Config(object):
     """
@@ -8,7 +9,7 @@ class Config(object):
     """
 
     SECRET_KEY = 'some value'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/weconnect_db'
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     
     TESTING = False
     DEBUG = False

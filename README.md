@@ -53,20 +53,13 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `mkvirtualenv venv` on command prompt
 * Run `workon venv` on command prompt
 * Run `pip install -r requirements.txt` on command prompt
-* Create PostgreSQL databases `weconnect_db` and `test_weconnect_db`
+* Run `createdb weconnect_db` and `createdb test_weconnect_db` on the psql bash terminal
+* Run `set DATABASE_URL=postgresql://db_user:password@localhost/weconnect_db`
 * Run `set FLASK_CONFIG=development` on command prompt
 * Run `set FLASK_APP=run.py` on command prompt
-* Run `flask db init` on command prompt
-* Run `flask db migrate` on command prompt
-* Run `flask db upgrade` on command prompt
-* Run `flask shell` on command prompt then type the following
-    - `>>> from app.models import Employee`
+* Run `python` on command prompt then type the following
     - `>>> from app import db`
-    - `>>> admin = Employee(email="admin@admin.com", username="admin", password="admin2017", is_admin=True)`
-    - `>>> employee1 = Employee(email="employee1@employee.com", username="employee1", password="employee12017", first_name="John", last_name="Doe")`
-    - `>>> db.session.add(admin)`
-    - `>>> db.session.add(employee1)`
-    - `>>> db.session.commit()`
+    - `>>> db.create_all()`
     - `>>> exit()`
 * Run `flask run` on command prompt
 * View the app on `http://127.0.0.1:5000/`
