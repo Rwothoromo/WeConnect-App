@@ -39,7 +39,6 @@ class TestingConfig(Config):
     Testing configurations
     """
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/test_weconnect_db'
     TESTING = True
 
 

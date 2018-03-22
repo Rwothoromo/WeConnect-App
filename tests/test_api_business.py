@@ -1,5 +1,5 @@
-# # tests/test_api_v2_business.py
-# """This script tests the business functionality of WeConnect api v1"""
+# # tests/test_api_business.py
+# """This script tests the business functionality of WeConnect api"""
 
 # # third party imports
 # from unittest import TestCase

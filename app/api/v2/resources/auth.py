@@ -25,8 +25,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 auth_dir = os.path.dirname(os.path.abspath(
     inspect.getfile(inspect.currentframe())))
 resources_dir = os.path.dirname(auth_dir)
-v1_dir = os.path.dirname(resources_dir)
-api_dir = os.path.dirname(v1_dir)
+v2_dir = os.path.dirname(resources_dir)
+api_dir = os.path.dirname(v2_dir)
 app_dir = os.path.dirname(api_dir)
 sys.path.insert(0, app_dir)
 # sys.path.append(os.path.dirname)

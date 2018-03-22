@@ -71,6 +71,12 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 ## Unittests
 
+* Run `set DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db`
+* Run `set FLASK_CONFIG=testing` on command prompt
+* Run the following on command prompt
+    - `python manage.py db init`
+    - `python manage.py db migrate`
+    - `python manage.py db upgrade`
 * Run `pytest` on command prompt
 
 ## GitHub pages
