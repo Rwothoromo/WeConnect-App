@@ -33,3 +33,12 @@ responses:
           type: string
           enum:
             - "Business not found"
+  409:
+    description: Business can only be deleted by owner
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Only the Business owner can delete"
