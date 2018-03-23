@@ -56,7 +56,8 @@ class BusinessCollection(Resource):
         businesses = Business.query.order_by(Business.name).all()
         if not businesses:
             return make_response(jsonify({"message": "No business found"}), 200)
-        businesses_list = [business.business_as_dict() for business in businesses]   
+        businesses_list = [business.business_as_dict()
+                           for business in businesses]
         return make_response(jsonify(businesses_list), 200)
 
     @token_required
@@ -111,10 +112,10 @@ class BusinessResource(Resource):
         """Get a business"""
 
         business = Business.query.get(business_id)
-        if not business:
-            return make_response(jsonify({"message": "Business not found"}), 404)
+        if business:
+            return make_response(jsonify(business.business_as_dict()), 200)
 
-        return make_response(jsonify(business.business_as_dict()), 200)
+        return make_response(jsonify({"message": "Business not found"}), 404)
 
 #     @token_required
 #     @swag_from('docs/put_business.yml')

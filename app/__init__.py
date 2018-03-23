@@ -16,8 +16,8 @@ from app.db import db
 
 from app.api.v2.resources.hello import HelloWorld
 from app.api.v2.resources.auth import RegisterUser, LoginUser, ResetPassword, LogoutUser
-# , BusinessResource, BusinessReviews
-from app.api.v2.resources.business import BusinessCollection
+# , BusinessReviews
+from app.api.v2.resources.business import BusinessCollection, BusinessResource
 
 app = Flask(__name__)
 app.config.from_object(app_config[os.environ['FLASK_CONFIG']])
@@ -63,7 +63,7 @@ api = Api(api_bp, prefix="/api/v2")
 # Add the resource to the API.
 api.add_resource(HelloWorld, '/')
 api.add_resource(BusinessCollection, '/businesses')
-# api.add_resource(BusinessResource, '/businesses/<int:business_id>')
+api.add_resource(BusinessResource, '/businesses/<int:business_id>')
 # api.add_resource(BusinessReviews, '/businesses/<int:business_id>/reviews')
 api.add_resource(RegisterUser, '/auth/register')
 api.add_resource(LoginUser, '/auth/login')
