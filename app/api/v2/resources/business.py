@@ -48,14 +48,16 @@ review_request_parser.add_argument(
 class BusinessCollection(Resource):
     """Operate on a list of Businesses, to view and add them"""
 
-    # @token_required
-    # @swag_from('docs/get_businesses.yml')
-    # def get(self):
-    #     """Retrieves all businesses"""
+    @token_required
+    @swag_from('docs/get_businesses.yml')
+    def get(self):
+        """Retrieves all businesses"""
 
-    #     if not businesses:
-    #         return make_response(jsonify({"message": "No business found"}), 200)
-    #     return make_response(jsonify(businesses), 200)
+        businesses = Business.query.order_by(Business.name)
+        if not businesses:
+            return make_response(jsonify({"message": "No business found"}), 200)
+        businesses_list = [business for business in businesses]
+        return make_response(jsonify(businesses_list), 200)
 
     @token_required
     @swag_from('docs/post_business.yml')

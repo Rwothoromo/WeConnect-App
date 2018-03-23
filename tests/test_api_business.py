@@ -46,13 +46,13 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.assertEqual("name must be a string", response_data1['message'])
         self.assertEqual(response1.status_code, 400)
 
-    # def test_api_businesses_view(self):
-    #     """Test api businesses viewing"""
+    def test_api_businesses_view(self):
+        """Test api businesses viewing"""
 
-    #     response = self.client.get(self.prefix + 'businesses',
-    #                                headers={'Authorization': 'Bearer ' + self.access_token})
+        response = self.client.get(self.prefix + 'businesses',
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
 
-    #     self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     # def test_api_business_view(self):
     #     """Test api business view a business"""
