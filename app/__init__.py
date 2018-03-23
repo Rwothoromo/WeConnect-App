@@ -20,8 +20,7 @@ from app.api.v2.resources.auth import RegisterUser, LoginUser, ResetPassword, Lo
 from app.api.v2.resources.business import BusinessCollection
 
 app = Flask(__name__)
-app_env = os.environ['FLASK_CONFIG'] if os.environ['FLASK_CONFIG'] else 'testing'
-app.config.from_object(app_config[app_env])
+app.config.from_object(app_config[os.environ['FLASK_CONFIG']])
 
 app.config['SWAGGER'] = {
     'swagger': '2.0',
