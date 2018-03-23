@@ -53,10 +53,10 @@ class BusinessCollection(Resource):
     def get(self):
         """Retrieves all businesses"""
 
-        businesses = Business.query.order_by(Business.name)
+        businesses = Business.query.order_by(Business.name).all()
         if not businesses:
             return make_response(jsonify({"message": "No business found"}), 200)
-        businesses_list = [business for business in businesses]
+        businesses_list = [business.business_as_dict() for business in businesses]   
         return make_response(jsonify(businesses_list), 200)
 
     @token_required
@@ -71,24 +71,27 @@ class BusinessCollection(Resource):
 
         business = Business.query.filter_by(name=args["name"]).first()
         if not business:
-            category_object = Category(args["category"], args["category"] + ' description')
+            category_object = Category(
+                args["category"], args["category"] + ' description')
             category = Category.query.filter_by(name=args["category"]).first()
             if not category:
                 db.session.add(category_object)
                 db.session.commit()
-                category = Category.query.filter_by(name=args["category"]).first()
+                category = Category.query.filter_by(
+                    name=args["category"]).first()
 
-            location_object = Location(args["location"], args["location"] + ' description')
+            location_object = Location(
+                args["location"], args["location"] + ' description')
             location = Location.query.filter_by(name=args["location"]).first()
             if not location:
                 db.session.add(location_object)
                 db.session.commit()
-                location = Location.query.filter_by(name=args["location"]).first()
-            
-            business_object = Business(args["name"], args["description"],
-                               category.id, location.id, args["photo"])
+                location = Location.query.filter_by(
+                    name=args["location"]).first()
 
-            
+            business_object = Business(args["name"], args["description"],
+                                       category.id, location.id, args["photo"])
+
             db.session.add(location_object)
             db.session.add(business_object)
             db.session.commit()
@@ -99,19 +102,19 @@ class BusinessCollection(Resource):
         return make_response(jsonify({"message": "Business already exists"}), 409)
 
 
-# class BusinessResource(Resource):
-#     """Operate on a single Business, to view, update and delete it"""
+class BusinessResource(Resource):
+    """Operate on a single Business, to view, update and delete it"""
 
-#     @token_required
-#     @swag_from('docs/get_business.yml')
-#     def get(self, business_id):
-#         """Get a business"""
+    @token_required
+    @swag_from('docs/get_business.yml')
+    def get(self, business_id):
+        """Get a business"""
 
-#         business = get_business_by_id(business_id)
-#         if not business:
-#             return make_response(jsonify({"message": "Business not found"}), 404)
+        business = Business.query.get(business_id)
+        if not business:
+            return make_response(jsonify({"message": "Business not found"}), 404)
 
-#         return make_response(jsonify(business), 200)
+        return make_response(jsonify(business.business_as_dict()), 200)
 
 #     @token_required
 #     @swag_from('docs/put_business.yml')

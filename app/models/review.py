@@ -25,3 +25,6 @@ class Review(db.Model):
 
     def __repr__(self):
         return '<Review: {}>'.format(self.name)
+
+    def review_as_dict(self):
+        return {r.name: getattr(self, r.name) for r in self.__table__.columns}

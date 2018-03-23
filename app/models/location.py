@@ -24,3 +24,6 @@ class Location(db.Model):
 
     def __repr__(self):
         return '<Location: {}>'.format(self.name)
+
+    def location_as_dict(self):
+        return {l.name: getattr(self, l.name) for l in self.__table__.columns}

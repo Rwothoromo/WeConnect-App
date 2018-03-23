@@ -24,3 +24,6 @@ class Category(db.Model):
 
     def __repr__(self):
         return '<Category: {}>'.format(self.name)
+
+    def category_as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

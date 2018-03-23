@@ -48,15 +48,28 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
     def test_api_businesses_view(self):
         """Test api businesses viewing"""
-
+        
         response = self.client.get(self.prefix + 'businesses',
                                    headers={'Authorization': 'Bearer ' + self.access_token})
+        response_data = json.loads(response.data.decode())
 
+        self.client.post(self.prefix + 'businesses',
+                         headers={'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json', data=json.dumps(self.business1))
+        
+        response1 = self.client.get(self.prefix + 'businesses',
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
+
+        self.assertEqual("No business found", response_data['message'])
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response1.status_code, 200)
 
     # def test_api_business_view(self):
     #     """Test api business view a business"""
 
+    #     self.client.post(self.prefix + 'businesses',
+    #                      headers={'Authorization': 'Bearer ' + self.access_token},
+    #                      content_type='application/json', data=json.dumps(self.business1))
     #     response = self.client.get(self.prefix + 'businesses/1',
     #                                headers={'Authorization': 'Bearer ' + self.access_token})
 
@@ -65,6 +78,9 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
     # def test_api_business_view_fails(self):
     #     """Test api fails to view a business"""
 
+    #     self.client.post(self.prefix + 'businesses',
+    #                      headers={'Authorization': 'Bearer ' + self.access_token},
+    #                      content_type='application/json', data=json.dumps(self.business1))
     #     response = self.client.get(self.prefix + 'businesses/9',
     #                                headers={'Authorization': 'Bearer ' + self.access_token})
     #     response_data = json.loads(response.data.decode())
