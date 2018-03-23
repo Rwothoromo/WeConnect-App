@@ -5,14 +5,14 @@ python:
 install:
   - pip install -r requirements.txt
 
-env:
-  - ENV_VAR=testing
-  - DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db
-
 # create test db
 before_script:
   - psql -c 'create database test_weconnect_db;' -U postgres
   - psql -c "create user db_user with password 'password';" -U postgres
+
+env:
+  - DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db
+  - ENV_VAR=testing
 
 # command to run tests
 script:
