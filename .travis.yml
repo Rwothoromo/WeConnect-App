@@ -13,7 +13,6 @@ before_script:
 env:
   - DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db
   - FLASK_CONFIG=testing
-  - ENV_VAR=testing
 
 # command to run tests
 script:
