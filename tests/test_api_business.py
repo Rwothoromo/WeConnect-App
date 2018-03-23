@@ -206,7 +206,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.assertEqual(response.status_code, 200)
 
     def test_api_business_delete_fails_for_missing_business(self):
-        """Test api business deletion fails to non existent business"""
+        """Test api business deletion fails for non existent business"""
 
         response = self.client.delete(self.prefix + 'businesses/7',
                                       headers={'Authorization': 'Bearer ' + self.access_token})
@@ -257,93 +257,104 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.assertEqual("Business review added", response_data['message'])
         self.assertEqual(response.status_code, 201)
 
-    # def test_api_create_business_reviews_fails(self):
-    #     """Test api business post reviews fails"""
+    def test_api_create_business_reviews_fails_for_missing_business(self):
+        """Test api business post reviews fails if business is not found"""
 
-    #     self.client.post(self.prefix + 'businesses',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.business1))
-    #     self.client.post(self.prefix + 'businesses/1/reviews',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.review1))
-    #     response = self.client.post(self.prefix + 'businesses/12/reviews',
-    #                                 headers={
-    #                                     'Authorization': 'Bearer ' + self.access_token},
-    #                                 content_type='application/json',
-    #                                 data=json.dumps(self.review1))
-    #     response1 = self.client.post(self.prefix + 'businesses/1/reviews',
-    #                                  headers={
-    #                                      'Authorization': 'Bearer ' + self.access_token},
-    #                                  content_type='application/json',
-    #                                  data=json.dumps(self.review1))
-    #     response2 = self.client.post(self.prefix + 'businesses/1/reviews',
-    #                                  headers={
-    #                                      'Authorization': 'Bearer ' + self.access_token},
-    #                                  content_type='application/json',
-    #                                  data=json.dumps(self.review2))
-    #     response_data = json.loads(response.data.decode())
-    #     response_data1 = json.loads(response1.data.decode())
-    #     response_data2 = json.loads(response2.data.decode())
+        response = self.client.post(self.prefix + 'businesses/12/reviews',
+                                    headers={
+                                        'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.review1))
+        response_data = json.loads(response.data.decode())
 
-    #     self.assertEqual("Business not found", response_data['message'])
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(
-    #         "Business review by that name already exists", response_data1['message'])
-    #     self.assertEqual(response1.status_code, 409)
-    #     self.assertEqual("name must be a string", response_data2['message'])
-    #     self.assertEqual(response2.status_code, 400)
+        self.assertEqual("Business not found", response_data['message'])
+        self.assertEqual(response.status_code, 404)
 
-    # def test_api_view_business_reviews(self):
-    #     """Test api business get reviews"""
+    def test_api_create_business_reviews_fails_for_new_existent_review_name(self):
+        """Test api business post reviews fails if new review name already exists"""
 
-    #     self.client.post(self.prefix + 'businesses',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.business1))
-    #     self.client.post(self.prefix + 'businesses/1/reviews',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.review1))
-    #     response = self.client.get(self.prefix + 'businesses/1/reviews',
-    #                                headers={'Authorization': 'Bearer ' + self.access_token})
-    #     response_data = json.loads(response.data.decode())
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business1))
+        self.client.post(self.prefix + 'businesses/1/reviews',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.review1))
 
-    #     self.assertIsInstance(response_data, list)
-    #     self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.prefix + 'businesses/1/reviews',
+                                    headers={
+                                        'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.review1))
 
-    # def test_api_view_business_reviews_fails(self):
-    #     """Test api business get reviews fails"""
+        response_data = json.loads(response.data.decode())
 
-    #     self.client.post(self.prefix + 'businesses',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.business1))
-    #     self.client.post(self.prefix + 'businesses',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.business2))
-    #     self.client.post(self.prefix + 'businesses/1/reviews',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.review1))
-    #     response = self.client.get(self.prefix + 'businesses/2/reviews',
-    #                                headers={'Authorization': 'Bearer ' + self.access_token})
-    #     response1 = self.client.get(self.prefix + 'businesses/8/reviews',
-    #                                 headers={'Authorization': 'Bearer ' + self.access_token})
-    #     response_data = json.loads(response.data.decode())
-    #     response_data1 = json.loads(response1.data.decode())
+        self.assertEqual(
+            "Business review by that name already exists", response_data['message'])
+        self.assertEqual(response.status_code, 409)
 
-    #     self.assertEqual("Business reviews not found",
-    #                      response_data['message'])
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual("Business not found", response_data1['message'])
-    #     self.assertEqual(response1.status_code, 404)
+    def test_api_create_business_reviews_fails_for_bad_input(self):
+        """Test api business post reviews fails for bad input"""
+
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business1))
+
+        response = self.client.post(self.prefix + 'businesses/1/reviews',
+                                    headers={
+                                        'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.review2))
+
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual("name must be a string", response_data['message'])
+        self.assertEqual(response.status_code, 400)
+
+    def test_api_view_business_reviews(self):
+        """Test api business get reviews"""
+
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business1))
+
+        response = self.client.get(self.prefix + 'businesses/1/reviews',
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
+
+        self.client.post(self.prefix + 'businesses/1/reviews',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.review1))
+
+        response1 = self.client.get(self.prefix + 'businesses/1/reviews',
+                                    headers={'Authorization': 'Bearer ' + self.access_token})
+
+        response_data = json.loads(response.data.decode())
+        response_data1 = json.loads(response1.data.decode())
+
+        self.assertEqual("Business reviews not found",
+                         response_data['message'])
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response_data1, list)
+        self.assertEqual(response1.status_code, 200)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_api_view_business_reviews_fails_for_missing_business(self):
+        """Test api business get reviews fails for non existent business"""
+
+        response = self.client.get(self.prefix + 'businesses/2/reviews',
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
+
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual("Business not found", response_data['message'])
+        self.assertEqual(response.status_code, 404)
