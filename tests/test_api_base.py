@@ -52,6 +52,13 @@ class WeConnectApiTestBase(TestCase):
             "password": "password"
         }
 
+        self.user_four = {
+            "first_name": "elijah",
+            "last_name": "rwoth",
+            "username": "elijahrwoth",
+            "password": "password"
+        }
+
         self.user_bad = {
             "first_name": '',
             "last_name": '',
@@ -71,6 +78,11 @@ class WeConnectApiTestBase(TestCase):
 
         self.user_three_login_data = {
             "username": "eli",
+            "password": "password"
+        }
+
+        self.user_four_login_data = {
+            "username": "elijahrwoth",
             "password": "password"
         }
 
@@ -143,14 +155,14 @@ class WeConnectApiTestBase(TestCase):
 
         with self.app.app_context():
             db.create_all()
-        
+
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.user_one))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                  data=json.dumps(self.user_one_login_data))
         login_data = json.loads(login.data.decode())
         self.access_token = login_data["access_token"]
-    
+
     def test_api_hello(self):
         """Test api hello text"""
 

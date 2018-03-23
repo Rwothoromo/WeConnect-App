@@ -117,33 +117,62 @@ class BusinessResource(Resource):
 
         return make_response(jsonify({"message": "Business not found"}), 404)
 
-#     @token_required
-#     @swag_from('docs/put_business.yml')
-#     def put(self, business_id):
-#         """Updates a business profile"""
+    @token_required
+    @swag_from('docs/put_business.yml')
+    def put(self, business_id):
+        """Updates a business profile"""
 
-#         args = business_request_parser.parse_args()
-#         for key, value in args.items():
-#             if string_empty(value):
-#                 return make_response(jsonify({"message": key + " must be a string"}), 400)
+        args = business_request_parser.parse_args()
+        for key, value in args.items():
+            if string_empty(value):
+                return make_response(jsonify({"message": key + " must be a string"}), 400)
 
-#         user = request.data["user"]
+        user_data = request.data["user"]
 
-#         business = get_business_by_id(business_id)
+        business = Business.query.get(business_id)
 
-#         if business:
-#             # to avoid duplicating a business name
-#             business_by_name = get_business_by_name(args.name)
-#             if business_by_name['business_id'] == business_id:
-#                 businesses.remove(business)
-#                 business = {"user_id": user.get("user_id"),
-#                             "business_id": business_id, "business_data": args}
-#                 businesses.append(business)
-#                 return make_response(jsonify({"message": "Business updated"}), 200)
+        if business:
+            if user_data.id != business.created_by:
+                return make_response(jsonify({"message": "Only the Business owner can update"}), 409)
 
-#             return make_response(jsonify({"message": "Business by that name already exists"}), 409)
+            # to avoid duplicating a business name
+            business_by_name = Business.query.filter_by(name=args.name).first()
+            if business_by_name:
+                if business_by_name.id == business_id:
 
-#         return make_response(jsonify({"message": "Business not found"}), 404)
+                    category = Category.query.filter_by(
+                        name=args["category"]).first()
+                    if not category:
+                        category_object = Category(
+                            args["category"], args["category"] + ' description')
+                        db.session.add(category_object)
+                        db.session.commit()
+                        category = Category.query.filter_by(
+                            name=args["category"]).first()
+
+                    location = Location.query.filter_by(
+                        name=args["location"]).first()
+                    if not location:
+                        location_object = Location(
+                            args["location"], args["location"] + ' description')
+                        db.session.add(location_object)
+                        db.session.commit()
+                        location = Location.query.filter_by(
+                            name=args["location"]).first()
+
+                    business.name = args.name
+                    business.description = args.description
+                    business.category = category.id
+                    business.location = location.id
+                    business.photo = args.photo
+
+                    db.session.commit()
+
+                    return make_response(jsonify({"message": "Business updated"}), 200)
+
+                return make_response(jsonify({"message": "Business by that name already exists"}), 409)
+
+        return make_response(jsonify({"message": "Business not found"}), 404)
 
 #     @token_required
 #     @swag_from('docs/delete_business.yml')
