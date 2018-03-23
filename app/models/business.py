@@ -22,7 +22,7 @@ class Business(db.Model):
     # reviews = db.relationship(
     #     'Review', backref='business', lazy='dynamic', cascade='all, delete-orphan')
 
-    # backref creates a new property on the Review model such that 
+    # backref creates a new property on the Review model such that
     # review.business gets the business assigned to that review.
     # lazy means data will be loaded from the database dynamically,
     # which is ideal for managing large collections.

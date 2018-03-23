@@ -142,15 +142,13 @@ class WeConnectApiTestBase(TestCase):
         }
 
         self.review1 = {
-            "business": "Bondo",
-            "description": "i was given meat yo",
-            "name": "extra game"
+            "name": "extra game",
+            "description": "i was given meat yo"
         }
 
         self.review2 = {
-            "business": "Bondo",
-            "description": '',
-            "name": ''
+            "name": '',
+            "description": ''
         }
 
         with self.app.app_context():

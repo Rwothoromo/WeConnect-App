@@ -239,23 +239,23 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          response_data['message'])
         self.assertEqual(response.status_code, 409)
 
-    # def test_api_create_business_reviews(self):
-    #     """Test api business post reviews"""
+    def test_api_create_business_reviews(self):
+        """Test api business post reviews"""
 
-    #     self.client.post(self.prefix + 'businesses',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.business1))
-    #     response = self.client.post(self.prefix + 'businesses/1/reviews',
-    #                                 headers={
-    #                                     'Authorization': 'Bearer ' + self.access_token},
-    #                                 content_type='application/json',
-    #                                 data=json.dumps(self.review1))
-    #     response_data = json.loads(response.data.decode())
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business1))
+        response = self.client.post(self.prefix + 'businesses/1/reviews',
+                                    headers={
+                                        'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json',
+                                    data=json.dumps(self.review1))
+        response_data = json.loads(response.data.decode())
 
-    #     self.assertEqual("Business review added", response_data['message'])
-    #     self.assertEqual(response.status_code, 201)
+        self.assertEqual("Business review added", response_data['message'])
+        self.assertEqual(response.status_code, 201)
 
     # def test_api_create_business_reviews_fails(self):
     #     """Test api business post reviews fails"""
