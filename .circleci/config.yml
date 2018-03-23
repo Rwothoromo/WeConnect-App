@@ -3,9 +3,10 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.6.1
-      environment:
-        DATABASE_URL: postgresql://db_user:password@localhost/test_weconnect_db
-        FLASK_CONFIG: testing
+        environment:
+          DATABASE_URL: postgresql://db_user:password@localhost/test_weconnect_db
+          FLASK_CONFIG: testing
+      - image: circleci/postgres:10.1
 
     working_directory: ~/repo
 
