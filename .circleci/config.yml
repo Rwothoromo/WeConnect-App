@@ -22,13 +22,13 @@ jobs:
 
       - run:
           name: set database and user
-        # Add a password to the `ubuntu` user, since Postgres is configured to
-        # always ask for a password without sudo, and fails without one.
-            command: sudo -u postgres psql -p 5433 -c "create user db_user with password 'password';"
-            command: sudo -u postgres psql -p 5433 -c "alter user db_user with superuser;"
+          # Add a password to the `ubuntu` user, since Postgres is configured to
+          # always ask for a password without sudo, and fails without one.
+          command: sudo -u postgres psql -p 5433 -c "create user db_user with password 'password';"
+          command: sudo -u postgres psql -p 5433 -c "alter user db_user with superuser;"
 
-        # Create a new test database.
-            command: sudo -u postgres psql -p 5433 -c "create database test_weconnect_db;"
+          # Create a new test database.
+          command: sudo -u postgres psql -p 5433 -c "create database test_weconnect_db;"
 
       - run:
           name: run tests
