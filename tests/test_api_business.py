@@ -153,11 +153,6 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
     def test_api_business_edit_fails_for_missing_business(self):
         """Test api business update fails for missing business"""
 
-        self.client.post(self.prefix + 'businesses',
-                         headers={
-                             'Authorization': 'Bearer ' + self.access_token},
-                         content_type='application/json',
-                         data=json.dumps(self.business1))
         response = self.client.put(self.prefix + 'businesses/4',
                                    headers={
                                        'Authorization': 'Bearer ' + self.access_token},
@@ -169,30 +164,30 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.assertEqual("Business not found", response_data['message'])
         self.assertEqual(response.status_code, 404)
 
-    # def test_api_business_edit_fails_for_new_existent_business_name(self):
-    #     """Test api business update fails if name already exists"""
+    def test_api_business_edit_fails_for_new_existent_business_name(self):
+        """Test api business update fails if new business name already exists"""
 
-    #     self.client.post(self.prefix + 'businesses',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.business1))
-    #     self.client.post(self.prefix + 'businesses',
-    #                      headers={
-    #                          'Authorization': 'Bearer ' + self.access_token},
-    #                      content_type='application/json',
-    #                      data=json.dumps(self.business3))
-    #     response = self.client.put(self.prefix + 'businesses/1',
-    #                                headers={
-    #                                    'Authorization': 'Bearer ' + self.access_token},
-    #                                content_type='application/json',
-    #                                data=json.dumps(self.business1_edit1))
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business1))
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business3))
+        response = self.client.put(self.prefix + 'businesses/1',
+                                   headers={
+                                       'Authorization': 'Bearer ' + self.access_token},
+                                   content_type='application/json',
+                                   data=json.dumps(self.business1_edit1))
 
-    #     response_data = json.loads(response.data.decode())
+        response_data = json.loads(response.data.decode())
 
-    #     self.assertEqual("Business by that name already exists",
-    #                      response_data['message'])
-    #     self.assertEqual(response.status_code, 409)
+        self.assertEqual("Business by that name already exists",
+                         response_data['message'])
+        self.assertEqual(response.status_code, 409)
 
     # def test_api_business_delete(self):
     #     """Test api business deletion"""

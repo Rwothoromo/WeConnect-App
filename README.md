@@ -77,7 +77,7 @@ WeConnect brings businesses and users together, and allows users to review busin
     - `python manage.py db init` to create a migration repository
     - `python manage.py db migrate` to update the migration script
     - `python manage.py db upgrade` to apply the migration to the database
-* Run `pytest` on command prompt
+* Run `python manage.py test` or `pytest` on command prompt
 
 ## GitHub pages
 

@@ -137,7 +137,7 @@ class WeConnectApiTestBase(TestCase):
             "name": "Boondocks",
             "description": "your favorite movies",
             "category": "Entertainment",
-            "location": "Kabale",
+            "location": "Kamwenge",
             "photo": "photo"
         }
 

@@ -13,14 +13,12 @@ from app.models.category import Category
 from app.models.location import Location
 from app.models.business import Business
 from app.models.review import Review
-from app.models.user import User
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
 business_request_parser = RequestParser(bundle_errors=True)
 business_request_parser.add_argument(
-    "name", type=str, required=True,
-    help="Business name must be a valid string")
+    "name", type=str, required=True, help="Business name must be a valid string")
 business_request_parser.add_argument(
     "description", type=str, required=True, help="Description must be a valid string")
 business_request_parser.add_argument(

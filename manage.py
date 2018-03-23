@@ -6,13 +6,6 @@ from flask_migrate import Migrate, MigrateCommand
 
 from app import app, db
 
-# from app.models.blacklist import Blacklist
-# from app.models.category import Category
-# from app.models.location import Location
-# from app.models.business import Business
-# from app.models.review import Review
-# from app.models.user import User
-
 
 migrate = Migrate(app, db)
 
