@@ -23,12 +23,12 @@ jobs:
       - run:
           name: set database
           command: |
-            sudo -u postgres psql -p 5433 -c "create database test_weconnect_db;"
+            psql -p 5433 -c "create database test_weconnect_db;"
 
       - run:
           name: set db user
           command: |
-            sudo -u postgres psql -p 5433 -c "create user db_user with password 'password';"
+            psql -p 5433 -c "create user db_user with password 'password';"
 
       - run:
           name: run tests

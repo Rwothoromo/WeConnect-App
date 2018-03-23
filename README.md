@@ -57,10 +57,10 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `set DATABASE_URL=postgresql://db_user:password@localhost/weconnect_db`
 * Run `set FLASK_CONFIG=development` on command prompt
 * Run the following on command prompt
-    - `python manage.py db init`
-    - `python manage.py db migrate`
-    - `python manage.py db upgrade`
-* Run `python manage.py runserver` on command prompt
+    - `python manage.py db init` to create a migration repository
+    - `python manage.py db migrate` to update the migration script
+    - `python manage.py db upgrade` to apply the migration to the database
+* Run `python manage.py runserver` on command prompt to run on the default ip and port
 * View the app on `http://127.0.0.1:5000/`
 
 ## Use endpoints
@@ -74,9 +74,9 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `set DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db`
 * Run `set FLASK_CONFIG=testing` on command prompt
 * Run the following on command prompt
-    - `python manage.py db init`
-    - `python manage.py db migrate`
-    - `python manage.py db upgrade`
+    - `python manage.py db init` to create a migration repository
+    - `python manage.py db migrate` to update the migration script
+    - `python manage.py db upgrade` to apply the migration to the database
 * Run `pytest` on command prompt
 
 ## GitHub pages
