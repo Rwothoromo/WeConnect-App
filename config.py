@@ -3,17 +3,19 @@
 
 import os
 
+
 class Config(object):
     """
     Common configurations
     """
 
     SECRET_KEY = 'some value'
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
-    
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL'] if os.environ[
+        'DATABASE_URL'] else 'postgresql://db_user:password@localhost/test_weconnect_db'
+
     TESTING = False
     DEBUG = False
-    CSRF_ENABLED = True # protect against CSRF attacks
+    CSRF_ENABLED = True  # protect against CSRF attacks
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

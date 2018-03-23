@@ -10,10 +10,6 @@ before_script:
   - psql -c 'create database test_weconnect_db;' -U postgres
   - psql -c "create user db_user with password 'password';" -U postgres
 
-env:
-  - DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db
-  - FLASK_CONFIG=testing
-
 # command to run tests
 script:
   - pytest

@@ -16,10 +16,12 @@ from app.db import db
 
 from app.api.v2.resources.hello import HelloWorld
 from app.api.v2.resources.auth import RegisterUser, LoginUser, ResetPassword, LogoutUser
-from app.api.v2.resources.business import BusinessCollection# , BusinessResource, BusinessReviews
+# , BusinessResource, BusinessReviews
+from app.api.v2.resources.business import BusinessCollection
 
 app = Flask(__name__)
-app.config.from_object(app_config[os.environ['FLASK_CONFIG']])
+app_env = os.environ['FLASK_CONFIG'] if os.environ['FLASK_CONFIG'] else 'testing'
+app.config.from_object(app_config[app_env])
 
 app.config['SWAGGER'] = {
     'swagger': '2.0',
