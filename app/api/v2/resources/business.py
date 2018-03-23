@@ -67,14 +67,26 @@ class BusinessCollection(Resource):
             if string_empty(value):
                 return make_response(jsonify({"message": key + " must be a string"}), 400)
 
-        business = Business.query.filter_by(username=args["name"]).first()
+        business = Business.query.filter_by(name=args["name"]).first()
         if not business:
             category_object = Category(args["category"], args["category"] + ' description')
-            location_object = Location(args["location"], args["location"] + ' description')
-            business_object = Business(args["name"], args["description"],
-                               args["category"], args["location"], args["photo"])
+            category = Category.query.filter_by(name=args["category"]).first()
+            if not category:
+                db.session.add(category_object)
+                db.session.commit()
+                category = Category.query.filter_by(name=args["category"]).first()
 
-            db.session.add(category_object)
+            location_object = Location(args["location"], args["location"] + ' description')
+            location = Location.query.filter_by(name=args["location"]).first()
+            if not location:
+                db.session.add(location_object)
+                db.session.commit()
+                location = Location.query.filter_by(name=args["location"]).first()
+            
+            business_object = Business(args["name"], args["description"],
+                               category.id, location.id, args["photo"])
+
+            
             db.session.add(location_object)
             db.session.add(business_object)
             db.session.commit()
