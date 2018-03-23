@@ -10,8 +10,8 @@ class Config(object):
     """
 
     SECRET_KEY = 'some value'
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL'] if os.environ[
-        'DATABASE_URL'] else 'postgresql://db_user:password@localhost/test_weconnect_db'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://db_user:password@localhost/test_weconnect_db' if not os.environ[
+        'DATABASE_URL'] else os.environ['DATABASE_URL']
 
     TESTING = False
     DEBUG = False
