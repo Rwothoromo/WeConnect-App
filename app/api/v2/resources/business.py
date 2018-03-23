@@ -172,17 +172,24 @@ class BusinessResource(Resource):
 
         return make_response(jsonify({"message": "Business not found"}), 404)
 
-#     @token_required
-#     @swag_from('docs/delete_business.yml')
-#     def delete(self, business_id):
-#         """Delete a business"""
+    @token_required
+    @swag_from('docs/delete_business.yml')
+    def delete(self, business_id):
+        """Delete a business"""
 
-#         business = get_business_by_id(business_id)
-#         if not business:
-#             return make_response(jsonify({"message": "Business not found"}), 404)
+        user_data = request.data["user"]
 
-#         businesses.remove(business)
-#         return make_response(jsonify({"message": "Business deleted"}), 200)
+        business = Business.query.get(business_id)
+        if business:
+            if user_data.id != business.created_by:
+                return make_response(jsonify({"message": "Only the Business owner can delete"}), 409)
+
+            db.session.delete(business)
+            db.session.commit()
+
+            return make_response(jsonify({"message": "Business deleted"}), 200)
+
+        return make_response(jsonify({"message": "Business not found"}), 404)
 
 
 # class BusinessReviews(Resource):

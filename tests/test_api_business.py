@@ -138,6 +138,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         login4 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                   data=json.dumps(self.user_four_login_data))
         login_data4 = json.loads(login4.data.decode())
+
         response = self.client.put(self.prefix + 'businesses/1',
                                    headers={
                                        'Authorization': 'Bearer ' + login_data4["access_token"]},
@@ -189,35 +190,54 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          response_data['message'])
         self.assertEqual(response.status_code, 409)
 
-    # def test_api_business_delete(self):
-    #     """Test api business deletion"""
+    def test_api_business_delete(self):
+        """Test api business deletion"""
 
-    #     response = self.client.delete(self.prefix + 'businesses/1',
-    #                                   headers={'Authorization': 'Bearer ' + self.access_token})
-    #     response_data = json.loads(response.data.decode())
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business1))
+        response = self.client.delete(self.prefix + 'businesses/1',
+                                      headers={'Authorization': 'Bearer ' + self.access_token})
+        response_data = json.loads(response.data.decode())
 
-    #     self.assertEqual("Business deleted", response_data['message'])
-    #     self.assertEqual(response.status_code, 200)
+        self.assertEqual("Business deleted", response_data['message'])
+        self.assertEqual(response.status_code, 200)
 
-    # def test_api_business_delete(self):
-    #     """Test api business deletion"""
+    def test_api_business_delete_fails_for_missing_business(self):
+        """Test api business deletion fails to non existent business"""
 
-    #     response = self.client.delete(self.prefix + 'businesses/1',
-    #                                   headers={'Authorization': 'Bearer ' + self.access_token})
-    #     response_data = json.loads(response.data.decode())
+        response = self.client.delete(self.prefix + 'businesses/7',
+                                      headers={'Authorization': 'Bearer ' + self.access_token})
+        response_data = json.loads(response.data.decode())
 
-    #     self.assertEqual("Business deleted", response_data['message'])
-    #     self.assertEqual(response.status_code, 200)
+        self.assertEqual("Business not found", response_data['message'])
+        self.assertEqual(response.status_code, 404)
 
-    # def test_api_business_delete_fails(self):
-    #     """Test api business deletion fails to non existent business"""
+    def test_api_business_delete_fails_for_wrong_user(self):
+        """Test api business delete fails for wrong user"""
 
-    #     response = self.client.delete(self.prefix + 'businesses/7',
-    #                                   headers={'Authorization': 'Bearer ' + self.access_token})
-    #     response_data = json.loads(response.data.decode())
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer ' + self.access_token},
+                         content_type='application/json',
+                         data=json.dumps(self.business1))
 
-    #     self.assertEqual("Business not found", response_data['message'])
-    #     self.assertEqual(response.status_code, 404)
+        self.client.post(self.prefix + 'auth/register', content_type='application/json',
+                         data=json.dumps(self.user_four))
+        login4 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
+                                  data=json.dumps(self.user_four_login_data))
+        login_data4 = json.loads(login4.data.decode())
+
+        response = self.client.delete(self.prefix + 'businesses/1',
+                                      headers={'Authorization': 'Bearer ' + login_data4["access_token"]})
+
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual("Only the Business owner can delete",
+                         response_data['message'])
+        self.assertEqual(response.status_code, 409)
 
     # def test_api_create_business_reviews(self):
     #     """Test api business post reviews"""
