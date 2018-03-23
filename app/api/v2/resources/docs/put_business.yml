@@ -63,7 +63,7 @@ responses:
             - "Business not found"
 
   409:
-    description: Business already exists
+    description: Business already exists or can only be updated by owner
     schema: 
       type: object
       properties:
@@ -71,12 +71,4 @@ responses:
           type: string
           enum:
             - "Business by that name already exists"
-    
-    description: Business can only be updated by owner
-    schema: 
-      type: object
-      properties:
-        message:
-          type: string
-          enum:
             - "Only the Business owner can update"

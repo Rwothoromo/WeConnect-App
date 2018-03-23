@@ -49,7 +49,7 @@ responses:
           enum:
             - "Business not found"
   409:
-    description: Business already exists
+    description: Business review already exists
     schema:
       type: object
       properties:
