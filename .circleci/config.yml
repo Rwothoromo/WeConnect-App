@@ -3,6 +3,9 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.6.1
+      environment:
+        DATABASE_URL: postgresql://db_user:password@localhost/test_weconnect_db
+        FLASK_CONFIG: testing
 
     working_directory: ~/repo
 
@@ -15,6 +18,16 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+
+      - run:
+          name: set database
+          command: |
+            psql -c 'create database test_weconnect_db;' -U postgres
+
+      - run:
+          name: set db user
+          command: |
+            psql -c "create user db_user with password 'password';" -U postgres
 
       - run:
           name: run tests
