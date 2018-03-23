@@ -2,33 +2,25 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.1
+      - image: circleci/python:3.6.2-stretch-browsers
         environment:
-          DATABASE_URL: postgresql://db_user:password@localhost/test_weconnect_db
+          DATABASE_URL: postgresql://root@localhost/circle_test
           FLASK_CONFIG: testing
-      - image: circleci/postgres:10.1
+      - image: circleci/postgres:10.1-alpine-ram
 
     working_directory: ~/repo
 
     steps:
       - checkout
-      
+
+      - run: sudo apt install postgresql-client-10.1
+
       - run:
           name: install dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
-
-      - run:
-          name: set database and user
-          # Add a password to the `ubuntu` user, since Postgres is configured to
-          # always ask for a password without sudo, and fails without one.
-          command: sudo -u postgres psql -p 5433 -c "create user db_user with password 'password';"
-          command: sudo -u postgres psql -p 5433 -c "alter user db_user with superuser;"
-
-          # Create a new test database.
-          command: sudo -u postgres psql -p 5433 -c "create database test_weconnect_db;"
 
       - run:
           name: run tests
