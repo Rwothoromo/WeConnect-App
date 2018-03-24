@@ -57,7 +57,7 @@ class BusinessCollection(Resource):
     def get(self, q=None, limit=None):
         """Retrieves all businesses"""
 
-        args = business_request_parser.parse_args()
+        args = q_request_parser.parse_args()
         q = args.get('q', None)
         limit = args.get('limit', None)
         # q = 'oNd'
