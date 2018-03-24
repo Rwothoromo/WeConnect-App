@@ -184,8 +184,7 @@ class BusinessResource(Resource):
                         category_name, '{} description'.format(category_name))
                     db.session.add(category_object)
                     db.session.commit()
-                    category = Category.query.filter_by(
-                        name=category_name).first()
+                    category = Category.query.filter_by(name=category_name).first()
 
                 location = Location.query.filter_by(location_name).first()
                 if not location:
