@@ -37,6 +37,14 @@ review_request_parser.add_argument(
     "description", type=str, required=True, help="Description must be a valid string")
 
 
+# for search by name q
+q_request_parser = RequestParser(bundle_errors=True)
+q_request_parser.add_argument(
+    "q", type=str, required=False, help="Search business by name")
+q_request_parser.add_argument(
+    "limit", type=int, required=False, help="Businesses results limit")
+
+
 # When we write our Resources, Flask-RESTful generates the routes
 # and the view handlers necessary to represent the resource over RESTful HTTP
 
@@ -46,17 +54,42 @@ class BusinessCollection(Resource):
 
     @token_required
     @swag_from('docs/get_businesses.yml')
-    def get(self):
+    def get(self, limit=None):
         """Retrieves all businesses"""
 
-        businesses = Business.query.order_by(Business.name).all()
+        args = q_request_parser.parse_args()
+        q = args["q"]
+        limit = args["limit"]
+        if q:
+            q = q.lower()
+            if limit:
+                businesses_query = Business.query.filter(Business.name.like(
+                    '%' + q + '%')).limit(limit).paginate(page=1, per_page=10, error_out=False, max_per_page=10)
+            else:
+                businesses_query = Business.query.filter(Business.name.like(
+                    '%' + q + '%')).paginate(page=1, per_page=10, error_out=False, max_per_page=10)
+        else:
+            if limit:
+                businesses_query = Business.query.order_by(Business.name).limit(
+                    limit).paginate(page=1, per_page=10, error_out=False, max_per_page=10)
+            else:
+                businesses_query = Business.query.order_by(Business.name).paginate(
+                    page=1, per_page=10, error_out=False, max_per_page=10)
+
+        businesses = businesses_query.items
         if not businesses:
             return make_response(jsonify({"message": "No business found"}), 200)
 
         businesses_list = [business.business_as_dict()
                            for business in businesses]
 
-        return make_response(jsonify(businesses_list), 200)
+        next_page = businesses_query.next_num if businesses_query.has_next else None
+        prev_page = businesses_query.prev_num if businesses_query.has_prev else None
+
+        businesses_result = {"businesses": businesses_list,
+                             "next_page": next_page, "prev_page": prev_page}
+
+        return make_response(jsonify(businesses_result), 200)
 
     @token_required
     @swag_from('docs/post_business.yml')

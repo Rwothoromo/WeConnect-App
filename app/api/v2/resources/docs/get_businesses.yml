@@ -8,6 +8,22 @@ parameters:
     type: string
     in: header
     required: true
+  - name: body
+    description: Search by name and limit number of results
+    in: body
+    required: false
+    schema:
+      type: object
+      required:
+        - "q"
+        - "limit"
+      properties:
+        q:
+          type: string
+          example: "ond"
+        limit:
+          type: integer
+          example: 13
 responses:
   200:
     description: A list of created businesses

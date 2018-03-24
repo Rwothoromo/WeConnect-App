@@ -61,10 +61,14 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
         response1 = self.client.get(self.prefix + 'businesses',
                                     headers={'Authorization': 'Bearer ' + self.access_token})
+        response2 = self.client.get(self.prefix + 'businesses',
+                                    headers={'Authorization': 'Bearer ' + self.access_token},
+                                    content_type='application/json', data=json.dumps(self.q_data))
 
         self.assertEqual("No business found", response_data['message'])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response2.status_code, 200)
 
     def test_api_business_view(self):
         """Test api business view a business"""
