@@ -71,7 +71,9 @@ def token_required(function):  # pragma: no cover
         access_token = None
 
         if "Authorization" in request.headers:
-            access_token = request.headers["Authorization"].split(" ")[1]
+            authorization = request.headers.get("Authorization", None)
+            if authorization:
+                access_token = authorization.split(" ")[1]
 
             if not access_token:
                 return {"message": "No token provided"}, 401
@@ -82,15 +84,18 @@ def token_required(function):  # pragma: no cover
             try:
                 decoded_token = jwt.decode(
                     access_token, secret_key, algorithms=["HS256"])
-
-                user = User.query.filter_by(id=decoded_token["sub"]).first()
-                if user:
-                    request.data = json.loads(
-                        request.data) if request.data else {}
-                    request.data["user"] = user
-
             except:
                 return {"message": "Invalid token provided"}, 401
+
+            try:
+                sub = decoded_token.get("sub", None)
+            except:
+                return {"message": "Invalid token provided"}, 401
+
+            user = User.query.get(sub)
+            if user:
+                request.data = json.loads(request.data) if request.data else {}
+                request.data["user"] = user
 
             return function(*args, **kwargs)
         else:
@@ -200,9 +205,9 @@ class ResetPassword(Resource):
         response.status_code = 200  # Post update success
 
         session["user_id"] = None
-        token = request.headers.get("Authorization", None)
-        if token:
-            token = token.split(" ")[1]
+        authorization = request.headers.get("Authorization", None)
+        if authorization:
+            token = authorization.split(" ")[1]
         token_blacklist = Blacklist(token)
 
         db.session.add(token_blacklist)
@@ -220,9 +225,9 @@ class LogoutUser(Resource):
         """Logs out a user"""
 
         session["user_id"] = None
-        token = request.headers.get("Authorization", None)
-        if token:
-            token = token.split(" ")[1]
+        authorization = request.headers.get("Authorization", None)
+        if authorization:
+            token = authorization.split(" ")[1]
         token_blacklist = Blacklist(token)
 
         db.session.add(token_blacklist)
