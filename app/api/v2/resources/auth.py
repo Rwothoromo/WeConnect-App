@@ -65,7 +65,7 @@ def string_empty(string_var):
     return not isinstance(string_var, str) or string_var in [' ', '']
 
 
-def token_required(function):  # pragma: no cover
+def token_required(function):
     @wraps(function)
     def decorated_function(*args, **kwargs):
         access_token = None
@@ -120,12 +120,17 @@ class RegisterUser(Resource):
             if string_empty(value):
                 return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
-        username = args["username"].lower()
+        first_name = args.get("first_name", None)
+        last_name = args.get("last_name", None)
+        username = args.get("username", None)
+        password = args.get("password", None)
+
+        if username:
+            username = username.lower()
 
         user = User.query.filter_by(username=username).first()
         if not user:
-            user_object = User(args["first_name"], args["last_name"],
-                               username, args["password"])
+            user_object = User(first_name, last_name, username, password)
 
             db.session.add(user_object)
             db.session.commit()
@@ -144,18 +149,22 @@ class LoginUser(Resource):
     def post(self):
         """Logs in a user and create a token for them"""
 
+        response_data = {"message": "Login failed"}
+
         args = request.get_json()
         for key, value in args.items():
             if string_empty(value):
                 return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
-        response_data = {"message": "Login failed"}
+        username = args.get("username", None)
+        password = args.get("password", None)
 
-        username = args["username"].lower()
+        if username:
+            username = username.lower()
 
         user = User.query.filter_by(username=username).first()
         if user:
-            if check_password_hash(user.password_hash, args["password"]):
+            if check_password_hash(user.password_hash, password):
                 access_token = jwt.encode(
                     {
                         "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60),

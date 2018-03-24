@@ -102,28 +102,32 @@ class BusinessCollection(Resource):
             if string_empty(value):
                 return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
-        business = Business.query.filter_by(name=args["name"]).first()
+        business_name = args.get("name", None)
+        category_name = args.get("category", None)
+        location_name = args.get("location", None)
+        description = args.get("description", None)
+        photo = args.get("photo", None)
+
+        business = Business.query.filter_by(name=business_name).first()
         if not business:
-            category = Category.query.filter_by(name=args["category"]).first()
+            category = Category.query.filter_by(name=category_name).first()
             if not category:
                 category_object = Category(
-                    args["category"], '{} description'.format(args["category"]))
+                    category_name, '{} description'.format(category_name))
                 db.session.add(category_object)
                 db.session.commit()
-                category = Category.query.filter_by(
-                    name=args["category"]).first()
+                category = Category.query.filter_by(name=category_name).first()
 
-            location = Location.query.filter_by(name=args["location"]).first()
+            location = Location.query.filter_by(name=location_name).first()
             if not location:
                 location_object = Location(
-                    args["location"], '{} description'.format(args["location"]))
+                    location_name, '{} description'.format(location_name))
                 db.session.add(location_object)
                 db.session.commit()
-                location = Location.query.filter_by(
-                    name=args["location"]).first()
+                location = Location.query.filter_by(name=location_name).first()
 
-            business_object = Business(args["name"], args["description"],
-                                       category.id, location.id, args["photo"])
+            business_object = Business(
+                business_name, description, category.id, location.id, photo)
 
             db.session.add(business_object)
             db.session.commit()
@@ -153,47 +157,50 @@ class BusinessResource(Resource):
     def put(self, business_id):
         """Updates a business profile"""
 
-        args = business_request_parser.parse_args()
-        for key, value in args.items():
-            if string_empty(value):
-                return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
-
-        user_data = request.data["user"]
-
         business = Business.query.get(business_id)
-
         if business:
-            if user_data.id != business.created_by:
+            user_data = request.data.get("user", None)
+            if not user_data or (user_data and (user_data.id != business.created_by)):
                 return make_response(jsonify({"message": "Only the Business owner can update"}), 409)
 
+            args = business_request_parser.parse_args()
+            for key, value in args.items():
+                if string_empty(value):
+                    return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
+
+            business_name = args.get("name", None)
+            category_name = args.get("category", None)
+            location_name = args.get("location", None)
+            description = args.get("description", None)
+            photo = args.get("photo", None)
+
             # to avoid duplicating a business name
-            business_by_name = Business.query.filter_by(name=args.name).first()
+            business_by_name = Business.query.filter_by(
+                name=business_name).first()
             if not business_by_name or (business_by_name and (business_by_name.id == business_id)):
-                category = Category.query.filter_by(
-                    name=args["category"]).first()
+                category = Category.query.filter_by(name=category_name).first()
                 if not category:
                     category_object = Category(
-                        args["category"], '{} description'.format(args["category"]))
+                        category_name, '{} description'.format(category_name))
                     db.session.add(category_object)
                     db.session.commit()
                     category = Category.query.filter_by(
-                        name=args["category"]).first()
+                        name=category_name).first()
 
-                location = Location.query.filter_by(
-                    name=args["location"]).first()
+                location = Location.query.filter_by(location_name).first()
                 if not location:
                     location_object = Location(
-                        args["location"], '{} description'.format(args["location"]))
+                        location_name, '{} description'.format(location_name))
                     db.session.add(location_object)
                     db.session.commit()
                     location = Location.query.filter_by(
-                        name=args["location"]).first()
+                        name=location_name).first()
 
-                business.name = args.name
-                business.description = args.description
+                business.name = business_name
+                business.description = description
                 business.category = category.id
                 business.location = location.id
-                business.photo = args.photo
+                business.photo = photo
 
                 db.session.commit()
 
@@ -208,11 +215,10 @@ class BusinessResource(Resource):
     def delete(self, business_id):
         """Delete a business"""
 
-        user_data = request.data["user"]
-
         business = Business.query.get(business_id)
         if business:
-            if user_data.id != business.created_by:
+            user_data = request.data.get("user", None)
+            if not user_data or (user_data and (user_data.id != business.created_by)):
                 return make_response(jsonify({"message": "Only the Business owner can delete"}), 409)
 
             db.session.delete(business)
@@ -232,7 +238,6 @@ class BusinessReviews(Resource):
         """Get all reviews for a business"""
 
         business = Business.query.get(business_id)
-
         if business:
             reviews = Review.query.filter_by(
                 business=business_id).order_by(Review.name).all()
@@ -252,27 +257,26 @@ class BusinessReviews(Resource):
         """Add a review for a business"""
 
         business = Business.query.get(business_id)
-        args = review_request_parser.parse_args()
-
         if business:
+            args = review_request_parser.parse_args()
             for key, value in args.items():
                 if string_empty(value):
                     return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
+            review_name = args.get("name", None)
+            description = args.get("description", None)
+
             # check if review already exists
-            review_by_name = Review.query.filter_by(name=args.name).first()
+            review_by_name = Review.query.filter_by(name=review_name).first()
             if not review_by_name:
-                review_object = Review(
-                    args.name, args.description, business_id)
+                review_object = Review(review_name, description, business_id)
 
                 db.session.add(review_object)
                 db.session.commit()
 
                 # Post create success
-                return make_response(
-                    jsonify({"message": "Business review added"}), 201)
+                return make_response(jsonify({"message": "Business review added"}), 201)
 
-            return make_response(
-                jsonify({"message": "Business review by that name already exists"}), 409)
+            return make_response(jsonify({"message": "Business review by that name already exists"}), 409)
 
         return make_response(jsonify({"message": "Business not found"}), 404)
