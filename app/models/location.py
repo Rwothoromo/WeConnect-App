@@ -26,4 +26,6 @@ class Location(db.Model):
         return '<Location: {}>'.format(self.name)
 
     def location_as_dict(self):
+        """Represent the location as a dict"""
+
         return {l.name: getattr(self, l.name) for l in self.__table__.columns}

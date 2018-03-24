@@ -26,4 +26,6 @@ class Category(db.Model):
         return '<Category: {}>'.format(self.name)
 
     def category_as_dict(self):
+        """Represent the category as a dict"""
+
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

@@ -32,4 +32,6 @@ class Business(db.Model):
         return '<Business: {}>'.format(self.name)
 
     def business_as_dict(self):
-       return {b.name: getattr(self, b.name) for b in self.__table__.columns}
+        """Represent the business as a dict"""
+
+        return {b.name: getattr(self, b.name) for b in self.__table__.columns}

@@ -20,4 +20,6 @@ class Blacklist(db.Model):
         return '<Token: {}'.format(self.token)
 
     def token_as_dict(self):
+        """Represent the token as a dict"""
+
         return {t.name: getattr(self, t.name) for t in self.__table__.columns}
