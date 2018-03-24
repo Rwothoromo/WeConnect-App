@@ -13,7 +13,7 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
         """Test api user registration"""
 
         response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                    data=json.dumps(self.user_two))
+                                    data=json.dumps(self.users['two']))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual('User added', response_data['message'])
@@ -23,9 +23,9 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
         """Test api user login"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_two))
+                         data=json.dumps(self.users['two']))
         response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                    data=json.dumps(self.user_two_login_data))
+                                    data=json.dumps(self.user_login['two']))
         response_data = json.loads(response.get_data())
 
         self.assertEqual('User logged in', response_data['message'])
@@ -35,9 +35,9 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
         """Test api user logout"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_two))
+                         data=json.dumps(self.users['two']))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_two_login_data))
+                                 data=json.dumps(self.user_login['two']))
         login_data = json.loads(login.get_data())
         access_token = login_data["access_token"]
 
@@ -52,9 +52,9 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
         """Test api password reset"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_three))
+                         data=json.dumps(self.users['three']))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_three_login_data))
+                                 data=json.dumps(self.user_login['three']))
         login_data = json.loads(login.get_data())
         access_token = login_data["access_token"]
 
@@ -69,11 +69,11 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
         """Test api user registration fails"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_two))
+                         data=json.dumps(self.users['two']))
         response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                    data=json.dumps(self.user_two))
+                                    data=json.dumps(self.users['two']))
         response1 = self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                     data=json.dumps(self.user_bad))
+                                     data=json.dumps(self.users['bad']))
         response_data = json.loads(response.data.decode())
         response_data1 = json.loads(response1.data.decode())
 
@@ -87,13 +87,13 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
         """Test api user login fails for bad input"""
 
         self.client.post(self.prefix + 'auth/register',
-                         content_type='application/json', data=json.dumps(self.user_three))
+                         content_type='application/json', data=json.dumps(self.users['three']))
         response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                    data=json.dumps(self.user_bad_login_data))
+                                    data=json.dumps(self.user_login['bad']))
         response1 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                     data=json.dumps(self.user_bad_login_data1))
+                                     data=json.dumps(self.user_login['bad1']))
         response2 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                     data=json.dumps(self.user_bad_login_data2))
+                                     data=json.dumps(self.user_login['bad2']))
         response_data = json.loads(response.get_data())
         response_data1 = json.loads(response1.get_data())
         response_data2 = json.loads(response2.get_data())

@@ -16,7 +16,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                     headers={
                                         'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
-                                    data=json.dumps(self.business1))
+                                    data=json.dumps(self.businesses['one']))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual("Business added", response_data['message'])
@@ -28,17 +28,17 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.client.post(self.prefix + 'businesses',
                          headers={'Authorization': 'Bearer ' +
                                   self.access_token},
-                         content_type='application/json', data=json.dumps(self.business1))
+                         content_type='application/json', data=json.dumps(self.businesses['one']))
         response = self.client.post(self.prefix + 'businesses',
                                     headers={
                                         'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
-                                    data=json.dumps(self.business1))
+                                    data=json.dumps(self.businesses['one']))
         response1 = self.client.post(self.prefix + 'businesses',
                                      headers={
                                          'Authorization': 'Bearer ' + self.access_token},
                                      content_type='application/json',
-                                     data=json.dumps(self.business2))
+                                     data=json.dumps(self.businesses['two']))
         response_data = json.loads(response.data.decode())
         response_data1 = json.loads(response1.data.decode())
 
@@ -57,7 +57,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.client.post(self.prefix + 'businesses',
                          headers={'Authorization': 'Bearer ' +
                                   self.access_token},
-                         content_type='application/json', data=json.dumps(self.business1))
+                         content_type='application/json', data=json.dumps(self.businesses['one']))
 
         response1 = self.client.get(self.prefix + 'businesses',
                                     headers={'Authorization': 'Bearer ' + self.access_token})
@@ -67,21 +67,21 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(1, len(response_data1['businesses']))
         self.assertEqual(response1.status_code, 200)
-    
+
     def test_api_businesses_view_by_name_search(self):
         """Test api businesses viewing by searched name"""
 
         self.client.post(self.prefix + 'businesses',
                          headers={'Authorization': 'Bearer ' +
                                   self.access_token},
-                         content_type='application/json', data=json.dumps(self.business1))
+                         content_type='application/json', data=json.dumps(self.businesses['one']))
         self.client.post(self.prefix + 'businesses',
                          headers={'Authorization': 'Bearer ' +
                                   self.access_token},
-                         content_type='application/json', data=json.dumps(self.business3))
+                         content_type='application/json', data=json.dumps(self.businesses['three']))
 
         response = self.client.get(self.prefix + 'businesses?q=oNd&limit=13',
-                                    headers={'Authorization': 'Bearer ' + self.access_token})
+                                   headers={'Authorization': 'Bearer ' + self.access_token})
         response_data = json.loads(response.data.decode())
 
         self.assertEqual(2, len(response_data['businesses']))
@@ -93,7 +93,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.client.post(self.prefix + 'businesses',
                          headers={'Authorization': 'Bearer ' +
                                   self.access_token},
-                         content_type='application/json', data=json.dumps(self.business1))
+                         content_type='application/json', data=json.dumps(self.businesses['one']))
         response = self.client.get(self.prefix + 'businesses/1',
                                    headers={'Authorization': 'Bearer ' + self.access_token})
 
@@ -116,12 +116,12 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
         response = self.client.put(self.prefix + 'businesses/1',
                                    headers={
                                        'Authorization': 'Bearer ' + self.access_token},
                                    content_type='application/json',
-                                   data=json.dumps(self.business1_edit))
+                                   data=json.dumps(self.businesses['one_edit']))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual("Business updated", response_data['message'])
@@ -134,12 +134,12 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
         response = self.client.put(self.prefix + 'businesses/1',
                                    headers={
                                        'Authorization': 'Bearer ' + self.access_token},
                                    content_type='application/json',
-                                   data=json.dumps(self.business2))
+                                   data=json.dumps(self.businesses['two']))
 
         response_data = json.loads(response.data.decode())
         self.assertEqual("name must be a string", response_data['message'])
@@ -152,19 +152,19 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_four))
+                         data=json.dumps(self.users['four']))
         login4 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                  data=json.dumps(self.user_four_login_data))
+                                  data=json.dumps(self.user_login['four']))
         login_data4 = json.loads(login4.data.decode())
 
         response = self.client.put(self.prefix + 'businesses/1',
                                    headers={
                                        'Authorization': 'Bearer ' + login_data4["access_token"]},
                                    content_type='application/json',
-                                   data=json.dumps(self.business1_edit1))
+                                   data=json.dumps(self.businesses['one_edit1']))
 
         response_data = json.loads(response.data.decode())
 
@@ -179,7 +179,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                    headers={
                                        'Authorization': 'Bearer ' + self.access_token},
                                    content_type='application/json',
-                                   data=json.dumps(self.business1_edit))
+                                   data=json.dumps(self.businesses['one_edit']))
 
         response_data = json.loads(response.data.decode())
 
@@ -193,17 +193,17 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
         self.client.post(self.prefix + 'businesses',
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business3))
+                         data=json.dumps(self.businesses['three']))
         response = self.client.put(self.prefix + 'businesses/1',
                                    headers={
                                        'Authorization': 'Bearer ' + self.access_token},
                                    content_type='application/json',
-                                   data=json.dumps(self.business1_edit1))
+                                   data=json.dumps(self.businesses['one_edit1']))
 
         response_data = json.loads(response.data.decode())
 
@@ -218,7 +218,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
         response = self.client.delete(self.prefix + 'businesses/1',
                                       headers={'Authorization': 'Bearer ' + self.access_token})
         response_data = json.loads(response.data.decode())
@@ -243,12 +243,12 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_four))
+                         data=json.dumps(self.users['four']))
         login4 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                  data=json.dumps(self.user_four_login_data))
+                                  data=json.dumps(self.user_login['four']))
         login_data4 = json.loads(login4.data.decode())
 
         response = self.client.delete(self.prefix + 'businesses/1',
@@ -267,12 +267,12 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
         response = self.client.post(self.prefix + 'businesses/1/reviews',
                                     headers={
                                         'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
-                                    data=json.dumps(self.review1))
+                                    data=json.dumps(self.reviews['one']))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual("Business review added", response_data['message'])
@@ -285,7 +285,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                     headers={
                                         'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
-                                    data=json.dumps(self.review1))
+                                    data=json.dumps(self.reviews['one']))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual("Business not found", response_data['message'])
@@ -298,18 +298,18 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
         self.client.post(self.prefix + 'businesses/1/reviews',
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.review1))
+                         data=json.dumps(self.reviews['one']))
 
         response = self.client.post(self.prefix + 'businesses/1/reviews',
                                     headers={
                                         'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
-                                    data=json.dumps(self.review1))
+                                    data=json.dumps(self.reviews['one']))
 
         response_data = json.loads(response.data.decode())
 
@@ -324,13 +324,13 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
 
         response = self.client.post(self.prefix + 'businesses/1/reviews',
                                     headers={
                                         'Authorization': 'Bearer ' + self.access_token},
                                     content_type='application/json',
-                                    data=json.dumps(self.review2))
+                                    data=json.dumps(self.reviews['two']))
 
         response_data = json.loads(response.data.decode())
 
@@ -344,7 +344,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.business1))
+                         data=json.dumps(self.businesses['one']))
 
         response = self.client.get(self.prefix + 'businesses/1/reviews',
                                    headers={'Authorization': 'Bearer ' + self.access_token})
@@ -353,7 +353,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          headers={
                              'Authorization': 'Bearer ' + self.access_token},
                          content_type='application/json',
-                         data=json.dumps(self.review1))
+                         data=json.dumps(self.reviews['one']))
 
         response1 = self.client.get(self.prefix + 'businesses/1/reviews',
                                     headers={'Authorization': 'Bearer ' + self.access_token})

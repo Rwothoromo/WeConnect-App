@@ -31,134 +31,44 @@ class WeConnectApiTestBase(TestCase):
         self.client = self.app.test_client()
         self.prefix = '/api/v2/'
 
-        self.user_one = {
-            "first_name": "jack",
-            "last_name": "dan",
-            "username": "jackdan",
-            "password": "password"
+        self.users = {
+            'one': {"first_name": "jack", "last_name": "dan", "username": "jackdan", "password": "password"},
+            'two': {"first_name": "jim", "last_name": "dan", "username": "jimdan", "password": "password"},
+            'three': {"first_name": "eli", "last_name": "rwt", "username": "eli", "password": "password"},
+            'four': {"first_name": "elijah", "last_name": "rwoth", "username": "elijahrwoth", "password": "password"},
+            'bad': {"first_name": '', "last_name": '', "username": '', "password": ''}
         }
 
-        self.user_two = {
-            "first_name": "jim",
-            "last_name": "dan",
-            "username": "jimdan",
-            "password": "password"
+        self.user_login = {
+            'one': {"username": "jackdan", "password": "password"},
+            'two': {"username": "jimdan", "password": "password"},
+            'three': {"username": "eli", "password": "password"},
+            'four': {"username": "elijahrwoth", "password": "password"},
+            'bad': {"username": '', "password": ''},
+            'bad1': {"username": "eli", "password": "passrd"},
+            'bad2': {"username": "elite", "password": "password"}
         }
 
-        self.user_three = {
-            "first_name": "eli",
-            "last_name": "rwt",
-            "username": "eli",
-            "password": "password"
+        self.businesses = {
+            'one': {"name": "Bondo", "description": "yummy", "category": "Eateries", "location": "Kabale", "photo": "photo"},
+            'one_edit': {"name": "Bondo", "yummy foods and deliveries": "yummy", "category": "Eateries", "location": "Kabale", "photo": "photo"},
+            'one_edit1': {"name": "Boondocks", "yummy foods and deliveries": "yummy", "category": "Eateries", "location": "Kabale", "photo": "photo"},
+            'two': {"name": "", "description": "", "category": "", "location": "", "photo": ""},
+            'three': {"name": "Boondocks", "description": "your favorite movies", "category": "Entertainment", "location": "Kamwenge", "photo": "photo"},
         }
 
-        self.user_four = {
-            "first_name": "elijah",
-            "last_name": "rwoth",
-            "username": "elijahrwoth",
-            "password": "password"
+        self.reviews = {
+            'one': {"name": "extra game", "description": "i was given meat yo"},
+            'two': {"name": "", "description": ""}
         }
-
-        self.user_bad = {
-            "first_name": '',
-            "last_name": '',
-            "username": '',
-            "password": ''
-        }
-
-        self.user_one_login_data = {
-            "username": "jackdan",
-            "password": "password"
-        }
-
-        self.user_two_login_data = {
-            "username": "jimdan",
-            "password": "password"
-        }
-
-        self.user_three_login_data = {
-            "username": "eli",
-            "password": "password"
-        }
-
-        self.user_four_login_data = {
-            "username": "elijahrwoth",
-            "password": "password"
-        }
-
-        self.user_bad_login_data = {
-            "username": '',
-            "password": ''
-        }
-
-        self.user_bad_login_data1 = {
-            "username": "eli",
-            "password": "passrd"
-        }
-
-        self.user_bad_login_data2 = {
-            "username": "elite",
-            "password": "password"
-        }
-
-        self.business1 = {
-            "name": "Bondo",
-            "description": "yummy",
-            "category": "Eateries",
-            "location": "Kabale",
-            "photo": "photo"
-        }
-
-        self.business1_edit = {
-            "name": "Bondo",
-            "description": "yummy foods and deliveries",
-            "category": "Eateries",
-            "location": "Kabale",
-            "photo": "photo"
-        }
-
-        self.business1_edit1 = {
-            "name": "Boondocks",
-            "description": "yummy foods and deliveries",
-            "category": "Eateries",
-            "location": "Kabale",
-            "photo": "photo"
-        }
-
-        self.business2 = {
-            "name": '',
-            "description": '',
-            "category": '',
-            "location": '',
-            "photo": ''
-        }
-
-        self.business3 = {
-            "name": "Boondocks",
-            "description": "your favorite movies",
-            "category": "Entertainment",
-            "location": "Kamwenge",
-            "photo": "photo"
-        }
-
-        self.review1 = {
-            "name": "extra game",
-            "description": "i was given meat yo"
-        }
-
-        self.review2 = {
-            "name": '',
-            "description": ''
-        }
-
 
         with self.app.app_context():
             db.create_all()
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_one))
+                         data=json.dumps(self.users['one']))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_one_login_data))
+                                 data=json.dumps(self.user_login['one']))
         login_data = json.loads(login.data.decode())
         self.access_token = login_data["access_token"]
 
