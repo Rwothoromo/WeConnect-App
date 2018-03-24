@@ -51,8 +51,8 @@ class WeConnectApiTestBase(TestCase):
 
         self.businesses = {
             'one': {"name": "Bondo", "description": "yummy", "category": "Eateries", "location": "Kabale", "photo": "photo"},
-            'one_edit': {"name": "Bondo", "yummy foods and deliveries": "yummy", "category": "Eateries", "location": "Kabale", "photo": "photo"},
-            'one_edit1': {"name": "Boondocks", "yummy foods and deliveries": "yummy", "category": "Eateries", "location": "Kabale", "photo": "photo"},
+            'one_edit': {"name": "Bondo", "description": "yummy foods and deliveries", "category": "Eateries", "location": "Kabale", "photo": "photo"},
+            'one_edit1': {"name": "Boondocks", "description": "yummy foods and deliveries", "category": "Eateries", "location": "Kabale", "photo": "photo"},
             'two': {"name": "", "description": "", "category": "", "location": "", "photo": ""},
             'three': {"name": "Boondocks", "description": "your favorite movies", "category": "Entertainment", "location": "Kamwenge", "photo": "photo"},
         }
