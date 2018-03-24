@@ -36,8 +36,7 @@ from app.models.blacklist import Blacklist
 from app.models.user import User
 
 
-secret_key = os.environ.get('SECRET_KEY') if os.environ.get(
-    'SECRET_KEY') else 'MEGAtron35648'
+secret_key = os.environ.get('SECRET_KEY', 'MEGAtron35648')
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
@@ -114,7 +113,7 @@ class RegisterUser(Resource):
         args = user_request_parser.parse_args()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key + " must be a string"}), 400)
+                return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         username = args["username"].lower()
 
@@ -143,7 +142,7 @@ class LoginUser(Resource):
         args = request.get_json()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key + " must be a string"}), 400)
+                return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         response_data = {"message": "Login failed"}
 
@@ -172,7 +171,7 @@ class LoginUser(Resource):
             response.status_code = 400  # Bad request
             return response
 
-        response_data["message"] = "This username does not exist! Please register!"
+        response_data["message"] = "Incorrect username and password combination!"
         response = jsonify(response_data)
         response.status_code = 400  # Bad request
         return response
@@ -201,7 +200,9 @@ class ResetPassword(Resource):
         response.status_code = 200  # Post update success
 
         session["user_id"] = None
-        token = request.headers["Authorization"].split(" ")[1]
+        token = request.headers.get("Authorization", None)
+        if token:
+            token = token.split(" ")[1]
         token_blacklist = Blacklist(token)
 
         db.session.add(token_blacklist)
@@ -219,7 +220,9 @@ class LogoutUser(Resource):
         """Logs out a user"""
 
         session["user_id"] = None
-        token = request.headers["Authorization"].split(" ")[1]
+        token = request.headers.get("Authorization", None)
+        if token:
+            token = token.split(" ")[1]
         token_blacklist = Blacklist(token)
 
         db.session.add(token_blacklist)

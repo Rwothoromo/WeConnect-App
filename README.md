@@ -55,6 +55,7 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `pip install -r requirements.txt` on command prompt
 * Run `createdb weconnect_db` and `createdb test_weconnect_db` on the psql bash terminal
 * Run `set DATABASE_URL=postgresql://db_user:password@localhost/weconnect_db`
+* Run `set SECRET_KEY=some_secret_value`
 * Run `set FLASK_CONFIG=development` on command prompt
 * Run the following on command prompt
     - `python manage.py db init` to create a migration repository
@@ -72,6 +73,7 @@ WeConnect brings businesses and users together, and allows users to review busin
 ## Unittests
 
 * Run `set DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db`
+* Run `set SECRET_KEY=some_secret_value`
 * Run `set FLASK_CONFIG=testing` on command prompt
 * Run the following on command prompt
     - `python manage.py db init` to create a migration repository

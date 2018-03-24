@@ -64,7 +64,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         response_data1 = json.loads(response1.data.decode())
 
         self.assertEqual("No business found", response_data['message'])
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(1, len(response_data1['businesses']))
         self.assertEqual(response1.status_code, 200)
     

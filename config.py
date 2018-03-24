@@ -4,12 +4,12 @@
 import os
 
 
-class Config(object):
+class Config:
     """
     Common configurations
     """
 
-    SECRET_KEY = 'some value'
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'some value')
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
     TESTING = False

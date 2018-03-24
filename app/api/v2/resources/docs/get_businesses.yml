@@ -30,9 +30,14 @@ responses:
     schema:
       type: object
       properties:
+        businesses:
+          type: array
+  404:
+    description: No business found
+    schema:
+      type: object
+      properties:
         message:
           type: string
           enum:
             - "No business found"
-        businesses:
-          type: array

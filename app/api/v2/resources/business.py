@@ -79,7 +79,7 @@ class BusinessCollection(Resource):
 
         businesses = businesses_query.items
         if not businesses:
-            return make_response(jsonify({"message": "No business found"}), 200)
+            return make_response(jsonify({"message": "No business found"}), 404)
 
         businesses_list = [business.business_as_dict()
                            for business in businesses]
@@ -100,14 +100,14 @@ class BusinessCollection(Resource):
         args = business_request_parser.parse_args()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key + " must be a string"}), 400)
+                return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         business = Business.query.filter_by(name=args["name"]).first()
         if not business:
             category = Category.query.filter_by(name=args["category"]).first()
             if not category:
                 category_object = Category(
-                    args["category"], args["category"] + ' description')
+                    args["category"], '{} description'.format(args["category"]))
                 db.session.add(category_object)
                 db.session.commit()
                 category = Category.query.filter_by(
@@ -116,7 +116,7 @@ class BusinessCollection(Resource):
             location = Location.query.filter_by(name=args["location"]).first()
             if not location:
                 location_object = Location(
-                    args["location"], args["location"] + ' description')
+                    args["location"], '{} description'.format(args["location"]))
                 db.session.add(location_object)
                 db.session.commit()
                 location = Location.query.filter_by(
@@ -156,7 +156,7 @@ class BusinessResource(Resource):
         args = business_request_parser.parse_args()
         for key, value in args.items():
             if string_empty(value):
-                return make_response(jsonify({"message": key + " must be a string"}), 400)
+                return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         user_data = request.data["user"]
 
@@ -173,7 +173,7 @@ class BusinessResource(Resource):
                     name=args["category"]).first()
                 if not category:
                     category_object = Category(
-                        args["category"], args["category"] + ' description')
+                        args["category"], '{} description'.format(args["category"]))
                     db.session.add(category_object)
                     db.session.commit()
                     category = Category.query.filter_by(
@@ -183,7 +183,7 @@ class BusinessResource(Resource):
                     name=args["location"]).first()
                 if not location:
                     location_object = Location(
-                        args["location"], args["location"] + ' description')
+                        args["location"], '{} description'.format(args["location"]))
                     db.session.add(location_object)
                     db.session.commit()
                     location = Location.query.filter_by(
@@ -257,7 +257,7 @@ class BusinessReviews(Resource):
         if business:
             for key, value in args.items():
                 if string_empty(value):
-                    return make_response(jsonify({"message": key + " must be a string"}), 400)
+                    return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
             # check if review already exists
             review_by_name = Review.query.filter_by(name=args.name).first()

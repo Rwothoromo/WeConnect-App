@@ -104,5 +104,5 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
             "Incorrect username and password combination!", response_data1['message'])
         self.assertEqual(response1.status_code, 400)
         self.assertEqual(
-            "This username does not exist! Please register!", response_data2['message'])
+            "Incorrect username and password combination!", response_data2['message'])
         self.assertEqual(response2.status_code, 400)
