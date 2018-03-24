@@ -61,14 +61,31 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
         response1 = self.client.get(self.prefix + 'businesses',
                                     headers={'Authorization': 'Bearer ' + self.access_token})
-        response2 = self.client.get(self.prefix + 'businesses',
-                                    headers={'Authorization': 'Bearer ' + self.access_token},
-                                    content_type='application/json', data=json.dumps(self.q_data))
+        response_data1 = json.loads(response1.data.decode())
 
         self.assertEqual("No business found", response_data['message'])
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(1, len(response_data1['businesses']))
         self.assertEqual(response1.status_code, 200)
-        self.assertEqual(response2.status_code, 200)
+    
+    def test_api_businesses_view_by_name_search(self):
+        """Test api businesses viewing by searched name"""
+
+        self.client.post(self.prefix + 'businesses',
+                         headers={'Authorization': 'Bearer ' +
+                                  self.access_token},
+                         content_type='application/json', data=json.dumps(self.business1))
+        self.client.post(self.prefix + 'businesses',
+                         headers={'Authorization': 'Bearer ' +
+                                  self.access_token},
+                         content_type='application/json', data=json.dumps(self.business3))
+
+        response = self.client.get(self.prefix + 'businesses?q=oNd&limit=13',
+                                    headers={'Authorization': 'Bearer ' + self.access_token})
+        response_data = json.loads(response.data.decode())
+
+        self.assertEqual(2, len(response_data['businesses']))
+        self.assertEqual(response.status_code, 200)
 
     def test_api_business_view(self):
         """Test api business view a business"""

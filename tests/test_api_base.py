@@ -151,10 +151,6 @@ class WeConnectApiTestBase(TestCase):
             "description": ''
         }
 
-        self.q_data = {
-            "q": "ond",
-            "limit": 13
-        }
 
         with self.app.app_context():
             db.create_all()

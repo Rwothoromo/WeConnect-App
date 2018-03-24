@@ -54,12 +54,13 @@ class BusinessCollection(Resource):
 
     @token_required
     @swag_from('docs/get_businesses.yml')
-    def get(self, limit=None):
+    def get(self, q=None, limit=None):
         """Retrieves all businesses"""
 
-        args = q_request_parser.parse_args()
-        q = args["q"]
-        limit = args["limit"]
+        args = business_request_parser.parse_args()
+        q = args.get('q', None)
+        limit = args.get('limit', None)
+        # q = 'oNd'
         if q:
             q = q.lower()
             if limit:
@@ -124,7 +125,6 @@ class BusinessCollection(Resource):
             business_object = Business(args["name"], args["description"],
                                        category.id, location.id, args["photo"])
 
-            db.session.add(location_object)
             db.session.add(business_object)
             db.session.commit()
 
