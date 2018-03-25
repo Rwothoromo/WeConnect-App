@@ -30,10 +30,6 @@ class User(UserMixin, db.Model):
         self.last_name = last_name
         self.username = username
         self.password_hash = generate_password_hash(password)
-        self.businesses = {}
-        self.reviews = {}
-        self.categories = {}
-        self.locations = {}
 
     def __repr__(self):
         return '<User: {}>'.format(self.username)
