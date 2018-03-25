@@ -87,3 +87,7 @@ WeConnect brings businesses and users together, and allows users to review busin
 ## GitHub pages
 
 Go to [WeConnect](https://rwothoromo.github.io/WeConnect-App/)
+
+## Notes
+
+For detailed instructions on heroku deployments, go [here](https://medium.com/@johnkagga/deploying-a-python-flask-app-to-heroku-41250bda27d0) or [here](https://devcenter.heroku.com/articles/heroku-cli)
