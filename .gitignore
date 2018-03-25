@@ -102,3 +102,7 @@ ENV/
 
 .pytest
 .pytest_cache/
+
+# local files and folders
+instance/
+migrations/

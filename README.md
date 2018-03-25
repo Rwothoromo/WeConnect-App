@@ -18,29 +18,31 @@ WeConnect brings businesses and users together, and allows users to review busin
 5. Users can give reviews about a business.
 6. Users can search for businesses based on business location or business category.
 
-[View on Heroku](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/)
+[View on Heroku](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/)
 
 | EndPoint                                             | Functionality                                    |
 | ---------------------------------------------------- | ------------------------------------------------ |
-| [POST   /api/v1/auth/register](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v1_auth_register)                    | Creates a user account                           |
-| [POST   /api/v1/auth/login](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v1_auth_login)                       | Logs in a user                                   |
-| [POST   /api/v1/auth/logout](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v1_auth_logout)                      | Logs out a user                                  |
-| [POST   /api/v1/auth/reset-password](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v1_auth_reset_password)              | Password reset                                   |
-| [POST   /api/v1/businesses](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v1_businesses)                       | Register a business                              |
-| [PUT    /api/v1/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/put_api_v1_businesses_business_id)         | Updates a business profile                       |
-| [DELETE /api/v1/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/delete_api_v1_businesses_business_id)         | Remove a business                                |
-| [GET    /api/v1/businesses](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v1_businesses)                       | Retrieves all businesses                         |
-| [GET    /api/v1/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v1_businesses_business_id)         | Get a business                                   |
-| [POST   /api/v1/businesses/\<businessId>/reviews](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v1_businesses_business_id_reviews) | Add a review for a business by the logged in user|
-| [GET    /api/v1/businesses/\<businessId>/reviews](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v1_businesses_business_id_reviews) | Get all reviews for a business                   |
+| [POST   /api/v2/auth/register](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_register)                    | Creates a user account                           |
+| [POST   /api/v2/auth/login](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_login)                       | Logs in a user                                   |
+| [POST   /api/v2/auth/logout](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_logout)                      | Logs out a user                                  |
+| [POST   /api/v2/auth/reset-password](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_reset_password)              | Password reset                                   |
+| [POST   /api/v2/businesses](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v2_businesses)                       | Register a business                              |
+| [PUT    /api/v2/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/put_api_v2_businesses_business_id)         | Updates a business profile                       |
+| [DELETE /api/v2/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/delete_api_v2_businesses_business_id)         | Remove a business                                |
+| [GET    /api/v2/businesses](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses)                       | Retrieves all businesses                         |
+| [GET    /api/v2/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses_business_id)         | Get a business                                   |
+| [POST   /api/v2/businesses/\<businessId>/reviews](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v2_businesses_business_id_reviews) | Add a review for a business by the logged in user|
+| [GET    /api/v2/businesses/\<businessId>/reviews](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses_business_id_reviews) | Get all reviews for a business                   |
 
 ## Technologies
 
-* Python 3.6 or 2.7
+* Python 3.6
+* PostgreSQL 10
 
 ## Requirements
 
 * Install [Python](https://www.python.org/downloads/)
+* Install [PostgreSQL](https://www.postgresql.org/download/)
 * Run `pip install virtualenv` on command prompt
 * Run `pip install virtualenvwrapper-win` on command prompt
 * Run `set WORKON_HOME=%USERPROFILES%\Envs` on command prompt
@@ -51,21 +53,41 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `mkvirtualenv venv` on command prompt
 * Run `workon venv` on command prompt
 * Run `pip install -r requirements.txt` on command prompt
-* Run `set FLASK_CONFIG=production` on command prompt
-* Run `set FLASK_APP=run.py` on command prompt
-* Run `flask run` on command prompt
+* Run `createdb weconnect_db` and `createdb test_weconnect_db` on the psql bash terminal
+* Run `set DATABASE_URL=postgresql://db_user:password@localhost/weconnect_db`
+* Run `set SECRET_KEY=some_secret_value`
+* Run `set FLASK_CONFIG=development` on command prompt
+* Run the following on command prompt
+  * `python manage.py db init` to create a migration repository
+  * `python manage.py db migrate` to update the migration script
+  * `python manage.py db upgrade` to apply the migration to the database
+* Run `python manage.py runserver` on command prompt to run on the default ip and port
 * View the app on `http://127.0.0.1:5000/`
 
 ## Use endpoints
 
 * You can proceed with the above url or run `python app/api/api_run.py` on command prompt
-* View the api on `http://127.0.0.1:5000/api/v1/`
+* View the api on `http://127.0.0.1:5000/api/v2/`
 * Test it's usage with postman
+
+## Use api documentation
+* View the api on `http://127.0.0.1:5000/apidocs`
 
 ## Unittests
 
-* Run `pytest` on command prompt
+* Run `set DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db`
+* Run `set SECRET_KEY=some_secret_value`
+* Run `set FLASK_CONFIG=testing` on command prompt
+* Run the following on command prompt
+  * `python manage.py db init` to create a migration repository
+  * `python manage.py db migrate` to update the migration script
+  * `python manage.py db upgrade` to apply the migration to the database
+* Run `python manage.py test` or `pytest` on command prompt
 
 ## GitHub pages
 
 Go to [WeConnect](https://rwothoromo.github.io/WeConnect-App/)
+
+## Notes
+
+For detailed instructions on heroku deployments, go [here](https://medium.com/@johnkagga/deploying-a-python-flask-app-to-heroku-41250bda27d0) or [here](https://devcenter.heroku.com/articles/heroku-cli)

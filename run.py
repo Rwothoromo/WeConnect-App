@@ -1,7 +1,7 @@
 # run.py
 """Weconnect entry point"""
 
-from app.api.api_run import app
+from app import app
 
-if __name__ == '__main__': # pragma: no cover
+if __name__ == '__main__':
     app.run()

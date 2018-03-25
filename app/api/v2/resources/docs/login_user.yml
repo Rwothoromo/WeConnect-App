@@ -43,4 +43,4 @@ responses:
           type: string
           enum:
             - "Incorrect username and password combination!"
-            - "This username does not exist! Please register!"
+            - "Incorrect username and password combination!"

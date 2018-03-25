@@ -1,4 +1,4 @@
-# app/api/v1/resources/hello.py
+# app/api/v2/resources/hello.py
 """Contains simple greeting logic"""
 
 from flask import jsonify, make_response
