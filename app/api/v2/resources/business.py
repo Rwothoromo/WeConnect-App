@@ -45,6 +45,10 @@ q_request_parser.add_argument(
     "limit", type=int, required=False, help="Businesses results limit")
 q_request_parser.add_argument(
     "page", type=int, required=False, help="Businesses results page to view")
+q_request_parser.add_argument(
+    "location", type=int, required=False, help="Business location filter")
+q_request_parser.add_argument(
+    "category", type=int, required=False, help="Business category filter")
 
 
 # When we write our Resources, Flask-RESTful generates the routes
@@ -63,6 +67,9 @@ class BusinessCollection(Resource):
         q = args.get('q', None)
         limit = args.get('limit', 10)
         page = args.get('page', 1)
+        location_name = args.get('location', None)
+        category_name = args.get('category', None)
+
         if q:
             q = q.lower()
             businesses_query = Business.query.order_by(Business.name).filter(Business.name.like(
@@ -70,6 +77,16 @@ class BusinessCollection(Resource):
         else:
             businesses_query = Business.query.order_by(Business.name).paginate(
                 page=page, per_page=limit, error_out=False)
+
+        if location_name:
+            location_ids = Location.query(Location.id).filter(Location.name.like('%' + location_name + '%'))
+            if location_ids:
+                businesses_query = businesses_query.filter(Business.location.in_((*location_ids)))
+
+        if category_name:
+            category_ids = Category.query(Category.id).filter(Category.name.like('%' + category_name + '%'))
+            if category_ids:
+                businesses_query = businesses_query.filter(Business.category.in_((*category_ids)))
 
         businesses = businesses_query.items
         if not businesses:
