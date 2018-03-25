@@ -70,6 +70,9 @@ WeConnect brings businesses and users together, and allows users to review busin
 * View the api on `http://127.0.0.1:5000/api/v2/`
 * Test it's usage with postman
 
+## Use api documentation
+* View the api on `http://127.0.0.1:5000/apidocs`
+
 ## Unittests
 
 * Run `set DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db`
