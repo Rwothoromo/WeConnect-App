@@ -18,6 +18,10 @@ class Business(db.Model):
     photo = db.Column(db.String(256))
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(
+    ), onupdate=db.func.current_timestamp())
+    reviews = db.relationship(
+        'Review', order_by='Review.id', cascade='all, delete-orphan')
 
     def __init__(self, name, description, category, location, photo):
         self.name = name
@@ -25,7 +29,6 @@ class Business(db.Model):
         self.category = category
         self.location = location
         self.photo = photo
-        self.reviews = {}
         self.created_by = session["user_id"]
 
     def __repr__(self):

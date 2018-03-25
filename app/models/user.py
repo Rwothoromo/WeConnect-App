@@ -18,7 +18,12 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(
+    ), onupdate=db.func.current_timestamp())
+    businesses = db.relationship(
+        'Business', order_by='Business.id', cascade='all, delete-orphan')
+    # cascade='all, delete-orphan' will delete
+    # businesses for a user, when the user is deleted
 
     def __init__(self, first_name, last_name, username, password):
         self.first_name = first_name

@@ -63,6 +63,8 @@ class WeConnectApiTestBase(TestCase):
         }
 
         with self.app.app_context():
+            db.session.close()
+            db.drop_all()
             db.create_all()
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',

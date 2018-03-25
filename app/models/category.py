@@ -15,11 +15,12 @@ class Category(db.Model):
     description = db.Column(db.String(256), nullable=False)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(
+    ), onupdate=db.func.current_timestamp())
 
     def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.businesses = {}
         self.created_by = session["user_id"]
 
     def __repr__(self):

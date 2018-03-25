@@ -16,6 +16,8 @@ class Review(db.Model):
     business = db.Column(db.Integer, db.ForeignKey('businesses.id'))
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(
+    ), onupdate=db.func.current_timestamp())
 
     def __init__(self, name, description, business):
         self.name = name
