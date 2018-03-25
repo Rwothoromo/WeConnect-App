@@ -43,6 +43,8 @@ q_request_parser.add_argument(
     "q", type=str, required=False, help="Search business by name")
 q_request_parser.add_argument(
     "limit", type=int, required=False, help="Businesses results limit")
+q_request_parser.add_argument(
+    "page", type=int, required=False, help="Businesses results page to view")
 
 
 # When we write our Resources, Flask-RESTful generates the routes
@@ -54,28 +56,20 @@ class BusinessCollection(Resource):
 
     @token_required
     @swag_from('docs/get_businesses.yml')
-    def get(self, q=None, limit=None):
+    def get(self):
         """Retrieves all businesses"""
 
         args = q_request_parser.parse_args()
         q = args.get('q', None)
-        limit = args.get('limit', None)
-        # q = 'oNd'
+        limit = args.get('limit', 10)
+        page = args.get('page', 1)
         if q:
             q = q.lower()
-            if limit:
-                businesses_query = Business.query.filter(Business.name.like(
-                    '%' + q + '%')).limit(limit).paginate(page=1, per_page=10, error_out=False, max_per_page=10)
-            else:
-                businesses_query = Business.query.filter(Business.name.like(
-                    '%' + q + '%')).paginate(page=1, per_page=10, error_out=False, max_per_page=10)
+            businesses_query = Business.query.order_by(Business.name).filter(Business.name.like(
+                '%' + q + '%')).paginate(page=page, per_page=limit, error_out=False)
         else:
-            if limit:
-                businesses_query = Business.query.order_by(Business.name).limit(
-                    limit).paginate(page=1, per_page=10, error_out=False, max_per_page=10)
-            else:
-                businesses_query = Business.query.order_by(Business.name).paginate(
-                    page=1, per_page=10, error_out=False, max_per_page=10)
+            businesses_query = Business.query.order_by(Business.name).paginate(
+                page=page, per_page=limit, error_out=False)
 
         businesses = businesses_query.items
         if not businesses:
