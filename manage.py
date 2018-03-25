@@ -12,6 +12,7 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
+
 @manager.command
 def test():
     tests = unittest.TestLoader().discover('./tests', pattern='test*.py')
@@ -21,11 +22,13 @@ def test():
     # return the opposite boolean
     return not result.wasSuccessful()
 
+
 @app.route('/')
-def main():
+def main():  # pragma: no cover
     """Redirect to api endpoints"""
 
     return redirect('/api/v2/')
+
 
 if __name__ == '__main__':
     manager.run()
