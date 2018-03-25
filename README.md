@@ -58,9 +58,9 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `set SECRET_KEY=some_secret_value`
 * Run `set FLASK_CONFIG=development` on command prompt
 * Run the following on command prompt
-    - `python manage.py db init` to create a migration repository
-    - `python manage.py db migrate` to update the migration script
-    - `python manage.py db upgrade` to apply the migration to the database
+  * `python manage.py db init` to create a migration repository
+  * `python manage.py db migrate` to update the migration script
+  * `python manage.py db upgrade` to apply the migration to the database
 * Run `python manage.py runserver` on command prompt to run on the default ip and port
 * View the app on `http://127.0.0.1:5000/`
 
@@ -76,9 +76,9 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `set SECRET_KEY=some_secret_value`
 * Run `set FLASK_CONFIG=testing` on command prompt
 * Run the following on command prompt
-    - `python manage.py db init` to create a migration repository
-    - `python manage.py db migrate` to update the migration script
-    - `python manage.py db upgrade` to apply the migration to the database
+  * `python manage.py db init` to create a migration repository
+  * `python manage.py db migrate` to update the migration script
+  * `python manage.py db upgrade` to apply the migration to the database
 * Run `python manage.py test` or `pytest` on command prompt
 
 ## GitHub pages
