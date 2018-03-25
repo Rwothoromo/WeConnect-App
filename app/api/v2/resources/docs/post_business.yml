@@ -1,4 +1,4 @@
-Endpoint that updates a business
+Endpoint that creates a business
 ---
 tags:
   - Business
@@ -7,11 +7,6 @@ parameters:
     description: A json web token prefixed with 'Bearer '
     in: header
     type: string
-    required: true
-  - name: business_id
-    description: business id
-    type: integer
-    in: path
     required: true
   - name: body
     description: business creation data
@@ -44,23 +39,14 @@ parameters:
 
 responses:
   201:
-    description: Business updated
+    description: Business added
     schema: 
       type: object
       properties:
         message:
           type: string
           enum:
-            - "Business updated"
-  404:
-    description: Business not found
-    schema: 
-      type: object
-      properties:
-        message:
-          type: string
-          enum:
-            - "Business not found"
+            - "Business added"
   409:
     description: Business already exists
     schema: 
@@ -69,4 +55,4 @@ responses:
         message:
           type: string
           enum:
-            - "Business by that name already exists"
+            - "Business already exists"

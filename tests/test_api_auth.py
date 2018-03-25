@@ -1,106 +1,19 @@
-# tests/test_api_v1_auth.py
-"""This script tests the functionality of WeConnect api v1"""
+# tests/test_api_auth.py
+"""This script tests the functionality of WeConnect api Auth"""
 
-# third party imports
-from unittest import TestCase
-
-import os
-import sys
-import inspect
 import json
 
-# solution to python 3 relative import errors
-# use the inspect module because for os.path.abspath(__file__),
-# the __file__ attribute is not always given
-test_api_v1_dir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
-tests_dir = os.path.dirname(test_api_v1_dir)
-sys.path.insert(0, tests_dir)
-# sys.path.append(os.path.dirname)
-from app.api.api_run import app
+from tests.test_api_base import WeConnectApiTestBase
 
 
-class WeConnectApiTestCase(TestCase):
+class WeConnectApiAuthTestCase(WeConnectApiTestBase):
     """Test user api logic"""
-
-    def setUp(self):
-        self.client = app.test_client()
-        self.prefix = '/api/v1/'
-
-        self.user_one = {
-            "first_name": "jack",
-            "last_name": "dan",
-            "username": "jackdan",
-            "password": "password"
-        }
-
-        self.user_two = {
-            "first_name": "jim",
-            "last_name": "dan",
-            "username": "jimdan",
-            "password": "password"
-        }
-
-        self.user_three = {
-            "first_name": "eli",
-            "last_name": "rwt",
-            "username": "eli",
-            "password": "password"
-        }
-
-        self.user_bad = {
-            "first_name": '',
-            "last_name": '',
-            "username": '',
-            "password": ''
-        }
-
-        self.user_one_login_data = {
-            "username": "jackdan",
-            "password": "password"
-        }
-
-        self.user_two_login_data = {
-            "username": "jimdan",
-            "password": "password"
-        }
-
-        self.user_three_login_data = {
-            "username": "eli",
-            "password": "password"
-        }
-
-        self.user_bad_login_data = {
-            "username": '',
-            "password": ''
-        }
-
-        self.user_bad_login_data1 = {
-            "username": "eli",
-            "password": "passrd"
-        }
-
-        self.user_bad_login_data2 = {
-            "username": "elite",
-            "password": "password"
-        }
-
-    def test_api_hello(self):
-        """Test api hello text"""
-
-        response = self.client.get('/', follow_redirects=True)
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual(
-            'WeConnect brings businesses and users together, and allows users to review businesses',
-            response_data['WeConnect'])
-        self.assertEqual(response.status_code, 200)
 
     def test_api_user_registration(self):
         """Test api user registration"""
 
         response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                    data=json.dumps(self.user_one))
+                                    data=json.dumps(self.users['two']))
         response_data = json.loads(response.data.decode())
 
         self.assertEqual('User added', response_data['message'])
@@ -110,9 +23,9 @@ class WeConnectApiTestCase(TestCase):
         """Test api user login"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_two))
+                         data=json.dumps(self.users['two']))
         response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                    data=json.dumps(self.user_two_login_data))
+                                    data=json.dumps(self.user_login['two']))
         response_data = json.loads(response.get_data())
 
         self.assertEqual('User logged in', response_data['message'])
@@ -122,9 +35,9 @@ class WeConnectApiTestCase(TestCase):
         """Test api user logout"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_two))
+                         data=json.dumps(self.users['two']))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_two_login_data))
+                                 data=json.dumps(self.user_login['two']))
         login_data = json.loads(login.get_data())
         access_token = login_data["access_token"]
 
@@ -139,9 +52,9 @@ class WeConnectApiTestCase(TestCase):
         """Test api password reset"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_three))
+                         data=json.dumps(self.users['three']))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_three_login_data))
+                                 data=json.dumps(self.user_login['three']))
         login_data = json.loads(login.get_data())
         access_token = login_data["access_token"]
 
@@ -156,11 +69,11 @@ class WeConnectApiTestCase(TestCase):
         """Test api user registration fails"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.user_two))
+                         data=json.dumps(self.users['two']))
         response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                    data=json.dumps(self.user_two))
+                                    data=json.dumps(self.users['two']))
         response1 = self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                     data=json.dumps(self.user_bad))
+                                     data=json.dumps(self.users['bad']))
         response_data = json.loads(response.data.decode())
         response_data1 = json.loads(response1.data.decode())
 
@@ -174,13 +87,13 @@ class WeConnectApiTestCase(TestCase):
         """Test api user login fails for bad input"""
 
         self.client.post(self.prefix + 'auth/register',
-                         content_type='application/json', data=json.dumps(self.user_three))
+                         content_type='application/json', data=json.dumps(self.users['three']))
         response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                    data=json.dumps(self.user_bad_login_data))
+                                    data=json.dumps(self.user_login['bad']))
         response1 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                     data=json.dumps(self.user_bad_login_data1))
+                                     data=json.dumps(self.user_login['bad1']))
         response2 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                     data=json.dumps(self.user_bad_login_data2))
+                                     data=json.dumps(self.user_login['bad2']))
         response_data = json.loads(response.get_data())
         response_data1 = json.loads(response1.get_data())
         response_data2 = json.loads(response2.get_data())
@@ -191,5 +104,5 @@ class WeConnectApiTestCase(TestCase):
             "Incorrect username and password combination!", response_data1['message'])
         self.assertEqual(response1.status_code, 400)
         self.assertEqual(
-            "This username does not exist! Please register!", response_data2['message'])
+            "Incorrect username and password combination!", response_data2['message'])
         self.assertEqual(response2.status_code, 400)

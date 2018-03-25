@@ -1,36 +1,44 @@
-Endpoint that retrieves a business' reviews
+Endpoint that deletes a business
 ---
 tags:
   - Business
 parameters:
   - name: Authorization
     description: A json web token prefixed with 'Bearer '
-    type: string
     in: header
+    type: string
     required: true
   - name: business_id
     description: business id
     type: integer
     in: path
     required: true
+
 responses:
   200:
-    description: A business review
-    schema:
+    description: Business deleted
+    schema: 
       type: object
       properties:
         message:
           type: string
           enum:
-            - "Business reviews not found"
-        reviews:
-          type: array
+            - "Business deleted"
   404:
     description: Business not found
-    schema:
+    schema: 
       type: object
       properties:
         message:
           type: string
           enum:
             - "Business not found"
+  409:
+    description: Business can only be deleted by owner
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Only the Business owner can delete"

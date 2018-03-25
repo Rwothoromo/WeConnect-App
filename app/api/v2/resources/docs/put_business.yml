@@ -1,12 +1,12 @@
-Endpoint that posts a business review
+Endpoint that updates a business
 ---
 tags:
   - Business
 parameters:
   - name: Authorization
     description: A json web token prefixed with 'Bearer '
-    type: string
     in: header
+    type: string
     required: true
   - name: business_id
     description: business id
@@ -14,7 +14,7 @@ parameters:
     in: path
     required: true
   - name: body
-    description: business review data
+    description: business creation data
     in: body
     required: true
     schema:
@@ -22,38 +22,53 @@ parameters:
       required:
         - "name"
         - "description"
+        - "category"
+        - "location"
+        - "photo"
       properties:
         name:
           type: "string"
-          example: "Well stocked"
+          example: "Buyondo Hardware"
         description:
           type: "string"
-          example: "They had a broad variety of construction materials"
+          example: "One stop center for building materials..."
+        category:
+          type: "string"
+          example: "Construction"
+        location:
+          type: "string"
+          example: "Kabale"
+        photo:
+          type: "string"
+          example: "photo"
+
 responses:
   201:
-    description: Business review added
-    schema:
+    description: Business updated
+    schema: 
       type: object
       properties:
-        business:
+        message:
           type: string
           enum:
-            - "Business review added"
+            - "Business updated"
   404:
     description: Business not found
-    schema:
+    schema: 
       type: object
       properties:
         message:
           type: string
           enum:
             - "Business not found"
+
   409:
-    description: Business already exists
-    schema:
+    description: Business already exists or can only be updated by owner
+    schema: 
       type: object
       properties:
         message:
           type: string
           enum:
-            - "Business review by that name already exists"
+            - "Business by that name already exists"
+            - "Only the Business owner can update"
