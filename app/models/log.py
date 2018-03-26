@@ -15,8 +15,10 @@ class Log(db.Model):
     user = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
-    def __init__(self, token):
-        self.token = token
+    def __init__(self, action, message, table):
+        self.action = action
+        self.message = message
+        self.table = table
 
     def __repr__(self):
         return '<Log: {}'.format(self.message)
