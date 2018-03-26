@@ -250,8 +250,8 @@ class BusinessResource(Resource):
 
                 log_object3 = Log(
                     "Update", "Updated business: {}".format(business_name), "businesses")
-                    db.session.add(log_object3)
-                    db.session.commit()
+                db.session.add(log_object3)
+                db.session.commit()
 
                 return make_response(jsonify({"message": "Business updated"}), 200)
 
