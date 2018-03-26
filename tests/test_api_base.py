@@ -77,7 +77,7 @@ class WeConnectApiTestBase(TestCase):
     def test_api_hello(self):
         """Test api hello text"""
 
-        response = self.client.get(self.prefix)
+        response = self.client.get('/')
         response_data = json.loads(response.data.decode())
 
         self.assertEqual(
