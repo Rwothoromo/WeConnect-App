@@ -228,7 +228,6 @@ class ResetPassword(Resource):
         response = jsonify(response_data)
         response.status_code = 200  # Post update success
 
-        session["user_id"] = None
         authorization = request.headers.get("Authorization", None)
         if authorization:
             token = authorization.split(" ")[1]
