@@ -22,8 +22,6 @@ class User(UserMixin, db.Model):
     ), onupdate=db.func.current_timestamp())
     businesses = db.relationship(
         'Business', order_by='Business.id', cascade='all, delete-orphan')
-    # cascade='all, delete-orphan' will delete
-    # businesses for a user, when the user is deleted
 
     def __init__(self, first_name, last_name, username, password):
         self.first_name = first_name

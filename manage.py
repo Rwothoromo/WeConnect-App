@@ -18,8 +18,6 @@ def test():
     tests = unittest.TestLoader().discover('./tests', pattern='test*.py')
     result = unittest.TextTestRunner(verbosity=2).run(tests)
 
-    # if result.wasSuccessful() return 0 else 1
-    # return the opposite boolean
     return not result.wasSuccessful()
 
 
