@@ -160,7 +160,7 @@ class BusinessCollection(Resource):
                 business_name, description, category.id, location.id, photo)
             db.session.add(business_object)
             db.session.commit()
-            
+
             log_object3 = Log(
                 "Insert", "Added business: {}".format(business_name), "businesses")
             db.session.add(log_object3)
@@ -220,7 +220,7 @@ class BusinessResource(Resource):
                     db.session.commit()
                     category = Category.query.filter_by(
                         name=category_name).first()
-                    
+
                     log_object1 = Log(
                         "Insert", "Added category: {}".format(category_name), "categories")
                     db.session.add(log_object1)
@@ -234,7 +234,7 @@ class BusinessResource(Resource):
                     db.session.commit()
                     location = Location.query.filter_by(
                         name=location_name).first()
-                    
+
                     log_object2 = Log(
                         "Insert", "Added location: {}".format(location_name), "locations")
                     db.session.add(log_object2)
@@ -249,7 +249,7 @@ class BusinessResource(Resource):
                 db.session.commit()
 
                 log_object3 = Log(
-                        "Update", "Updated business: {}".format(business_name), "businesses")
+                    "Update", "Updated business: {}".format(business_name), "businesses")
                     db.session.add(log_object3)
                     db.session.commit()
 
@@ -324,8 +324,12 @@ class BusinessReviews(Resource):
             review_by_name = Review.query.filter_by(name=review_name).first()
             if not review_by_name:
                 review_object = Review(review_name, description, business_id)
-
                 db.session.add(review_object)
+                db.session.commit()
+
+                log_object = Log(
+                    "Insert", "Added review: {}".format(review_name), "reviews")
+                db.session.add(log_object)
                 db.session.commit()
 
                 # Post create success
