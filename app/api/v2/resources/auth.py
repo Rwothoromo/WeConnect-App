@@ -258,10 +258,10 @@ class LogoutUser(Resource):
             token = authorization.split(" ")[1]
         token_blacklist = Blacklist(token)
 
-        user_data = request.data["user"]
         db.session.add(token_blacklist)
         db.session.commit()
 
+        user_data = request.data["user"]
         log_object = Log("Insert", "Revoked token for user: {}".format(
             user_data.username), "blacklists")
         db.session.add(log_object)

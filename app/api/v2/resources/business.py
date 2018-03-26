@@ -266,6 +266,7 @@ class BusinessResource(Resource):
 
         business = Business.query.get(business_id)
         if business:
+            business_name = business.name
             user_data = request.data.get("user", None)
             if not user_data or (user_data and (user_data.id != business.created_by)):
                 return make_response(jsonify({"message": "Only the Business owner can delete"}), 409)
@@ -274,7 +275,7 @@ class BusinessResource(Resource):
             db.session.commit()
 
             log_object = Log(
-                "Delete", "Deleted business: {}".format(business.name), "businesses")
+                "Delete", "Deleted business: {}".format(business_name), "businesses")
             db.session.add(log_object)
             db.session.commit()
 
