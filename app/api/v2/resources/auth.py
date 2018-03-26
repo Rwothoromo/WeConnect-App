@@ -136,7 +136,7 @@ class RegisterUser(Resource):
             db.session.commit()
 
             log_object = Log(
-                "Insert", "Added user: {}".format(username), "users", session["user_id"])
+                "Insert", "Added user: {}".format(username), "users", user_object.id)
             db.session.add(log_object)
             db.session.commit()
 
@@ -253,7 +253,6 @@ class LogoutUser(Resource):
     def post(self):
         """Logs out a user"""
 
-        session["user_id"] = None
         authorization = request.headers.get("Authorization", None)
         if authorization:
             token = authorization.split(" ")[1]
@@ -267,5 +266,7 @@ class LogoutUser(Resource):
             user_data.username), "blacklists", session["user_id"])
         db.session.add(log_object)
         db.session.commit()
+
+        session["user_id"] = None
 
         return make_response(jsonify({"message": "Access token revoked"}), 200)

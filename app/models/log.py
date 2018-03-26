@@ -21,7 +21,7 @@ class Log(db.Model):
         self.action = action
         self.message = message
         self.table = table
-        self.user = user_id
+        self.user = 1
 
     def __repr__(self):
         return '<Log: {}'.format(self.message)

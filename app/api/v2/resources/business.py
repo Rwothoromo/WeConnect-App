@@ -1,7 +1,7 @@
 # app/api/resources/business.py
 """Contains business logic"""
 
-from flask import jsonify, make_response, request
+from flask import jsonify, make_response, request, session
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
