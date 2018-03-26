@@ -240,6 +240,8 @@ class ResetPassword(Resource):
         db.session.add(log_object1)
         db.session.commit()
 
+        session["user_id"] = None
+
         return response
 
 
