@@ -139,7 +139,7 @@ class BusinessCollection(Resource):
                 category = Category.query.filter_by(name=category_name).first()
 
                 log_object1 = Log(
-                    "Insert", "Added category: {}".format(category_name), "categories")
+                    "Insert", "Added category: {}".format(category_name), "categories", session["user_id"])
                 db.session.add(log_object1)
                 db.session.commit()
 
@@ -152,7 +152,7 @@ class BusinessCollection(Resource):
                 location = Location.query.filter_by(name=location_name).first()
 
                 log_object2 = Log(
-                    "Insert", "Added location: {}".format(location_name), "locations")
+                    "Insert", "Added location: {}".format(location_name), "locations", session["user_id"])
                 db.session.add(log_object2)
                 db.session.commit()
 
@@ -162,7 +162,7 @@ class BusinessCollection(Resource):
             db.session.commit()
 
             log_object3 = Log(
-                "Insert", "Added business: {}".format(business_name), "businesses")
+                "Insert", "Added business: {}".format(business_name), "businesses", session["user_id"])
             db.session.add(log_object3)
             db.session.commit()
 
