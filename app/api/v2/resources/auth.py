@@ -132,10 +132,11 @@ class RegisterUser(Resource):
         user = User.query.filter_by(username=username).first()
         if not user:
             user_object = User(first_name, last_name, username, password)
+            db.session.add(user_object)
+            db.session.commit()
+
             log_object = Log(
                 "Insert", "Added user: {}".format(username), "users")
-
-            db.session.add(user_object)
             db.session.add(log_object)
             db.session.commit()
 
@@ -215,11 +216,11 @@ class ResetPassword(Resource):
 
         password = "Chang3m3" + str(random.randrange(10000))
         user.password_hash = generate_password_hash(password)
+        db.session.commit()
 
         log_object = Log("Update", "Updated password for user: {}".format(
             user.username), "users")
         db.session.add(log_object)
-
         db.session.commit()
 
         response_data["message"] = "User password reset"
@@ -232,11 +233,11 @@ class ResetPassword(Resource):
         if authorization:
             token = authorization.split(" ")[1]
         token_blacklist = Blacklist(token)
+        db.session.add(token_blacklist)
+        db.session.commit()
 
         log_object1 = Log("Insert", "Revoked token for user: {}".format(
             user.username), "blacklists")
-
-        db.session.add(token_blacklist)
         db.session.add(log_object1)
         db.session.commit()
 
@@ -258,10 +259,11 @@ class LogoutUser(Resource):
         token_blacklist = Blacklist(token)
 
         user_data = request.data["user"]
+        db.session.add(token_blacklist)
+        db.session.commit()
+
         log_object = Log("Insert", "Revoked token for user: {}".format(
             user_data.username), "blacklists")
-
-        db.session.add(token_blacklist)
         db.session.add(log_object)
         db.session.commit()
 

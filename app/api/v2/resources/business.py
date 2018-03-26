@@ -13,6 +13,7 @@ from app.models.category import Category
 from app.models.location import Location
 from app.models.business import Business
 from app.models.review import Review
+from app.models.log import Log
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
@@ -137,6 +138,11 @@ class BusinessCollection(Resource):
                 db.session.commit()
                 category = Category.query.filter_by(name=category_name).first()
 
+                log_object1 = Log(
+                    "Insert", "Added category: {}".format(category_name), "categories")
+                db.session.add(log_object1)
+                db.session.commit()
+
             location = Location.query.filter_by(name=location_name).first()
             if not location:
                 location_object = Location(
@@ -145,10 +151,19 @@ class BusinessCollection(Resource):
                 db.session.commit()
                 location = Location.query.filter_by(name=location_name).first()
 
+                log_object2 = Log(
+                    "Insert", "Added location: {}".format(location_name), "locations")
+                db.session.add(log_object2)
+                db.session.commit()
+
             business_object = Business(
                 business_name, description, category.id, location.id, photo)
-
             db.session.add(business_object)
+            db.session.commit()
+            
+            log_object3 = Log(
+                "Insert", "Added business: {}".format(business_name), "businesses")
+            db.session.add(log_object3)
             db.session.commit()
 
             return make_response(
@@ -205,6 +220,11 @@ class BusinessResource(Resource):
                     db.session.commit()
                     category = Category.query.filter_by(
                         name=category_name).first()
+                    
+                    log_object1 = Log(
+                        "Insert", "Added category: {}".format(category_name), "categories")
+                    db.session.add(log_object1)
+                    db.session.commit()
 
                 location = Location.query.filter_by(name=location_name).first()
                 if not location:
@@ -214,6 +234,11 @@ class BusinessResource(Resource):
                     db.session.commit()
                     location = Location.query.filter_by(
                         name=location_name).first()
+                    
+                    log_object2 = Log(
+                        "Insert", "Added location: {}".format(location_name), "locations")
+                    db.session.add(log_object2)
+                    db.session.commit()
 
                 business.name = business_name
                 business.description = description
@@ -222,6 +247,11 @@ class BusinessResource(Resource):
                 business.photo = photo
 
                 db.session.commit()
+
+                log_object3 = Log(
+                        "Update", "Updated business: {}".format(business_name), "businesses")
+                    db.session.add(log_object3)
+                    db.session.commit()
 
                 return make_response(jsonify({"message": "Business updated"}), 200)
 
@@ -241,6 +271,11 @@ class BusinessResource(Resource):
                 return make_response(jsonify({"message": "Only the Business owner can delete"}), 409)
 
             db.session.delete(business)
+            db.session.commit()
+
+            log_object = Log(
+                "Delete", "Deleted business: {}".format(business.name), "businesses")
+            db.session.add(log_object)
             db.session.commit()
 
             return make_response(jsonify({"message": "Business deleted"}), 200)
