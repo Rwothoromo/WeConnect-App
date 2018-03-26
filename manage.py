@@ -22,7 +22,7 @@ def test():
 
 
 @app.route('/')
-def main():
+def main():  # pragma: no cover
     """Redirect to api endpoints"""
 
     return redirect('/api/v2/')
