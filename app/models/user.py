@@ -18,17 +18,16 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(
+    ), onupdate=db.func.current_timestamp())
+    businesses = db.relationship(
+        'Business', order_by='Business.id', cascade='all, delete-orphan')
 
     def __init__(self, first_name, last_name, username, password):
         self.first_name = first_name
         self.last_name = last_name
         self.username = username
         self.password_hash = generate_password_hash(password)
-        self.businesses = {}
-        self.reviews = {}
-        self.categories = {}
-        self.locations = {}
 
     def __repr__(self):
         return '<User: {}>'.format(self.username)

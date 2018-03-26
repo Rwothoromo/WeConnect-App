@@ -18,7 +18,7 @@ WeConnect brings businesses and users together, and allows users to review busin
 5. Users can give reviews about a business.
 6. Users can search for businesses based on business location or business category.
 
-[View on Heroku](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/)
+[View on Heroku](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/)
 
 | EndPoint                                             | Functionality                                    |
 | ---------------------------------------------------- | ------------------------------------------------ |
@@ -58,9 +58,9 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `set SECRET_KEY=some_secret_value`
 * Run `set FLASK_CONFIG=development` on command prompt
 * Run the following on command prompt
-    - `python manage.py db init` to create a migration repository
-    - `python manage.py db migrate` to update the migration script
-    - `python manage.py db upgrade` to apply the migration to the database
+  * `python manage.py db init` to create a migration repository
+  * `python manage.py db migrate` to update the migration script
+  * `python manage.py db upgrade` to apply the migration to the database
 * Run `python manage.py runserver` on command prompt to run on the default ip and port
 * View the app on `http://127.0.0.1:5000/`
 
@@ -70,17 +70,26 @@ WeConnect brings businesses and users together, and allows users to review busin
 * View the api on `http://127.0.0.1:5000/api/v2/`
 * Test it's usage with postman
 
+## Use api documentation
+
+* View the api on [Heroku](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/)
+* View the api on `http://127.0.0.1:5000/apidocs`
+
 ## Unittests
 
 * Run `set DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db`
 * Run `set SECRET_KEY=some_secret_value`
 * Run `set FLASK_CONFIG=testing` on command prompt
 * Run the following on command prompt
-    - `python manage.py db init` to create a migration repository
-    - `python manage.py db migrate` to update the migration script
-    - `python manage.py db upgrade` to apply the migration to the database
+  * `python manage.py db init` to create a migration repository
+  * `python manage.py db migrate` to update the migration script
+  * `python manage.py db upgrade` to apply the migration to the database
 * Run `python manage.py test` or `pytest` on command prompt
 
 ## GitHub pages
 
 Go to [WeConnect](https://rwothoromo.github.io/WeConnect-App/)
+
+## Notes
+
+For detailed instructions on heroku deployments, go [here](https://medium.com/@johnkagga/deploying-a-python-flask-app-to-heroku-41250bda27d0) or [here](https://devcenter.heroku.com/articles/heroku-cli)

@@ -34,6 +34,7 @@ sys.path.insert(0, app_dir)
 from app.db import db
 from app.models.blacklist import Blacklist
 from app.models.user import User
+from app.models.log import Log
 
 
 secret_key = os.environ.get('SECRET_KEY', 'MEGAtron35648')
@@ -131,8 +132,12 @@ class RegisterUser(Resource):
         user = User.query.filter_by(username=username).first()
         if not user:
             user_object = User(first_name, last_name, username, password)
-
             db.session.add(user_object)
+            db.session.commit()
+
+            log_object = Log(
+                "Insert", "Added user: {}".format(username), "users", user_object.id)
+            db.session.add(log_object)
             db.session.commit()
 
             # Post create success
@@ -174,6 +179,11 @@ class LoginUser(Resource):
 
                 session["user_id"] = user.id
 
+                log_object = Log(
+                    "Login", "Logged in user: {}".format(username), "users", session["user_id"])
+                db.session.add(log_object)
+                db.session.commit()
+
                 response_data["message"] = "User logged in"
                 response_data["access_token"] = access_token.decode()
                 response = jsonify(response_data)
@@ -208,19 +218,29 @@ class ResetPassword(Resource):
         user.password_hash = generate_password_hash(password)
         db.session.commit()
 
+        log_object = Log("Update", "Updated password for user: {}".format(
+            user.username), "users", session["user_id"])
+        db.session.add(log_object)
+        db.session.commit()
+
         response_data["message"] = "User password reset"
         response_data["new_password"] = password
         response = jsonify(response_data)
         response.status_code = 200  # Post update success
 
-        session["user_id"] = None
         authorization = request.headers.get("Authorization", None)
         if authorization:
             token = authorization.split(" ")[1]
         token_blacklist = Blacklist(token)
-
         db.session.add(token_blacklist)
         db.session.commit()
+
+        log_object1 = Log("Insert", "Revoked token for user: {}".format(
+            user.username), "blacklists", session["user_id"])
+        db.session.add(log_object1)
+        db.session.commit()
+
+        session["user_id"] = None
 
         return response
 
@@ -233,7 +253,6 @@ class LogoutUser(Resource):
     def post(self):
         """Logs out a user"""
 
-        session["user_id"] = None
         authorization = request.headers.get("Authorization", None)
         if authorization:
             token = authorization.split(" ")[1]
@@ -241,5 +260,13 @@ class LogoutUser(Resource):
 
         db.session.add(token_blacklist)
         db.session.commit()
+
+        user_data = request.data["user"]
+        log_object = Log("Insert", "Revoked token for user: {}".format(
+            user_data.username), "blacklists", session["user_id"])
+        db.session.add(log_object)
+        db.session.commit()
+
+        session["user_id"] = None
 
         return make_response(jsonify({"message": "Access token revoked"}), 200)

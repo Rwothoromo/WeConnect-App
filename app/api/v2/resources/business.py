@@ -1,7 +1,7 @@
 # app/api/resources/business.py
 """Contains business logic"""
 
-from flask import jsonify, make_response, request
+from flask import jsonify, make_response, request, session
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
@@ -13,6 +13,7 @@ from app.models.category import Category
 from app.models.location import Location
 from app.models.business import Business
 from app.models.review import Review
+from app.models.log import Log
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
@@ -45,6 +46,10 @@ q_request_parser.add_argument(
     "limit", type=int, required=False, help="Businesses results limit")
 q_request_parser.add_argument(
     "page", type=int, required=False, help="Businesses results page to view")
+q_request_parser.add_argument(
+    "location", type=str, required=False, help="Business location filter")
+q_request_parser.add_argument(
+    "category", type=str, required=False, help="Business category filter")
 
 
 # When we write our Resources, Flask-RESTful generates the routes
@@ -63,13 +68,34 @@ class BusinessCollection(Resource):
         q = args.get('q', None)
         limit = args.get('limit', 10)
         page = args.get('page', 1)
+        location_name = args.get('location', None)
+        category_name = args.get('category', None)
+
         if q:
             q = q.lower()
-            businesses_query = Business.query.order_by(Business.name).filter(Business.name.like(
-                '%' + q + '%')).paginate(page=page, per_page=limit, error_out=False)
+            businesses_query = Business.query.order_by(
+                Business.name).filter(Business.name.like('%' + q + '%'))
         else:
-            businesses_query = Business.query.order_by(Business.name).paginate(
-                page=page, per_page=limit, error_out=False)
+            businesses_query = Business.query.order_by(Business.name)
+
+        if location_name:
+            locations = Location.query.filter(
+                Location.name.like('%' + location_name + '%'))
+            if locations:
+                location_ids = [location.id for location in locations]
+                businesses_query = businesses_query.filter(
+                    Business.location.in_(location_ids))
+
+        if category_name:
+            categories = Category.query.filter(
+                Category.name.like('%' + category_name + '%'))
+            if categories:
+                category_ids = [category.id for category in categories]
+                businesses_query = businesses_query.filter(
+                    Business.category.in_(category_ids))
+
+        businesses_query = businesses_query.paginate(
+            page=page, per_page=limit, error_out=False)
 
         businesses = businesses_query.items
         if not businesses:
@@ -112,6 +138,11 @@ class BusinessCollection(Resource):
                 db.session.commit()
                 category = Category.query.filter_by(name=category_name).first()
 
+                log_object1 = Log(
+                    "Insert", "Added category: {}".format(category_name), "categories", session["user_id"])
+                db.session.add(log_object1)
+                db.session.commit()
+
             location = Location.query.filter_by(name=location_name).first()
             if not location:
                 location_object = Location(
@@ -120,10 +151,19 @@ class BusinessCollection(Resource):
                 db.session.commit()
                 location = Location.query.filter_by(name=location_name).first()
 
+                log_object2 = Log(
+                    "Insert", "Added location: {}".format(location_name), "locations", session["user_id"])
+                db.session.add(log_object2)
+                db.session.commit()
+
             business_object = Business(
                 business_name, description, category.id, location.id, photo)
-
             db.session.add(business_object)
+            db.session.commit()
+
+            log_object3 = Log(
+                "Insert", "Added business: {}".format(business_name), "businesses", session["user_id"])
+            db.session.add(log_object3)
             db.session.commit()
 
             return make_response(
@@ -181,6 +221,11 @@ class BusinessResource(Resource):
                     category = Category.query.filter_by(
                         name=category_name).first()
 
+                    log_object1 = Log(
+                        "Insert", "Added category: {}".format(category_name), "categories", session["user_id"])
+                    db.session.add(log_object1)
+                    db.session.commit()
+
                 location = Location.query.filter_by(name=location_name).first()
                 if not location:
                     location_object = Location(
@@ -190,12 +235,22 @@ class BusinessResource(Resource):
                     location = Location.query.filter_by(
                         name=location_name).first()
 
+                    log_object2 = Log(
+                        "Insert", "Added location: {}".format(location_name), "locations", session["user_id"])
+                    db.session.add(log_object2)
+                    db.session.commit()
+
                 business.name = business_name
                 business.description = description
                 business.category = category.id
                 business.location = location.id
                 business.photo = photo
 
+                db.session.commit()
+
+                log_object3 = Log(
+                    "Update", "Updated business: {}".format(business_name), "businesses", session["user_id"])
+                db.session.add(log_object3)
                 db.session.commit()
 
                 return make_response(jsonify({"message": "Business updated"}), 200)
@@ -211,11 +266,17 @@ class BusinessResource(Resource):
 
         business = Business.query.get(business_id)
         if business:
+            business_name = business.name
             user_data = request.data.get("user", None)
             if not user_data or (user_data and (user_data.id != business.created_by)):
                 return make_response(jsonify({"message": "Only the Business owner can delete"}), 409)
 
             db.session.delete(business)
+            db.session.commit()
+
+            log_object = Log(
+                "Delete", "Deleted business: {}".format(business_name), "businesses", session["user_id"])
+            db.session.add(log_object)
             db.session.commit()
 
             return make_response(jsonify({"message": "Business deleted"}), 200)
@@ -264,8 +325,12 @@ class BusinessReviews(Resource):
             review_by_name = Review.query.filter_by(name=review_name).first()
             if not review_by_name:
                 review_object = Review(review_name, description, business_id)
-
                 db.session.add(review_object)
+                db.session.commit()
+
+                log_object = Log(
+                    "Insert", "Added review: {}".format(review_name), "reviews", session["user_id"])
+                db.session.add(log_object)
                 db.session.commit()
 
                 # Post create success
