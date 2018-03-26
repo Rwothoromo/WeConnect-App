@@ -17,11 +17,11 @@ class Log(db.Model):
     user = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
-    def __init__(self, action, message, table):
+    def __init__(self, action, message, table, user_id):
         self.action = action
         self.message = message
         self.table = table
-        self.user = session["user_id"]
+        self.user = user_id
 
     def __repr__(self):
         return '<Log: {}'.format(self.message)

@@ -222,7 +222,7 @@ class BusinessResource(Resource):
                         name=category_name).first()
 
                     log_object1 = Log(
-                        "Insert", "Added category: {}".format(category_name), "categories")
+                        "Insert", "Added category: {}".format(category_name), "categories", session["user_id"])
                     db.session.add(log_object1)
                     db.session.commit()
 
@@ -236,7 +236,7 @@ class BusinessResource(Resource):
                         name=location_name).first()
 
                     log_object2 = Log(
-                        "Insert", "Added location: {}".format(location_name), "locations")
+                        "Insert", "Added location: {}".format(location_name), "locations", session["user_id"])
                     db.session.add(log_object2)
                     db.session.commit()
 
@@ -249,7 +249,7 @@ class BusinessResource(Resource):
                 db.session.commit()
 
                 log_object3 = Log(
-                    "Update", "Updated business: {}".format(business_name), "businesses")
+                    "Update", "Updated business: {}".format(business_name), "businesses", session["user_id"])
                 db.session.add(log_object3)
                 db.session.commit()
 
@@ -275,7 +275,7 @@ class BusinessResource(Resource):
             db.session.commit()
 
             log_object = Log(
-                "Delete", "Deleted business: {}".format(business_name), "businesses")
+                "Delete", "Deleted business: {}".format(business_name), "businesses", session["user_id"])
             db.session.add(log_object)
             db.session.commit()
 
@@ -329,7 +329,7 @@ class BusinessReviews(Resource):
                 db.session.commit()
 
                 log_object = Log(
-                    "Insert", "Added review: {}".format(review_name), "reviews")
+                    "Insert", "Added review: {}".format(review_name), "reviews", session["user_id"])
                 db.session.add(log_object)
                 db.session.commit()
 

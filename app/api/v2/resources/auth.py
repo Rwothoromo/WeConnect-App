@@ -136,7 +136,7 @@ class RegisterUser(Resource):
             db.session.commit()
 
             log_object = Log(
-                "Insert", "Added user: {}".format(username), "users")
+                "Insert", "Added user: {}".format(username), "users", session["user_id"])
             db.session.add(log_object)
             db.session.commit()
 
@@ -180,7 +180,7 @@ class LoginUser(Resource):
                 session["user_id"] = user.id
 
                 log_object = Log(
-                    "Login", "Logged in user: {}".format(username), "users")
+                    "Login", "Logged in user: {}".format(username), "users", session["user_id"])
                 db.session.add(log_object)
                 db.session.commit()
 
@@ -219,7 +219,7 @@ class ResetPassword(Resource):
         db.session.commit()
 
         log_object = Log("Update", "Updated password for user: {}".format(
-            user.username), "users")
+            user.username), "users", session["user_id"])
         db.session.add(log_object)
         db.session.commit()
 
@@ -236,7 +236,7 @@ class ResetPassword(Resource):
         db.session.commit()
 
         log_object1 = Log("Insert", "Revoked token for user: {}".format(
-            user.username), "blacklists")
+            user.username), "blacklists", session["user_id"])
         db.session.add(log_object1)
         db.session.commit()
 
@@ -264,7 +264,7 @@ class LogoutUser(Resource):
 
         user_data = request.data["user"]
         log_object = Log("Insert", "Revoked token for user: {}".format(
-            user_data.username), "blacklists")
+            user_data.username), "blacklists", session["user_id"])
         db.session.add(log_object)
         db.session.commit()
 
