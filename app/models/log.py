@@ -1,5 +1,7 @@
 # app/models/log.py
 
+from flask import session
+
 from app.db import db
 
 
@@ -19,6 +21,7 @@ class Log(db.Model):
         self.action = action
         self.message = message
         self.table = table
+        self.created_by = session["user_id"]
 
     def __repr__(self):
         return '<Log: {}'.format(self.message)
