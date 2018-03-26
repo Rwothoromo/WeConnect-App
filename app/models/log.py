@@ -1,7 +1,5 @@
 # app/models/log.py
 
-from flask import session
-
 from app.db import db
 
 
