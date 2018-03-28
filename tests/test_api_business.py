@@ -1,5 +1,4 @@
 # tests/test_api_business.py
-"""This script tests the business functionality of WeConnect api business"""
 
 import json
 

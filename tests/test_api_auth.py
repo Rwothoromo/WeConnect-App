@@ -1,5 +1,4 @@
 # tests/test_api_auth.py
-"""This script tests the functionality of WeConnect api Auth"""
 
 import json
 

@@ -1,5 +1,4 @@
 # app/api/resources/auth.py
-"""Contains user logic"""
 
 import os
 import sys
@@ -140,10 +139,8 @@ class RegisterUser(Resource):
             db.session.add(log_object)
             db.session.commit()
 
-            # Post create success
             return make_response(jsonify({"message": "User added"}), 201)
 
-        # Bad request
         return make_response(jsonify({"message": "User already exists"}), 409)
 
 
@@ -187,17 +184,17 @@ class LoginUser(Resource):
                 response_data["message"] = "User logged in"
                 response_data["access_token"] = access_token.decode()
                 response = jsonify(response_data)
-                response.status_code = 200  # Post success
+                response.status_code = 200
                 return response
 
             response_data["message"] = "Incorrect username and password combination!"
             response = jsonify(response_data)
-            response.status_code = 400  # Bad request
+            response.status_code = 400
             return response
 
         response_data["message"] = "Incorrect username and password combination!"
         response = jsonify(response_data)
-        response.status_code = 400  # Bad request
+        response.status_code = 400
         return response
 
 
@@ -226,7 +223,7 @@ class ResetPassword(Resource):
         response_data["message"] = "User password reset"
         response_data["new_password"] = password
         response = jsonify(response_data)
-        response.status_code = 200  # Post update success
+        response.status_code = 200
 
         authorization = request.headers.get("Authorization", None)
         if authorization:

@@ -1,5 +1,4 @@
 # tests/test_api_auth.py
-"""This script holds the configurations for the WeConnect api tests"""
 
 # third party imports
 from unittest import TestCase

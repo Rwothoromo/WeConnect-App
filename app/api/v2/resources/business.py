@@ -1,5 +1,4 @@
 # app/api/resources/business.py
-"""Contains business logic"""
 
 from flask import jsonify, make_response, request, session
 from flask_restful import Resource
@@ -333,7 +332,6 @@ class BusinessReviews(Resource):
                 db.session.add(log_object)
                 db.session.commit()
 
-                # Post create success
                 return make_response(jsonify({"message": "Business review added"}), 201)
 
             return make_response(jsonify({"message": "Business review by that name already exists"}), 409)

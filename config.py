@@ -1,5 +1,4 @@
-# instance/config.py
-"""Weconnect app configurations"""
+# config.py
 
 import os
 

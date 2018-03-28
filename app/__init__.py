@@ -1,5 +1,4 @@
 # app/__init__.py
-"""Initializes the app module"""
 
 import os
 
@@ -51,10 +50,9 @@ app.config['SWAGGER'] = {
 
 swagger = Swagger(app)
 
-# db = SQLAlchemy(app)
 db.init_app(app)
 
-# Add Blueprint; how to construct or extend the app
+# Add api Blueprint
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp, prefix="/api/v2")
 

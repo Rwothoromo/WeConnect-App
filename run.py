@@ -1,5 +1,4 @@
 # run.py
-"""Weconnect entry point"""
 
 from app import app
 
