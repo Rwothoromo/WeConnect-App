@@ -28,7 +28,6 @@ v2_dir = os.path.dirname(resources_dir)
 api_dir = os.path.dirname(v2_dir)
 app_dir = os.path.dirname(api_dir)
 sys.path.insert(0, app_dir)
-# sys.path.append(os.path.dirname)
 
 from app.db import db
 from app.models.blacklist import Blacklist
@@ -59,10 +58,10 @@ user_request_parser.add_argument(
     help="Password is required")
 
 
-def string_empty(string_var):
-    """Return true if string is empty"""
+def valid_string(var):
+    """Return true if var is string"""
 
-    return not isinstance(string_var, str) or string_var in [' ', '']
+    return isinstance(var, str) or not var.strip()
 
 
 def token_required(function):
@@ -117,7 +116,7 @@ class RegisterUser(Resource):
 
         args = user_request_parser.parse_args()
         for key, value in args.items():
-            if string_empty(value):
+            if valid_string(value):
                 return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         first_name = args.get("first_name", None)
@@ -155,7 +154,7 @@ class LoginUser(Resource):
 
         args = request.get_json()
         for key, value in args.items():
-            if string_empty(value):
+            if valid_string(value):
                 return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         username = args.get("username", None)

@@ -58,7 +58,7 @@ api_bp = Blueprint('api', __name__)
 api = Api(api_bp, prefix="/api/v2")
 
 
-# Add the resource to the API.
+# Add resources to the API
 api.add_resource(HelloWorld, '/')
 api.add_resource(BusinessCollection, '/businesses')
 api.add_resource(BusinessResource, '/businesses/<int:business_id>')
