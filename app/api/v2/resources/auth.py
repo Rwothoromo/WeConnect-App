@@ -89,15 +89,16 @@ def token_required(function):
                 decoded_token = jwt.decode(
                     access_token, secret_key, algorithms=["HS256"])
                 sub = decoded_token.get("sub", None)
+                user = User.query.get(sub)
             except jwt.InvalidTokenError:
                 return {"message": "Invalid token provided"}, 401
             except IndexError:
                 return {"message": "Invalid token provided"}, 401
+            except db.NoResultFound:
+                return {"message": "Invalid token provided"}, 401
             else:
-                user = User.query.get(sub)
-                if user:
-                    request.data = json.loads(request.data) if request.data else {}
-                    request.data["user"] = user
+                request.data = json.loads(request.data) if request.data else {}
+                request.data["user"] = user
 
             return function(*args, **kwargs)
         else:
