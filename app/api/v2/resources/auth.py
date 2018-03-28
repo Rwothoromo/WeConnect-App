@@ -61,7 +61,7 @@ user_request_parser.add_argument(
 def valid_string(var):
     """Return true if var is string"""
 
-    return isinstance(var, str) or not var.strip()
+    return isinstance(var, str) and not var.strip()
 
 
 def token_required(function):
@@ -72,7 +72,12 @@ def token_required(function):
         if "Authorization" in request.headers:
             authorization = request.headers.get("Authorization", None)
             if authorization:
-                access_token = authorization.split(" ")[1]
+                authorization_list = authorization.split(" ")
+                if len(authorization_list) > 1:
+                    access_token = authorization_list[1]
+
+                if not access_token:
+                    return {"message": "No token provided"}, 401
 
             if not access_token:
                 return {"message": "No token provided"}, 401

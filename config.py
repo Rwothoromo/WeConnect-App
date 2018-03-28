@@ -9,7 +9,8 @@ class Config:
     """
 
     SECRET_KEY = os.environ.get('SECRET_KEY', 'some value')
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        'DATABASE_URL', 'postgresql://db_user:password@localhost/weconnect_db')
 
     TESTING = False
     DEBUG = False
@@ -32,6 +33,7 @@ class ProductionConfig(Config):
     """
 
     DEBUG = False
+    TESTING = False
 
 
 class TestingConfig(Config):
