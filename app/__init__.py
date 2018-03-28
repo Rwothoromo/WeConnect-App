@@ -18,7 +18,8 @@ from app.api.v2.resources.auth import RegisterUser, LoginUser, ResetPassword, Lo
 from app.api.v2.resources.business import BusinessCollection, BusinessResource, BusinessReviews
 
 app = Flask(__name__)
-app.config.from_object(app_config[os.environ['FLASK_CONFIG']])
+flask_config = os.environ.get('FLASK_CONFIG', 'production')
+app.config.from_object(app_config[flask_config])
 
 app.config['SWAGGER'] = {
     'swagger': '2.0',
