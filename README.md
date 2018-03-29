@@ -22,17 +22,17 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 | EndPoint                                             | Functionality                                    |
 | ---------------------------------------------------- | ------------------------------------------------ |
-| [POST   /api/v2/auth/register](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_register)                    | Creates a user account                           |
-| [POST   /api/v2/auth/login](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_login)                       | Logs in a user                                   |
-| [POST   /api/v2/auth/logout](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_logout)                      | Logs out a user                                  |
-| [POST   /api/v2/auth/reset-password](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_reset_password)              | Password reset                                   |
-| [POST   /api/v2/businesses](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v2_businesses)                       | Register a business                              |
-| [PUT    /api/v2/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/put_api_v2_businesses_business_id)         | Updates a business profile                       |
-| [DELETE /api/v2/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/delete_api_v2_businesses_business_id)         | Remove a business                                |
-| [GET    /api/v2/businesses](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses)                       | Retrieves all businesses                         |
-| [GET    /api/v2/businesses/\<businessId>](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses_business_id)         | Get a business                                   |
-| [POST   /api/v2/businesses/\<businessId>/reviews](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v2_businesses_business_id_reviews) | Add a review for a business by the logged in user|
-| [GET    /api/v2/businesses/\<businessId>/reviews](https://weconnect-app-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses_business_id_reviews) | Get all reviews for a business                   |
+| [POST   /api/v2/auth/register](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_register)                    | Creates a user account                           |
+| [POST   /api/v2/auth/login](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_login)                       | Logs in a user                                   |
+| [POST   /api/v2/auth/logout](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_logout)                      | Logs out a user                                  |
+| [POST   /api/v2/auth/reset-password](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/User/post_api_v2_auth_reset_password)              | Password reset                                   |
+| [POST   /api/v2/businesses](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v2_businesses)                       | Register a business                              |
+| [PUT    /api/v2/businesses/\<businessId>](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/put_api_v2_businesses_business_id)         | Updates a business profile                       |
+| [DELETE /api/v2/businesses/\<businessId>](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/delete_api_v2_businesses_business_id)         | Remove a business                                |
+| [GET    /api/v2/businesses](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses)                       | Retrieves all businesses                         |
+| [GET    /api/v2/businesses/\<businessId>](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses_business_id)         | Get a business                                   |
+| [POST   /api/v2/businesses/\<businessId>/reviews](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v2_businesses_business_id_reviews) | Add a review for a business by the logged in user|
+| [GET    /api/v2/businesses/\<businessId>/reviews](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses_business_id_reviews) | Get all reviews for a business                   |
 
 ## Technologies
 
