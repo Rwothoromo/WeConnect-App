@@ -97,7 +97,7 @@ def token_required(function):
             except db.NoResultFound:
                 return {"message": "Invalid token provided"}, 401
             else:
-                request.data = json.loads(request.data) if request.data else {}
+                request.data = json.loads(request.data.decode()) if request.data else {}
                 request.data["user"] = user
 
             return function(*args, **kwargs)

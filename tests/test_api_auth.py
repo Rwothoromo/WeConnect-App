@@ -25,7 +25,7 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
                          data=json.dumps(self.users['two']))
         response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                     data=json.dumps(self.user_login['two']))
-        response_data = json.loads(response.get_data())
+        response_data = json.loads(response.data.decode())
 
         self.assertEqual('User logged in', response_data['message'])
         self.assertEqual(response.status_code, 200)
@@ -37,7 +37,7 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
                          data=json.dumps(self.users['two']))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                  data=json.dumps(self.user_login['two']))
-        login_data = json.loads(login.get_data())
+        login_data = json.loads(login.data.decode())
         access_token = login_data["access_token"]
 
         response = self.client.post(
@@ -54,7 +54,7 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
                          data=json.dumps(self.users['three']))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                  data=json.dumps(self.user_login['three']))
-        login_data = json.loads(login.get_data())
+        login_data = json.loads(login.data.decode())
         access_token = login_data["access_token"]
 
         response = self.client.post(self.prefix + 'auth/reset-password',
@@ -78,8 +78,7 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
 
         self.assertEqual("User already exists", response_data['message'])
         self.assertEqual(response.status_code, 409)
-        self.assertEqual("first_name must be a string",
-                         response_data1['message'])
+        self.assertIn("must be a string", response_data1['message'])
         self.assertEqual(response1.status_code, 400)
 
     def test_api_user_login_fails_for_bad_input(self):
@@ -93,11 +92,11 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
                                      data=json.dumps(self.user_login['bad1']))
         response2 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                      data=json.dumps(self.user_login['bad2']))
-        response_data = json.loads(response.get_data())
-        response_data1 = json.loads(response1.get_data())
-        response_data2 = json.loads(response2.get_data())
+        response_data = json.loads(response.data.decode())
+        response_data1 = json.loads(response1.data.decode())
+        response_data2 = json.loads(response2.data.decode())
 
-        self.assertEqual("username must be a string", response_data['message'])
+        self.assertIn("must be a string", response_data['message'])
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             "Incorrect username and password combination!", response_data1['message'])

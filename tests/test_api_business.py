@@ -43,7 +43,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
         self.assertEqual("Business already exists", response_data['message'])
         self.assertEqual(response.status_code, 409)
-        self.assertEqual("name must be a string", response_data1['message'])
+        self.assertIn("must be a string", response_data1['message'])
         self.assertEqual(response1.status_code, 400)
 
     def test_api_businesses_view(self):
@@ -141,7 +141,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                    data=json.dumps(self.businesses['two']))
 
         response_data = json.loads(response.data.decode())
-        self.assertEqual("name must be a string", response_data['message'])
+        self.assertIn("must be a string", response_data['message'])
         self.assertEqual(response.status_code, 400)
 
     def test_api_business_edit_fails_for_wrong_user(self):
@@ -333,7 +333,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
         response_data = json.loads(response.data.decode())
 
-        self.assertEqual("name must be a string", response_data['message'])
+        self.assertIn("must be a string", response_data['message'])
         self.assertEqual(response.status_code, 400)
 
     def test_api_view_business_reviews(self):
