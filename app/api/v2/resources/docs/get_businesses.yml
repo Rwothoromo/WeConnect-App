@@ -11,22 +11,22 @@ parameters:
   - name: q
     description: Search business by name e.g "ond"
     type: string
-    in: path
+    in: query
     required: false
   - name: limit
     description: Limit number of results per page e.g 13
     type: integer
-    in: path
+    in: query
     required: false
   - name: location
     description: Search business by location e.g "ya"
     type: string
-    in: path
+    in: query
     required: false
   - name: category
     description: Search business by category e.g "tion"
     type: string
-    in: path
+    in: query
     required: false
 responses:
   200:

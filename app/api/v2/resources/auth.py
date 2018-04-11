@@ -137,8 +137,9 @@ class RegisterUser(Resource):
             db.session.add(user_object)
             db.session.commit()
 
+            user = User.query.filter_by(username=username).first()
             log_object = Log(
-                "Insert", "Added user: {}".format(username), "users", user_object.id)
+                "Insert", "Added user: {}".format(username), "users", user.id)
             db.session.add(log_object)
             db.session.commit()
 
