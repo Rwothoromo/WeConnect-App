@@ -73,13 +73,13 @@ class BusinessCollection(Resource):
         if q:
             q = q.lower()
             businesses_query = Business.query.order_by(
-                Business.name).filter(Business.name.like('%' + q + '%'))
+                Business.name).filter(Business.name.ilike('%' + q + '%'))
         else:
             businesses_query = Business.query.order_by(Business.name)
 
         if location_name:
             locations = Location.query.filter(
-                Location.name.like('%' + location_name + '%'))
+                Location.name.ilike('%' + location_name + '%'))
             if locations:
                 location_ids = [location.id for location in locations]
                 businesses_query = businesses_query.filter(
@@ -87,7 +87,7 @@ class BusinessCollection(Resource):
 
         if category_name:
             categories = Category.query.filter(
-                Category.name.like('%' + category_name + '%'))
+                Category.name.ilike('%' + category_name + '%'))
             if categories:
                 category_ids = [category.id for category in categories]
                 businesses_query = businesses_query.filter(
