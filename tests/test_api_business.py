@@ -16,13 +16,11 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                         'Authorization': 'Bearer {}'.format(self.access_token)},
                                     content_type='application/json',
                                     data=json.dumps(self.businesses['one']))
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual("Business added", response_data['message'])
         self.assertEqual(response.status_code, 201)
 
-    def test_api_business_creation_fails(self):
-        """Test api business creation fails"""
+    def test_business_duplication_fails(self):
+        """Test api business creation fails for existent business"""
 
         self.client.post(self.prefix + 'businesses',
                          headers={
@@ -33,41 +31,46 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                         'Authorization': 'Bearer {}'.format(self.access_token)},
                                     content_type='application/json',
                                     data=json.dumps(self.businesses['one']))
-        response1 = self.client.post(self.prefix + 'businesses',
-                                     headers={
-                                         'Authorization': 'Bearer {}'.format(self.access_token)},
-                                     content_type='application/json',
-                                     data=json.dumps(self.businesses['two']))
-        response_data = json.loads(response.data.decode())
-        response_data1 = json.loads(response1.data.decode())
 
-        self.assertEqual("Business already exists", response_data['message'])
         self.assertEqual(response.status_code, 409)
-        self.assertIn("must be a string", response_data1['message'])
-        self.assertEqual(response1.status_code, 400)
 
-    def test_api_businesses_view(self):
-        """Test api businesses viewing"""
+    def test_business_creation_fails(self):
+        """Test api business creation fails for bad input"""
+
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json', data=json.dumps(self.businesses['one']))
+        response = self.client.post(self.prefix + 'businesses',
+                                    headers={
+                                        'Authorization': 'Bearer {}'.format(self.access_token)},
+                                    content_type='application/json',
+                                    data=json.dumps(self.businesses['two']))
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_no_businesses_to_view(self):
+        """Test api businesses viewing when no businesses were registered"""
 
         response = self.client.get(self.prefix + 'businesses',
                                    headers={'Authorization': 'Bearer {}'.format(self.access_token)})
-        response_data = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_api_businesses_view(self):
+        """Test api businesses viewing"""
 
         self.client.post(self.prefix + 'businesses',
                          headers={'Authorization': 'Bearer {}'.format(self.access_token)},
                          content_type='application/json', data=json.dumps(self.businesses['one']))
 
-        response1 = self.client.get(self.prefix + 'businesses',
-                                    headers={
-                                        'Authorization': 'Bearer {}'.format(self.access_token)})
-        response_data1 = json.loads(response1.data.decode())
+        response = self.client.get(self.prefix + 'businesses',
+                                   headers={
+                                       'Authorization': 'Bearer {}'.format(self.access_token)})
 
-        self.assertEqual("No business found", response_data['message'])
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(1, len(response_data1['businesses']))
-        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
-    def test_api_businesses_view_by_name_search(self):
+    def test_api_businesses_search(self):
         """Test api businesses viewing by searched name"""
 
         self.client.post(self.prefix + 'businesses',
@@ -81,9 +84,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
         response = self.client.get(self.prefix + 'businesses?q=oNd&limit=13',
                                    headers={'Authorization': 'Bearer {}'.format(self.access_token)})
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual(2, len(response_data['businesses']))
         self.assertEqual(response.status_code, 200)
 
     def test_api_business_view(self):
@@ -103,9 +104,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
         response = self.client.get(self.prefix + 'businesses/1',
                                    headers={'Authorization': 'Bearer {}'.format(self.access_token)})
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual("Business not found", response_data['message'])
         self.assertEqual(response.status_code, 404)
 
     def test_api_business_edit(self):
@@ -121,12 +120,10 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                        'Authorization': 'Bearer {}'.format(self.access_token)},
                                    content_type='application/json',
                                    data=json.dumps(self.businesses['one_edit']))
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual("Business updated", response_data['message'])
         self.assertEqual(response.status_code, 200)
 
-    def test_api_business_edit_fails_for_bad_input(self):
+    def test_bad_business_edit_fails(self):
         """Test api business update fails for bad input"""
 
         self.client.post(self.prefix + 'businesses',
@@ -140,11 +137,9 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                    content_type='application/json',
                                    data=json.dumps(self.businesses['two']))
 
-        response_data = json.loads(response.data.decode())
-        self.assertIn("must be a string", response_data['message'])
         self.assertEqual(response.status_code, 400)
 
-    def test_api_business_edit_fails_for_wrong_user(self):
+    def test_business_edit_fails_for_wrong_user(self):
         """Test api business update fails for wrong user"""
 
         self.client.post(self.prefix + 'businesses',
@@ -165,10 +160,6 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                    content_type='application/json',
                                    data=json.dumps(self.businesses['one_edit1']))
 
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual("Only the Business owner can update",
-                         response_data['message'])
         self.assertEqual(response.status_code, 409)
 
     def test_api_business_edit_fails_for_missing_business(self):
@@ -180,9 +171,6 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                    content_type='application/json',
                                    data=json.dumps(self.businesses['one_edit']))
 
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual("Business not found", response_data['message'])
         self.assertEqual(response.status_code, 404)
 
     def test_api_business_edit_fails_for_new_existent_business_name(self):
@@ -204,10 +192,6 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                    content_type='application/json',
                                    data=json.dumps(self.businesses['one_edit1']))
 
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual("Business by that name already exists",
-                         response_data['message'])
         self.assertEqual(response.status_code, 409)
 
     def test_api_business_delete(self):
@@ -219,20 +203,18 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          content_type='application/json',
                          data=json.dumps(self.businesses['one']))
         response = self.client.delete(self.prefix + 'businesses/1',
-                                      headers={'Authorization': 'Bearer {}'.format(self.access_token)})
-        response_data = json.loads(response.data.decode())
+                                      headers={
+                                          'Authorization': 'Bearer {}'.format(self.access_token)})
 
-        self.assertEqual("Business deleted", response_data['message'])
         self.assertEqual(response.status_code, 200)
 
     def test_api_business_delete_fails_for_missing_business(self):
         """Test api business deletion fails for non existent business"""
 
         response = self.client.delete(self.prefix + 'businesses/7',
-                                      headers={'Authorization': 'Bearer {}'.format(self.access_token)})
-        response_data = json.loads(response.data.decode())
+                                      headers={
+                                          'Authorization': 'Bearer {}'.format(self.access_token)})
 
-        self.assertEqual("Business not found", response_data['message'])
         self.assertEqual(response.status_code, 404)
 
     def test_api_business_delete_fails_for_wrong_user(self):
@@ -251,12 +233,9 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         login_data4 = json.loads(login4.data.decode())
 
         response = self.client.delete(self.prefix + 'businesses/1',
-                                      headers={'Authorization': 'Bearer ' + login_data4["access_token"]})
+                                      headers={
+                                          'Authorization': 'Bearer ' + login_data4["access_token"]})
 
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual("Only the Business owner can delete",
-                         response_data['message'])
         self.assertEqual(response.status_code, 409)
 
     def test_api_create_business_reviews(self):
@@ -272,9 +251,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                         'Authorization': 'Bearer {}'.format(self.access_token)},
                                     content_type='application/json',
                                     data=json.dumps(self.reviews['one']))
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual("Business review added", response_data['message'])
         self.assertEqual(response.status_code, 201)
 
     def test_api_create_business_reviews_fails_for_missing_business(self):
@@ -285,9 +262,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                         'Authorization': 'Bearer {}'.format(self.access_token)},
                                     content_type='application/json',
                                     data=json.dumps(self.reviews['one']))
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual("Business not found", response_data['message'])
         self.assertEqual(response.status_code, 404)
 
     def test_api_create_business_reviews_fails_for_new_existent_review_name(self):
@@ -310,10 +285,6 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                     content_type='application/json',
                                     data=json.dumps(self.reviews['one']))
 
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual(
-            "Business review by that name already exists", response_data['message'])
         self.assertEqual(response.status_code, 409)
 
     def test_api_create_business_reviews_fails_for_bad_input(self):
@@ -331,13 +302,10 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                                     content_type='application/json',
                                     data=json.dumps(self.reviews['two']))
 
-        response_data = json.loads(response.data.decode())
-
-        self.assertIn("must be a string", response_data['message'])
         self.assertEqual(response.status_code, 400)
 
-    def test_api_view_business_reviews(self):
-        """Test api business get reviews"""
+    def test_no_business_reviews(self):
+        """Test api business get reviews if none were created for that business"""
 
         self.client.post(self.prefix + 'businesses',
                          headers={
@@ -348,23 +316,26 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         response = self.client.get(self.prefix + 'businesses/1/reviews',
                                    headers={'Authorization': 'Bearer {}'.format(self.access_token)})
 
+        self.assertEqual(response.status_code, 404)
+
+    def test_api_view_business_reviews(self):
+        """Test api business get reviews"""
+
+        self.client.post(self.prefix + 'businesses',
+                         headers={
+                             'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.businesses['one']))
+
         self.client.post(self.prefix + 'businesses/1/reviews',
                          headers={
                              'Authorization': 'Bearer {}'.format(self.access_token)},
                          content_type='application/json',
                          data=json.dumps(self.reviews['one']))
 
-        response1 = self.client.get(self.prefix + 'businesses/1/reviews',
-                                    headers={'Authorization': 'Bearer {}'.format(self.access_token)})
-
-        response_data = json.loads(response.data.decode())
-        response_data1 = json.loads(response1.data.decode())
-
-        self.assertEqual("Business reviews not found",
-                         response_data['message'])
-        self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response_data1, list)
-        self.assertEqual(response1.status_code, 200)
+        response = self.client.get(self.prefix + 'businesses/1/reviews',
+                                   headers={
+                                       'Authorization': 'Bearer {}'.format(self.access_token)})
 
         self.assertEqual(response.status_code, 200)
 
@@ -374,7 +345,4 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         response = self.client.get(self.prefix + 'businesses/2/reviews',
                                    headers={'Authorization': 'Bearer {}'.format(self.access_token)})
 
-        response_data = json.loads(response.data.decode())
-
-        self.assertEqual("Business not found", response_data['message'])
         self.assertEqual(response.status_code, 404)

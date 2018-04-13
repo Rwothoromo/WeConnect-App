@@ -301,7 +301,7 @@ class BusinessReviews(Resource):
 
                 return make_response(jsonify(reviews_list), 200)
 
-            return make_response(jsonify({"message": "Business reviews not found"}), 200)
+            return make_response(jsonify({"message": "Business reviews not found"}), 404)
 
         return make_response(jsonify({"message": "Business not found"}), 404)
 
