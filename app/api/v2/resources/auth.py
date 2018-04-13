@@ -193,12 +193,12 @@ class LoginUser(Resource):
 
             response_data["message"] = "Incorrect username and password combination!"
             response = jsonify(response_data)
-            response.status_code = 400
+            response.status_code = 401
             return response
 
         response_data["message"] = "Incorrect username and password combination!"
         response = jsonify(response_data)
-        response.status_code = 400
+        response.status_code = 401
         return response
 
 

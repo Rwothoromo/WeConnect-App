@@ -13,9 +13,7 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
 
         response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
                                     data=json.dumps(self.users['two']))
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual('User added', response_data['message'])
         self.assertEqual(response.status_code, 201)
 
     def test_api_user_login(self):
@@ -25,9 +23,7 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
                          data=json.dumps(self.users['two']))
         response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                     data=json.dumps(self.user_login['two']))
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual('User logged in', response_data['message'])
         self.assertEqual(response.status_code, 200)
 
     def test_api_user_logout(self):
@@ -42,9 +38,7 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
 
         response = self.client.post(
             self.prefix + 'auth/logout', headers={'Authorization': 'Bearer ' + access_token})
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual('Access token revoked', response_data['message'])
         self.assertEqual(response.status_code, 200)
 
     def test_api_user_password_reset(self):
@@ -59,48 +53,51 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
 
         response = self.client.post(self.prefix + 'auth/reset-password',
                                     headers={'Authorization': 'Bearer ' + access_token})
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual('User password reset', response_data['message'])
         self.assertEqual(response.status_code, 200)
 
-    def test_api_user_registration_fails(self):
-        """Test api user registration fails"""
+    def test_api_user_duplication_fails(self):
+        """Test api user registration fails for existent user"""
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.users['two']))
         response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
                                     data=json.dumps(self.users['two']))
-        response1 = self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                                     data=json.dumps(self.users['bad']))
-        response_data = json.loads(response.data.decode())
-        response_data1 = json.loads(response1.data.decode())
 
-        self.assertEqual("User already exists", response_data['message'])
         self.assertEqual(response.status_code, 409)
-        self.assertIn("must be a string", response_data1['message'])
-        self.assertEqual(response1.status_code, 400)
 
-    def test_api_user_login_fails_for_bad_input(self):
+    def test_api_user_creation_fails(self):
+        """Test api user registration fails for bad input"""
+
+        response = self.client.post(self.prefix + 'auth/register', content_type='application/json',
+                                    data=json.dumps(self.users['bad']))
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_api_bad_user_login_fails(self):
         """Test api user login fails for bad input"""
+
+        response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
+                                    data=json.dumps(self.user_login['bad']))
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_api_bad_password_fails(self):
+        """Test api user login fails for bad password"""
 
         self.client.post(self.prefix + 'auth/register',
                          content_type='application/json', data=json.dumps(self.users['three']))
         response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                    data=json.dumps(self.user_login['bad']))
-        response1 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                     data=json.dumps(self.user_login['bad1']))
-        response2 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                     data=json.dumps(self.user_login['bad2']))
-        response_data = json.loads(response.data.decode())
-        response_data1 = json.loads(response1.data.decode())
-        response_data2 = json.loads(response2.data.decode())
+                                    data=json.dumps(self.user_login['bad1']))
 
-        self.assertIn("must be a string", response_data['message'])
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            "Incorrect username and password combination!", response_data1['message'])
-        self.assertEqual(response1.status_code, 400)
-        self.assertEqual(
-            "Incorrect username and password combination!", response_data2['message'])
-        self.assertEqual(response2.status_code, 400)
+        self.assertEqual(response.status_code, 401)
+
+    def test_api_bad_username_fails(self):
+        """Test api user login fails for bad username"""
+
+        self.client.post(self.prefix + 'auth/register',
+                         content_type='application/json', data=json.dumps(self.users['three']))
+        response = self.client.post(self.prefix + 'auth/login', content_type='application/json',
+                                    data=json.dumps(self.user_login['bad2']))
+
+        self.assertEqual(response.status_code, 401)

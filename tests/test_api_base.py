@@ -77,11 +77,7 @@ class WeConnectApiTestBase(TestCase):
         """Test api hello text"""
 
         response = self.client.get(self.prefix)
-        response_data = json.loads(response.data.decode())
 
-        self.assertEqual(
-            'WeConnect brings businesses and users together, and allows users to review businesses',
-            response_data['WeConnect'])
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
