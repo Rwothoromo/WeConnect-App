@@ -34,7 +34,7 @@ WeConnect brings businesses and users together, and allows users to review busin
 | [POST   /api/v2/businesses/\<businessId>/reviews](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/post_api_v2_businesses_business_id_reviews) | Add a review for a business by the logged in user|
 | [GET    /api/v2/businesses/\<businessId>/reviews](https://weconnect-api-v2-rwothoromo.herokuapp.com/apidocs/#!/Business/get_api_v2_businesses_business_id_reviews) | Get all reviews for a business                   |
 
-## Technologies
+## Tested with
 
 * Python 3.6
 * PostgreSQL 10
@@ -53,9 +53,9 @@ WeConnect brings businesses and users together, and allows users to review busin
 * Run `mkvirtualenv venv` on command prompt
 * Run `workon venv` on command prompt
 * Run `pip install -r requirements.txt` on command prompt
-* Run `createdb weconnect_db` and `createdb test_weconnect_db` on the psql bash terminal
-* Run `set DATABASE_URL=postgresql://db_user:password@localhost/weconnect_db`
-* Run `set SECRET_KEY=some_secret_value`
+* Run `createdb <weconnect_db>` and `createdb <test_weconnect_db>` on the psql bash terminal
+* Run `set DATABASE_URL=postgresql://<db_user>:<password>@localhost/<weconnect_db>`
+* Run `set SECRET_KEY=<some_secret_value>`
 * Run `set FLASK_CONFIG=development` on command prompt
 * Run the following on command prompt
   * `python manage.py db init` to create a migration repository
@@ -76,8 +76,8 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 ## Unittests
 
-* Run `set DATABASE_URL=postgresql://db_user:password@localhost/test_weconnect_db`
-* Run `set SECRET_KEY=some_secret_value`
+* Run `set DATABASE_URL=postgresql://<db_user>:<password>@localhost/<test_weconnect_db>`
+* Run `set SECRET_KEY=<some_secret_value>`
 * Run `set FLASK_CONFIG=testing` on command prompt
 * Run the following on command prompt
   * `python manage.py db init` to create a migration repository
