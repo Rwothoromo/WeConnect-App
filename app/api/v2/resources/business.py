@@ -5,7 +5,7 @@ from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
 
-from .auth import token_required, valid_string
+from .auth import token_required, not_valid_string
 
 from app.db import db
 from app.models.category import Category
@@ -118,7 +118,7 @@ class BusinessCollection(Resource):
 
         args = business_request_parser.parse_args()
         for key, value in args.items():
-            if valid_string(value):
+            if not_valid_string(key, value):
                 return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         business_name = args.get("name", None)
@@ -198,7 +198,7 @@ class BusinessResource(Resource):
 
             args = business_request_parser.parse_args()
             for key, value in args.items():
-                if valid_string(value):
+                if not_valid_string(key, value):
                     return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
             business_name = args.get("name", None)
@@ -314,7 +314,7 @@ class BusinessReviews(Resource):
         if business:
             args = review_request_parser.parse_args()
             for key, value in args.items():
-                if valid_string(value):
+                if not_valid_string(key, value):
                     return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
             review_name = args.get("name", None)

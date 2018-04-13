@@ -58,10 +58,14 @@ user_request_parser.add_argument(
     help="Password is required")
 
 
-def valid_string(var):
-    """Return true if var is string"""
+def not_valid_string(key, value):
+    """Return true if value is not string of required length"""
 
-    return isinstance(var, str) and not var.strip()
+    fifty_character_limit = ['first_name', 'last_name', 'username', 'password', 'name', 'category', 'location']
+
+    if key in fifty_character_limit:
+        return len(value) <= 50 and isinstance(value, str) and not value.strip()
+    return isinstance(value, str) and not value.strip()
 
 
 def token_required(function):
@@ -120,7 +124,7 @@ class RegisterUser(Resource):
 
         args = user_request_parser.parse_args()
         for key, value in args.items():
-            if valid_string(value):
+            if not_valid_string(key, value):
                 return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         first_name = args.get("first_name", None)
@@ -159,7 +163,7 @@ class LoginUser(Resource):
 
         args = request.get_json()
         for key, value in args.items():
-            if valid_string(value):
+            if not_valid_string(key, value):
                 return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
 
         username = args.get("username", None)
