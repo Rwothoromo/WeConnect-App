@@ -61,11 +61,13 @@ user_request_parser.add_argument(
 def not_valid_string(key, value):
     """Return true if value is not string of required length"""
 
+    valid_length = 256
     fifty_character_limit = ['first_name', 'last_name', 'username', 'password', 'name', 'category', 'location']
 
     if key in fifty_character_limit:
-        return len(value) <= 50 and isinstance(value, str) and not value.strip()
-    return isinstance(value, str) and not value.strip()
+        valid_length = 50
+        return (len(value) <= valid_length and isinstance(value, str) and not value.strip(), valid_length)
+    return (len(value) <= valid_length and isinstance(value, str) and not value.strip(), valid_length)
 
 
 def token_required(function):
@@ -124,8 +126,9 @@ class RegisterUser(Resource):
 
         args = user_request_parser.parse_args()
         for key, value in args.items():
-            if not_valid_string(key, value):
-                return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
+            arg_is_invalid = not_valid_string(key, value)
+            if arg_is_invalid[0]:
+                return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
 
         first_name = args.get("first_name", None)
         last_name = args.get("last_name", None)
@@ -163,8 +166,9 @@ class LoginUser(Resource):
 
         args = request.get_json()
         for key, value in args.items():
-            if not_valid_string(key, value):
-                return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
+            arg_is_invalid = not_valid_string(key, value)
+            if arg_is_invalid[0]:
+                return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
 
         username = args.get("username", None)
         password = args.get("password", None)

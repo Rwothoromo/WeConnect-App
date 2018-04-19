@@ -118,8 +118,9 @@ class BusinessCollection(Resource):
 
         args = business_request_parser.parse_args()
         for key, value in args.items():
-            if not_valid_string(key, value):
-                return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
+            arg_is_invalid = not_valid_string(key, value)
+            if arg_is_invalid[0]:
+                return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
 
         business_name = args.get("name", None)
         category_name = args.get("category", None)
@@ -198,8 +199,9 @@ class BusinessResource(Resource):
 
             args = business_request_parser.parse_args()
             for key, value in args.items():
-                if not_valid_string(key, value):
-                    return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
+                arg_is_invalid = not_valid_string(key, value)
+                if arg_is_invalid[0]:
+                    return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
 
             business_name = args.get("name", None)
             category_name = args.get("category", None)
@@ -314,8 +316,9 @@ class BusinessReviews(Resource):
         if business:
             args = review_request_parser.parse_args()
             for key, value in args.items():
-                if not_valid_string(key, value):
-                    return make_response(jsonify({"message": "{} must be a string".format(key)}), 400)
+                arg_is_invalid = not_valid_string(key, value)
+                if arg_is_invalid[0]:
+                    return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
 
             review_name = args.get("name", None)
             description = args.get("description", None)

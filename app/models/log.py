@@ -10,7 +10,7 @@ class Log(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     action = db.Column(db.String(50), nullable=False)
-    message = db.Column(db.String(100), nullable=False)
+    message = db.Column(db.String(256), nullable=False)
     table = db.Column(db.String(50), nullable=False)
     user = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())

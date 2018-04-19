@@ -35,7 +35,7 @@ class WeConnectApiTestBase(TestCase):
             'two': {"first_name": "jim", "last_name": "dan", "username": "jimdan", "password": "password"},
             'three': {"first_name": "eli", "last_name": "rwt", "username": "eli", "password": "password"},
             'four': {"first_name": "elijah", "last_name": "rwoth", "username": "elijahrwoth", "password": "password"},
-            'bad': {"first_name": '', "last_name": '', "username": '', "password": ''}
+            'bad': {"first_name": 'first_namefirst_namefirst_namefirst_namefirst_namefirst_namefirst_name', "last_name": '', "username": '', "password": ''}
         }
 
         self.user_login = {
