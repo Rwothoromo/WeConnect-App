@@ -128,7 +128,7 @@ class RegisterUser(Resource):
         for key, value in args.items():
             arg_is_invalid = not_valid_string(key, value)
             if arg_is_invalid[0]:
-                return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
+                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
 
         first_name = args.get("first_name", None)
         last_name = args.get("last_name", None)
@@ -168,7 +168,7 @@ class LoginUser(Resource):
         for key, value in args.items():
             arg_is_invalid = not_valid_string(key, value)
             if arg_is_invalid[0]:
-                return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
+                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
 
         username = args.get("username", None)
         password = args.get("password", None)

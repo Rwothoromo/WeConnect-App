@@ -120,7 +120,7 @@ class BusinessCollection(Resource):
         for key, value in args.items():
             arg_is_invalid = not_valid_string(key, value)
             if arg_is_invalid[0]:
-                return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
+                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
 
         business_name = args.get("name", None)
         category_name = args.get("category", None)
@@ -201,7 +201,7 @@ class BusinessResource(Resource):
             for key, value in args.items():
                 arg_is_invalid = not_valid_string(key, value)
                 if arg_is_invalid[0]:
-                    return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
+                    return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
 
             business_name = args.get("name", None)
             category_name = args.get("category", None)
@@ -318,7 +318,7 @@ class BusinessReviews(Resource):
             for key, value in args.items():
                 arg_is_invalid = not_valid_string(key, value)
                 if arg_is_invalid[0]:
-                    return make_response(jsonify({"message": "{} must be a string of maximum {} characterss".format(key, arg_is_invalid[1])}), 400)
+                    return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
 
             review_name = args.get("name", None)
             description = args.get("description", None)
