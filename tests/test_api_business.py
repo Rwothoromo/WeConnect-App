@@ -150,13 +150,13 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.users['four']))
-        login4 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
+        login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                   data=json.dumps(self.user_login['four']))
-        login_data4 = json.loads(login4.data.decode())
+        login_data = json.loads(login.data.decode())
 
         response = self.client.put(self.prefix + 'businesses/1',
                                    headers={
-                                       'Authorization': 'Bearer ' + login_data4["access_token"]},
+                                       'Authorization': 'Bearer ' + login_data["access_token"]},
                                    content_type='application/json',
                                    data=json.dumps(self.businesses['one_edit1']))
 
@@ -228,13 +228,13 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
 
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.users['four']))
-        login4 = self.client.post(self.prefix + 'auth/login', content_type='application/json',
+        login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
                                   data=json.dumps(self.user_login['four']))
-        login_data4 = json.loads(login4.data.decode())
+        login_data = json.loads(login.data.decode())
 
         response = self.client.delete(self.prefix + 'businesses/1',
                                       headers={
-                                          'Authorization': 'Bearer ' + login_data4["access_token"]})
+                                          'Authorization': 'Bearer ' + login_data["access_token"]})
 
         self.assertEqual(response.status_code, 409)
 
