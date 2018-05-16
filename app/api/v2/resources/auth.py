@@ -140,14 +140,14 @@ class RegisterUser(Resource):
 
         user = User.query.filter_by(username=username).first()
         if not user:
-            user_object = User(first_name, last_name, username, password)
-            db.session.add(user_object)
+            user = User(first_name, last_name, username, password)
+            db.session.add(user)
             db.session.commit()
 
             user = User.query.filter_by(username=username).first()
-            log_object = Log(
+            log = Log(
                 "Insert", "Added user: {}".format(username), "users", user.id)
-            db.session.add(log_object)
+            db.session.add(log)
             db.session.commit()
 
             return make_response(jsonify({"message": "User added"}), 201)
@@ -188,9 +188,9 @@ class LoginUser(Resource):
 
                 session["user_id"] = user.id
 
-                log_object = Log(
+                log = Log(
                     "Login", "Logged in user: {}".format(username), "users", session["user_id"])
-                db.session.add(log_object)
+                db.session.add(log)
                 db.session.commit()
 
                 response_data["message"] = "User logged in"
@@ -227,9 +227,9 @@ class ResetPassword(Resource):
         user.password_hash = generate_password_hash(password)
         db.session.commit()
 
-        log_object = Log("Update", "Updated password for user: {}".format(
+        log1 = Log("Update", "Updated password for user: {}".format(
             user.username), "users", session["user_id"])
-        db.session.add(log_object)
+        db.session.add(log1)
         db.session.commit()
 
         response_data["message"] = "User password reset"
@@ -244,9 +244,9 @@ class ResetPassword(Resource):
         db.session.add(token_blacklist)
         db.session.commit()
 
-        log_object1 = Log("Insert", "Revoked token for user: {}".format(
+        log2 = Log("Insert", "Revoked token for user: {}".format(
             user.username), "blacklists", session["user_id"])
-        db.session.add(log_object1)
+        db.session.add(log2)
         db.session.commit()
 
         session["user_id"] = None
@@ -271,9 +271,9 @@ class LogoutUser(Resource):
         db.session.commit()
 
         user_data = request.data["user"]
-        log_object = Log("Insert", "Revoked token for user: {}".format(
+        log = Log("Insert", "Revoked token for user: {}".format(
             user_data.username), "blacklists", session["user_id"])
-        db.session.add(log_object)
+        db.session.add(log)
         db.session.commit()
 
         session["user_id"] = None

@@ -132,38 +132,38 @@ class BusinessCollection(Resource):
         if not business:
             category = Category.query.filter_by(name=category_name).first()
             if not category:
-                category_object = Category(
+                category = Category(
                     category_name, '{} description'.format(category_name))
-                db.session.add(category_object)
+                db.session.add(category)
                 db.session.commit()
                 category = Category.query.filter_by(name=category_name).first()
 
-                log_object1 = Log(
+                log1 = Log(
                     "Insert", "Added category: {}".format(category_name), "categories", session["user_id"])
-                db.session.add(log_object1)
+                db.session.add(log1)
                 db.session.commit()
 
             location = Location.query.filter_by(name=location_name).first()
             if not location:
-                location_object = Location(
+                location = Location(
                     location_name, '{} description'.format(location_name))
-                db.session.add(location_object)
+                db.session.add(location)
                 db.session.commit()
                 location = Location.query.filter_by(name=location_name).first()
 
-                log_object2 = Log(
+                log2 = Log(
                     "Insert", "Added location: {}".format(location_name), "locations", session["user_id"])
-                db.session.add(log_object2)
+                db.session.add(log2)
                 db.session.commit()
 
-            business_object = Business(
+            business = Business(
                 business_name, description, category.id, location.id, photo)
-            db.session.add(business_object)
+            db.session.add(business)
             db.session.commit()
 
-            log_object3 = Log(
+            log3 = Log(
                 "Insert", "Added business: {}".format(business_name), "businesses", session["user_id"])
-            db.session.add(log_object3)
+            db.session.add(log3)
             db.session.commit()
 
             return make_response(
@@ -215,30 +215,30 @@ class BusinessResource(Resource):
             if not business_by_name or (business_by_name and (business_by_name.id == business_id)):
                 category = Category.query.filter_by(name=category_name).first()
                 if not category:
-                    category_object = Category(
+                    category = Category(
                         category_name, '{} description'.format(category_name))
-                    db.session.add(category_object)
+                    db.session.add(category)
                     db.session.commit()
                     category = Category.query.filter_by(
                         name=category_name).first()
 
-                    log_object1 = Log(
+                    log1 = Log(
                         "Insert", "Added category: {}".format(category_name), "categories", session["user_id"])
-                    db.session.add(log_object1)
+                    db.session.add(log1)
                     db.session.commit()
 
                 location = Location.query.filter_by(name=location_name).first()
                 if not location:
-                    location_object = Location(
+                    location = Location(
                         location_name, '{} description'.format(location_name))
-                    db.session.add(location_object)
+                    db.session.add(location)
                     db.session.commit()
                     location = Location.query.filter_by(
                         name=location_name).first()
 
-                    log_object2 = Log(
+                    log2 = Log(
                         "Insert", "Added location: {}".format(location_name), "locations", session["user_id"])
-                    db.session.add(log_object2)
+                    db.session.add(log2)
                     db.session.commit()
 
                 business.name = business_name
@@ -249,9 +249,9 @@ class BusinessResource(Resource):
 
                 db.session.commit()
 
-                log_object3 = Log(
+                log3 = Log(
                     "Update", "Updated business: {}".format(business_name), "businesses", session["user_id"])
-                db.session.add(log_object3)
+                db.session.add(log3)
                 db.session.commit()
 
                 return make_response(jsonify({"message": "Business updated"}), 200)
@@ -275,9 +275,9 @@ class BusinessResource(Resource):
             db.session.delete(business)
             db.session.commit()
 
-            log_object = Log(
+            log = Log(
                 "Delete", "Deleted business: {}".format(business_name), "businesses", session["user_id"])
-            db.session.add(log_object)
+            db.session.add(log)
             db.session.commit()
 
             return make_response(jsonify({"message": "Business deleted"}), 200)
@@ -326,13 +326,13 @@ class BusinessReviews(Resource):
             # check if review already exists
             review_by_name = Review.query.filter_by(name=review_name).first()
             if not review_by_name:
-                review_object = Review(review_name, description, business_id)
-                db.session.add(review_object)
+                review = Review(review_name, description, business_id)
+                db.session.add(review)
                 db.session.commit()
 
-                log_object = Log(
+                log = Log(
                     "Insert", "Added review: {}".format(review_name), "reviews", session["user_id"])
-                db.session.add(log_object)
+                db.session.add(log)
                 db.session.commit()
 
                 return make_response(jsonify({"message": "Business review added"}), 201)
