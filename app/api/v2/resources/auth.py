@@ -82,9 +82,6 @@ def token_required(function):
                 if len(authorization_list) > 1:
                     access_token = authorization_list[1]
 
-                if not access_token:
-                    return {"message": "No token provided"}, 401
-
             if not access_token:
                 return {"message": "No token provided"}, 401
 
@@ -96,11 +93,7 @@ def token_required(function):
                     access_token, secret_key, algorithms=["HS256"])
                 sub = decoded_token.get("sub", None)
                 user = User.query.get(sub)
-            except jwt.InvalidTokenError:
-                return {"message": "Invalid token provided"}, 401
-            except IndexError:
-                return {"message": "Invalid token provided"}, 401
-            except db.NoResultFound:
+            except (jwt.InvalidTokenError, IndexError, db.NoResultFound):
                 return {"message": "Invalid token provided"}, 401
             else:
                 request.data = json.loads(request.data.decode()) if request.data else {}
