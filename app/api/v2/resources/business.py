@@ -5,7 +5,7 @@ from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
 
-from .auth import token_required, not_valid_string
+from .auth import token_required, validate_inputs
 
 from app.db import db
 from app.models.category import Category
@@ -117,10 +117,10 @@ class BusinessCollection(Resource):
         """Register a business"""
 
         args = business_request_parser.parse_args()
-        for key, value in args.items():
-            arg_is_invalid = not_valid_string(key, value)
-            if arg_is_invalid[0]:
-                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
+
+        invalid_input = validate_inputs(args)
+        if invalid_input:
+            return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
 
         business_name = args.get("name", None)
         category_name = args.get("category", None)
@@ -198,10 +198,10 @@ class BusinessResource(Resource):
                 return make_response(jsonify({"message": "Only the Business owner can update"}), 409)
 
             args = business_request_parser.parse_args()
-            for key, value in args.items():
-                arg_is_invalid = not_valid_string(key, value)
-                if arg_is_invalid[0]:
-                    return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
+            
+            invalid_input = validate_inputs(args)
+            if invalid_input:
+                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
 
             business_name = args.get("name", None)
             category_name = args.get("category", None)
@@ -315,10 +315,10 @@ class BusinessReviews(Resource):
         business = Business.query.get(business_id)
         if business:
             args = review_request_parser.parse_args()
-            for key, value in args.items():
-                arg_is_invalid = not_valid_string(key, value)
-                if arg_is_invalid[0]:
-                    return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
+
+            invalid_input = validate_inputs(args)
+            if invalid_input:
+                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
 
             review_name = args.get("name", None)
             description = args.get("description", None)

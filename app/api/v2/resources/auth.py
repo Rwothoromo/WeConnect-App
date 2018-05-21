@@ -58,17 +58,17 @@ user_request_parser.add_argument(
     help="Password is required")
 
 
-def not_valid_string(key, value):
-    """Return true if value is not string of required length"""
+def validate_inputs(args):
+    """Return error message if input is invalid"""
 
-    valid_length = 256
     fifty_character_limit = ['first_name', 'last_name', 'username', 'password', 'name', 'category', 'location']
-
-    if key in fifty_character_limit:
-        valid_length = 50
-        return (len(value) <= valid_length and isinstance(value, str) and not value.strip(), valid_length)
-    return (len(value) <= valid_length and isinstance(value, str) and not value.strip(), valid_length)
-
+    for key, value in args.items():
+        valid_length = 50 if key in fifty_character_limit else 256
+        arg_is_invalid = (len(value) > valid_length or not isinstance(value, str) or not value.strip(), \
+                            valid_length, key)
+        if arg_is_invalid[0]:
+            return arg_is_invalid
+    
 
 def token_required(function):
     @wraps(function)
@@ -125,10 +125,10 @@ class RegisterUser(Resource):
         """Creates a user account"""
 
         args = user_request_parser.parse_args()
-        for key, value in args.items():
-            arg_is_invalid = not_valid_string(key, value)
-            if arg_is_invalid[0]:
-                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
+        
+        invalid_input = validate_inputs(args)
+        if invalid_input:
+            return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
 
         first_name = args.get("first_name", None)
         last_name = args.get("last_name", None)
@@ -165,10 +165,10 @@ class LoginUser(Resource):
         response_data = {"message": "Login failed"}
 
         args = request.get_json()
-        for key, value in args.items():
-            arg_is_invalid = not_valid_string(key, value)
-            if arg_is_invalid[0]:
-                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(key, arg_is_invalid[1])}), 400)
+
+        invalid_input = validate_inputs(args)
+        if invalid_input:
+            return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
 
         username = args.get("username", None)
         password = args.get("password", None)
