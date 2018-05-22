@@ -159,7 +159,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         login_data = json.loads(login.data.decode())
 
         response = self.client.put(self.prefix + 'businesses/1',
-                                    headers={
+                                   headers={
                                        'Authorization': 'Bearer ' + login_data["access_token"]},
                                    content_type='application/json',
                                    data=json.dumps(self.businesses['one_edit1']))
@@ -233,7 +233,7 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         self.client.post(self.prefix + 'auth/register', content_type='application/json',
                          data=json.dumps(self.users['four']))
         login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                  data=json.dumps(self.user_login['four']))
+                                 data=json.dumps(self.user_login['four']))
         login_data = json.loads(login.data.decode())
 
         response = self.client.delete(self.prefix + 'businesses/1',
@@ -355,22 +355,22 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         """Test that the business model can be queried and represented"""
 
         self.client.post(self.prefix + 'businesses',
-                                    headers={
-                                        'Authorization': 'Bearer {}'.format(self.access_token)},
-                                    content_type='application/json',
-                                    data=json.dumps(self.businesses['one']))
+                         headers={
+                             'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.businesses['one']))
         business = Business.query.get(1)
 
-        self.assertEqual(business.__repr__(), '<Business: {}>'.format(self.businesses['one']['name']))
+        self.assertEqual(business.__repr__(),
+                         '<Business: {}>'.format(self.businesses['one']['name']))
 
     def test_business_as_dict(self):
         """Test that the business model is represented as a dictionary"""
 
         self.client.post(self.prefix + 'businesses',
-                                    headers={
-                                        'Authorization': 'Bearer {}'.format(self.access_token)},
-                                    content_type='application/json',
-                                    data=json.dumps(self.businesses['one']))
+                         headers={'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.businesses['one']))
         business = Business.query.get(1)
 
         self.assertEqual(business.business_as_dict()['id'], 1)
@@ -379,22 +379,21 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         """Test that the category model can be queried and represented"""
 
         self.client.post(self.prefix + 'businesses',
-                                    headers={
-                                        'Authorization': 'Bearer {}'.format(self.access_token)},
-                                    content_type='application/json',
-                                    data=json.dumps(self.businesses['one']))
+                         headers={'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.businesses['one']))
         category = Category.query.get(1)
 
-        self.assertEqual(category.__repr__(), '<Category: {}>'.format(self.businesses['one']['category']))
+        self.assertEqual(category.__repr__(),
+                         '<Category: {}>'.format(self.businesses['one']['category']))
 
     def test_category_as_dict(self):
         """Test that the category model is represented as a dictionary"""
 
         self.client.post(self.prefix + 'businesses',
-                                    headers={
-                                        'Authorization': 'Bearer {}'.format(self.access_token)},
-                                    content_type='application/json',
-                                    data=json.dumps(self.businesses['one']))
+                         headers={'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.businesses['one']))
         category = Category.query.get(1)
 
         self.assertEqual(category.category_as_dict()['id'], 1)
@@ -403,22 +402,21 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         """Test that the location model can be queried and represented"""
 
         self.client.post(self.prefix + 'businesses',
-                                    headers={
-                                        'Authorization': 'Bearer {}'.format(self.access_token)},
-                                    content_type='application/json',
-                                    data=json.dumps(self.businesses['one']))
+                         headers={'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.businesses['one']))
         location = Location.query.get(1)
 
-        self.assertEqual(location.__repr__(), '<Location: {}>'.format(self.businesses['one']['location']))
+        self.assertEqual(location.__repr__(),
+                         '<Location: {}>'.format(self.businesses['one']['location']))
 
     def test_location_as_dict(self):
         """Test that the location model is represented as a dictionary"""
 
         self.client.post(self.prefix + 'businesses',
-                                    headers={
-                                        'Authorization': 'Bearer {}'.format(self.access_token)},
-                                    content_type='application/json',
-                                    data=json.dumps(self.businesses['one']))
+                         headers={'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.businesses['one']))
         location = Location.query.get(1)
 
         self.assertEqual(location.location_as_dict()['id'], 1)
@@ -432,10 +430,9 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          content_type='application/json',
                          data=json.dumps(self.businesses['one']))
         self.client.post(self.prefix + 'businesses/1/reviews',
-                        headers={
-                            'Authorization': 'Bearer {}'.format(self.access_token)},
-                        content_type='application/json',
-                        data=json.dumps(self.reviews['one']))
+                         headers={'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.reviews['one']))
         review = Review.query.get(1)
 
         self.assertEqual(review.__repr__(), '<Review: {}>'.format(self.reviews['one']['name']))
@@ -449,10 +446,10 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
                          content_type='application/json',
                          data=json.dumps(self.businesses['one']))
         self.client.post(self.prefix + 'businesses/1/reviews',
-                        headers={
-                            'Authorization': 'Bearer {}'.format(self.access_token)},
-                        content_type='application/json',
-                        data=json.dumps(self.reviews['one']))
+                         headers={
+                             'Authorization': 'Bearer {}'.format(self.access_token)},
+                         content_type='application/json',
+                         data=json.dumps(self.reviews['one']))
         review = Review.query.get(1)
 
         self.assertEqual(review.review_as_dict()['id'], 1)
