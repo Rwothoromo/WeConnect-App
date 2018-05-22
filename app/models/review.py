@@ -18,6 +18,7 @@ class Review(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(
     ), onupdate=db.func.current_timestamp())
+    author = db.relationship("User")
 
     def __init__(self, name, description, business):
         self.name = name
@@ -31,4 +32,6 @@ class Review(db.Model):
     def review_as_dict(self):
         """Represent the review as a dict"""
 
-        return {r.name: getattr(self, r.name) for r in self.__table__.columns}
+        review = {r.name: getattr(self, r.name) for r in self.__table__.columns}
+        review['author'] = self.author.first_name + ' ' + self.author.last_name
+        return review

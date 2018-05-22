@@ -12,14 +12,15 @@ class Log(db.Model):
     action = db.Column(db.String(50), nullable=False)
     message = db.Column(db.String(256), nullable=False)
     table = db.Column(db.String(50), nullable=False)
-    user = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    author = db.relationship("User")
 
     def __init__(self, action, message, table, user_id):
         self.action = action
         self.message = message
         self.table = table
-        self.user = 1
+        self.created_by = user_id
 
     def __repr__(self):
         return '<Log: {}'.format(self.message)
@@ -27,4 +28,6 @@ class Log(db.Model):
     def log_as_dict(self):
         """Represent the log as a dict"""
 
-        return {t.id: getattr(self, t.id) for t in self.__table__.columns}
+        log = {l.id: getattr(self, l.id) for l in self.__table__.columns}
+        log['author'] = self.author.first_name + ' ' + self.author.last_name
+        return log

@@ -17,6 +17,7 @@ class Category(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(
     ), onupdate=db.func.current_timestamp())
+    author = db.relationship("User")
 
     def __init__(self, name, description):
         self.name = name
@@ -29,4 +30,6 @@ class Category(db.Model):
     def category_as_dict(self):
         """Represent the category as a dict"""
 
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        category = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        category['author'] = self.author.first_name + ' ' + self.author.last_name
+        return category

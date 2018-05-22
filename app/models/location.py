@@ -17,6 +17,7 @@ class Location(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(
     ), onupdate=db.func.current_timestamp())
+    author = db.relationship("User")
 
     def __init__(self, name, description):
         self.name = name
@@ -29,4 +30,6 @@ class Location(db.Model):
     def location_as_dict(self):
         """Represent the location as a dict"""
 
-        return {l.name: getattr(self, l.name) for l in self.__table__.columns}
+        location = {l.name: getattr(self, l.name) for l in self.__table__.columns}
+        location['author'] = self.author.first_name + ' ' + self.author.last_name
+        return location
