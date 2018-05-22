@@ -23,11 +23,11 @@ class Log(db.Model):
         self.created_by = user_id
 
     def __repr__(self):
-        return '<Log: {}'.format(self.message)
+        return '<Log: {}>'.format(self.message)
 
     def log_as_dict(self):
         """Represent the log as a dict"""
 
-        log = {l.id: getattr(self, l.id) for l in self.__table__.columns}
+        log = {l.name: getattr(self, l.name) for l in self.__table__.columns}
         log['author'] = self.author.first_name + ' ' + self.author.last_name
         return log

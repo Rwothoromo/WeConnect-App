@@ -17,9 +17,9 @@ class Blacklist(db.Model):
 
     # Represent the object when it is queried
     def __repr__(self):
-        return '<Token: {}'.format(self.token)
+        return '<Token: {}>'.format(self.token)
 
     def token_as_dict(self):
         """Represent the token as a dict"""
 
-        return {t.token: getattr(self, t.token) for t in self.__table__.columns}
+        return {t.name: getattr(self, t.name) for t in self.__table__.columns}
