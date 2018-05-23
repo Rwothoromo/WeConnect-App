@@ -22,6 +22,7 @@ responses:
         message:
           type: string
           enum:
+            - "Business reviews not found"
   404:
     description: Business not found
     schema:
