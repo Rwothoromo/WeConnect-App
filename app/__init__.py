@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_restful import Api
 from flasgger import Swagger
+from flask_cors import CORS
 
 # local imports
 from config import app_config
@@ -52,6 +53,8 @@ app.config['SWAGGER'] = {
 swagger = Swagger(app)
 
 db.init_app(app)
+
+cors = CORS(app)
 
 # Add api Blueprint
 api_bp = Blueprint('api', __name__)
