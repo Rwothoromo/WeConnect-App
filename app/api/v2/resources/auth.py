@@ -68,7 +68,7 @@ def validate_inputs(args):
                             valid_length, key)
         if arg_is_invalid[0]:
             return arg_is_invalid
-    
+
 
 def token_required(function):
     @wraps(function)

@@ -198,7 +198,7 @@ class BusinessResource(Resource):
                 return make_response(jsonify({"message": "Only the Business owner can update"}), 409)
 
             args = business_request_parser.parse_args()
-            
+
             invalid_input = validate_inputs(args)
             if invalid_input:
                 return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
