@@ -1,5 +1,6 @@
 alembic==0.9.8
 aniso8601==2.0.0
+appnope==0.1.0
 asn1crypto==0.24.0
 astroid==1.6.1
 attrs==17.4.0
@@ -19,6 +20,7 @@ flake8==3.5.0
 flasgger==0.8.1
 Flask==0.12.2
 Flask-API==1.0
+Flask-Cors==3.0.6
 Flask-Login==0.4.1
 Flask-Migrate==2.1.1
 Flask-RESTful==0.3.6
