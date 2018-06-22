@@ -265,10 +265,10 @@ class LogoutUser(Resource):
 
         user_data = request.data["user"]
         log = Log("Insert", "Revoked token for user: {}".format(
-            user_data.username), "blacklists", session["user_id"])
+            user_data.username), "blacklists", user_data.id)
         db.session.add(log)
         db.session.commit()
 
         session["user_id"] = None
 
-        return make_response(jsonify({"message": "Access token revoked"}), 200)
+        return make_response(jsonify({"message": "Logged out successfully"}), 200)
