@@ -116,6 +116,8 @@ class BusinessCollection(Resource):
     def post(self):
         """Register a business"""
 
+        user_data = request.data["user"]
+        session["user_id"] = user_data.id
         args = business_request_parser.parse_args()
 
         invalid_input = validate_inputs(args)
@@ -139,7 +141,7 @@ class BusinessCollection(Resource):
                 category = Category.query.filter_by(name=category_name).first()
 
                 log1 = Log(
-                    "Insert", "Added category: {}".format(category_name), "categories", session["user_id"])
+                    "Insert", "Added category: {}".format(category_name), "categories", user_data.id)
                 db.session.add(log1)
                 db.session.commit()
 
@@ -152,7 +154,7 @@ class BusinessCollection(Resource):
                 location = Location.query.filter_by(name=location_name).first()
 
                 log2 = Log(
-                    "Insert", "Added location: {}".format(location_name), "locations", session["user_id"])
+                    "Insert", "Added location: {}".format(location_name), "locations", user_data.id)
                 db.session.add(log2)
                 db.session.commit()
 
@@ -162,7 +164,7 @@ class BusinessCollection(Resource):
             db.session.commit()
 
             log3 = Log(
-                "Insert", "Added business: {}".format(business_name), "businesses", session["user_id"])
+                "Insert", "Added business: {}".format(business_name), "businesses", user_data.id)
             db.session.add(log3)
             db.session.commit()
 
@@ -203,6 +205,7 @@ class BusinessResource(Resource):
             if invalid_input:
                 return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
 
+            session["user_id"] = user_data.id
             business_name = args.get("name", None)
             category_name = args.get("category", None)
             location_name = args.get("location", None)
@@ -223,7 +226,7 @@ class BusinessResource(Resource):
                         name=category_name).first()
 
                     log1 = Log(
-                        "Insert", "Added category: {}".format(category_name), "categories", session["user_id"])
+                        "Insert", "Added category: {}".format(category_name), "categories", user_data.id)
                     db.session.add(log1)
                     db.session.commit()
 
@@ -237,7 +240,7 @@ class BusinessResource(Resource):
                         name=location_name).first()
 
                     log2 = Log(
-                        "Insert", "Added location: {}".format(location_name), "locations", session["user_id"])
+                        "Insert", "Added location: {}".format(location_name), "locations", user_data.id)
                     db.session.add(log2)
                     db.session.commit()
 
@@ -250,7 +253,7 @@ class BusinessResource(Resource):
                 db.session.commit()
 
                 log3 = Log(
-                    "Update", "Updated business: {}".format(business_name), "businesses", session["user_id"])
+                    "Update", "Updated business: {}".format(business_name), "businesses", user_data.id)
                 db.session.add(log3)
                 db.session.commit()
 
@@ -265,6 +268,7 @@ class BusinessResource(Resource):
     def delete(self, business_id):
         """Delete a business"""
 
+        user_data = request.data["user"]
         business = Business.query.get(business_id)
         if business:
             business_name = business.name
@@ -275,8 +279,9 @@ class BusinessResource(Resource):
             db.session.delete(business)
             db.session.commit()
 
+            session["user_id"] = user_data.id
             log = Log(
-                "Delete", "Deleted business: {}".format(business_name), "businesses", session["user_id"])
+                "Delete", "Deleted business: {}".format(business_name), "businesses", user_data.id)
             db.session.add(log)
             db.session.commit()
 
@@ -312,6 +317,8 @@ class BusinessReviews(Resource):
     def post(self, business_id):
         """Add a review for a business"""
 
+        user_data = request.data["user"]
+        session["user_id"] = user_data.id
         business = Business.query.get(business_id)
         if business:
             args = review_request_parser.parse_args()
@@ -331,7 +338,7 @@ class BusinessReviews(Resource):
                 db.session.commit()
 
                 log = Log(
-                    "Insert", "Added review: {}".format(review_name), "reviews", session["user_id"])
+                    "Insert", "Added review: {}".format(review_name), "reviews", user_data.id)
                 db.session.add(log)
                 db.session.commit()
 
