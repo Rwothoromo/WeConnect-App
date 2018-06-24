@@ -182,7 +182,7 @@ class LoginUser(Resource):
                 session["user_id"] = user.id
 
                 log = Log(
-                    "Login", "Logged in user: {}".format(username), "users", session["user_id"])
+                    "Login", "Logged in user: {}".format(username), "users", user.id)
                 db.session.add(log)
                 db.session.commit()
 
@@ -221,7 +221,7 @@ class ResetPassword(Resource):
         db.session.commit()
 
         log1 = Log("Update", "Updated password for user: {}".format(
-            user.username), "users", session["user_id"])
+            user.username), "users", user_data.id)
         db.session.add(log1)
         db.session.commit()
 
@@ -238,7 +238,7 @@ class ResetPassword(Resource):
         db.session.commit()
 
         log2 = Log("Insert", "Revoked token for user: {}".format(
-            user.username), "blacklists", session["user_id"])
+            user.username), "blacklists", user_data.id)
         db.session.add(log2)
         db.session.commit()
 
