@@ -23,6 +23,8 @@ class Business(db.Model):
     reviews = db.relationship(
         'Review', order_by='Review.id', cascade='all, delete-orphan')
     author = db.relationship("User")
+    category_relationship = db.relationship("Category")
+    location_relationship = db.relationship("Location")
 
     def __init__(self, name, description, category, location, photo):
         self.name = name
@@ -40,4 +42,6 @@ class Business(db.Model):
 
         business = {b.name: getattr(self, b.name) for b in self.__table__.columns}
         business['author'] = self.author.first_name + ' ' + self.author.last_name
+        business['category_name'] = self.category_relationship.name
+        business['location_name'] = self.location_relationship.name
         return business
