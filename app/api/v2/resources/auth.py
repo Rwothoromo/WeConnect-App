@@ -187,6 +187,9 @@ class LoginUser(Resource):
                 db.session.commit()
 
                 response_data["message"] = "User logged in"
+                response_data["username"] = user.username
+                response_data["first_name"] = user.first_name
+                response_data["last_name"] = user.last_name
                 response_data["access_token"] = access_token.decode()
                 response = jsonify(response_data)
                 response.status_code = 200
