@@ -25,8 +25,6 @@ business_request_parser.add_argument(
     "category", type=str, required=True, help="Category must be a valid string")
 business_request_parser.add_argument(
     "location", type=str, required=True, help="Location must be a valid string")
-business_request_parser.add_argument(
-    "photo", type=str, required=True, help="Photo must be a valid string")
 
 
 # for reviews
