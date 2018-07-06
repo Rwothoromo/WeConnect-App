@@ -65,7 +65,7 @@ class BusinessCollection(Resource):
 
         args = q_request_parser.parse_args()
         q = args.get('q', None)
-        limit = args.get('limit', 10)
+        limit = args.get('limit', None)
         page = args.get('page', 1)
         location_name = args.get('location', None)
         category_name = args.get('category', None)
