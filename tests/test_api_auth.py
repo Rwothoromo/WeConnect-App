@@ -108,61 +108,49 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
     def test_user_representation(self):
         """Test that the user model can be queried and represented"""
 
-        user = User.query.get(1)
-
-        self.assertEqual(user.__repr__(), '<User: {}>'.format(self.users['one']['username']))
+        self.assertEqual(
+            repr(
+                User(
+                    first_name=self.users['two']['first_name'], 
+                    last_name=self.users['two']['last_name'], 
+                    username=self.users['two']['username'], 
+                    password=self.users['two']['password']
+                )
+            ), "<User: {}>".format(self.users['two']['username']))
 
     def test_user_as_dict(self):
         """Test that the user model is represented as a dictionary"""
 
-        user = User.query.get(1)
+        user = User(
+            first_name=self.users['two']['first_name'], 
+            last_name=self.users['two']['last_name'], 
+            username=self.users['two']['username'], 
+            password=self.users['two']['password']
+        )
 
-        self.assertEqual(user.user_as_dict()['id'], 1)
+        self.assertIsInstance(user.user_as_dict(), dict)
 
     def test_log_representation(self):
         """Test that the log model can be queried and represented"""
 
-        log = Log.query.get(1)
-
-        self.assertEqual(log.__repr__(), '<Log: Added user: {}>'.format(self.users['one']['username']))
-
-    def test_log_as_dict(self):
-        """Test that the log model is represented as a dictionary"""
-
-        log = Log.query.get(1)
-
-        self.assertEqual(log.log_as_dict()['id'], 1)
+        self.assertEqual(
+            repr(
+                Log(
+                    action='Login',
+                    message='Logged in user: {}'.format(self.users['one']['username']),
+                    table='users',
+                    user_id=1
+                )
+            ), "<Log: {}>".format('Logged in user: {}'.format(self.users['one']['username'])))
 
     def test_blacklist_representation(self):
         """Test that the blacklist model can be queried and represented"""
 
-        self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.users['two']))
-        login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_login['two']))
-        login_data = json.loads(login.data.decode())
-        access_token = login_data["access_token"]
-
-        self.client.post(
-            self.prefix + 'auth/logout', headers={'Authorization': 'Bearer ' + access_token})
-
-        blacklist = Blacklist.query.get(1)
-
-        self.assertEqual(blacklist.__repr__(), '<Token: {}>'.format(access_token))
+        self.assertEqual(repr(Blacklist(token=self.access_token)), "<Token: {}>".format(self.access_token))
 
     def test_blacklist_as_dict(self):
         """Test that the blacklist model is represented as a dictionary"""
 
-        self.client.post(self.prefix + 'auth/register', content_type='application/json',
-                         data=json.dumps(self.users['two']))
-        login = self.client.post(self.prefix + 'auth/login', content_type='application/json',
-                                 data=json.dumps(self.user_login['two']))
-        login_data = json.loads(login.data.decode())
-        access_token = login_data["access_token"]
+        blacklist = Blacklist(token=self.access_token)
 
-        self.client.post(
-            self.prefix + 'auth/logout', headers={'Authorization': 'Bearer ' + access_token})
-
-        blacklist = Blacklist.query.get(1)
-
-        self.assertEqual(blacklist.token_as_dict()['id'], 1)
+        self.assertIsInstance(blacklist.token_as_dict(), dict)
