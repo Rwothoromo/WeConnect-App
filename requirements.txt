@@ -14,7 +14,7 @@ codeclimate-test-reporter==0.2.3
 colorama==0.3.9
 coverage==4.0.3
 coveralls==1.2.0
-cryptography==2.1.4
+cryptography>2.3
 decorator==4.2.1
 docopt==0.6.2
 flake8==3.5.0
