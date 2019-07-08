@@ -6,7 +6,8 @@ from flask import redirect
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from api import app, db
+from api import db
+from api.v2 import app
 
 
 migrate = Migrate(app, db)

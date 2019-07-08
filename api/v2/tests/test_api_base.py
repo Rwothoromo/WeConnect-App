@@ -18,7 +18,7 @@ sys.path.insert(0, tests_dir)
 # sys.path.append(os.path.dirname)
 
 # local imports
-from api import app
+from api.v2 import app
 from api.db import db
 
 

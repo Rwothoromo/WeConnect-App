@@ -1,0 +1,46 @@
+Endpoint that logs in a user
+---
+tags:
+  - User
+parameters:
+  - name: body
+    description: user login data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "username"
+        - "password"
+      properties:
+        username:
+          type: "string"
+          example: "jackdan"
+        password:
+          type: "string"
+          format: password
+          example: "chicken pie"
+responses:
+  200:
+    description: User logged in
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "User logged in"
+        access_token:
+          type: string
+          enum:
+            - "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTk4OTUwODYsImlhdCI6MTUxOTg5MTQ4Niwic3ViIjoxfQ.1HGHyKAqw34MUbjdekuHUEpn0SHntqeYhEnaG1HMv-4"
+  409:
+    description: User login failed
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Incorrect username and password combination!"
+            - "This username does not exist! Please register!"

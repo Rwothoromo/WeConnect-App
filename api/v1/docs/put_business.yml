@@ -1,0 +1,72 @@
+Endpoint that updates a business
+---
+tags:
+  - Business
+parameters:
+  - name: Authorization
+    description: A json web token prefixed with 'Bearer '
+    in: header
+    type: string
+    required: true
+  - name: business_id
+    description: business id
+    type: integer
+    in: path
+    required: true
+  - name: body
+    description: business creation data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "name"
+        - "description"
+        - "category"
+        - "location"
+        - "photo"
+      properties:
+        name:
+          type: "string"
+          example: "Buyondo Hardware"
+        description:
+          type: "string"
+          example: "One stop center for building materials..."
+        category:
+          type: "string"
+          example: "Construction"
+        location:
+          type: "string"
+          example: "Kabale"
+        photo:
+          type: "string"
+          example: "photo"
+
+responses:
+  201:
+    description: Business updated
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business updated"
+  404:
+    description: Business not found
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business not found"
+  409:
+    description: Business already exists
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business by that name already exists"
