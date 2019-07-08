@@ -29,10 +29,10 @@ api_dir = os.path.dirname(v2_dir)
 app_dir = os.path.dirname(api_dir)
 sys.path.insert(0, app_dir)
 
-from app.db import db
-from app.models.blacklist import Blacklist
-from app.models.user import User
-from app.models.log import Log
+from api.db import db
+from api.v2.models.blacklist import Blacklist
+from api.v2.models.user import User
+from api.v2.models.log import Log
 
 
 secret_key = os.environ.get('SECRET_KEY', 'MEGAtron35648')

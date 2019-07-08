@@ -2,11 +2,11 @@
 
 import json
 
-from tests.test_api_base import WeConnectApiTestBase
-from app.models.business import Business
-from app.models.category import Category
-from app.models.location import Location
-from app.models.review import Review
+from api.v2.tests.test_api_base import WeConnectApiTestBase
+from api.v2.models.business import Business
+from api.v2.models.category import Category
+from api.v2.models.location import Location
+from api.v2.models.review import Review
 
 
 class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
@@ -65,7 +65,8 @@ class WeConnectApiBusinessTestCase(WeConnectApiTestBase):
         """Test api businesses viewing"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer {}'.format(self.access_token)},
+                         headers={'Authorization': 'Bearer {}'.format(
+                             self.access_token)},
                          content_type='application/json', data=json.dumps(self.businesses['one']))
 
         response = self.client.get(self.prefix + 'businesses',

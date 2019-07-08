@@ -2,7 +2,7 @@
 
 from flask import session
 
-from app.db import db
+from api.db import db
 
 
 class Location(db.Model):

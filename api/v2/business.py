@@ -7,12 +7,12 @@ from flasgger import swag_from
 
 from .auth import token_required, validate_inputs
 
-from app.db import db
-from app.models.category import Category
-from app.models.location import Location
-from app.models.business import Business
-from app.models.review import Review
-from app.models.log import Log
+from api.db import db
+from api.v2.models.category import Category
+from api.v2.models.location import Location
+from api.v2.models.business import Business
+from api.v2.models.review import Review
+from api.v2.models.log import Log
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those

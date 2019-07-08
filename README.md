@@ -64,7 +64,7 @@ export FLASK_CONFIG=development
 
 * Run `source .env` to activate the environment variables on Unix/Mac.
 * Run `env` to verify the above.
-* Run the following:
+* Run the migrations:
   * `python manage.py db init` to create a migration repository
   * `python manage.py db migrate` to update the migration script
   * `python manage.py db upgrade` to apply the migration to the database
@@ -105,6 +105,4 @@ For detailed instructions on heroku deployments, go [here](https://medium.com/@j
 
 ## Extra
 
-If removing unnecessary files:
-
-* Run find . | grep -E "(\__pycache__|\migrations)" | xargs rm -rf.
+* Run `find . | grep -E "(\__pycache__|\migrations)" | xargs rm -rf` to remove unnecessary files.

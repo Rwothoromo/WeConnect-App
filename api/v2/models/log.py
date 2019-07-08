@@ -1,6 +1,6 @@
 # app/models/log.py
 
-from app.db import db
+from api.db import db
 
 
 class Log(db.Model):

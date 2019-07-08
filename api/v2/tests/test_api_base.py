@@ -18,8 +18,8 @@ sys.path.insert(0, tests_dir)
 # sys.path.append(os.path.dirname)
 
 # local imports
-from app import app
-from app.db import db
+from api import app
+from api.db import db
 
 
 class WeConnectApiTestBase(TestCase):

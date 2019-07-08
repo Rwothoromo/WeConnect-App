@@ -2,10 +2,10 @@
 
 import json
 
-from tests.test_api_base import WeConnectApiTestBase
-from app.models.user import User
-from app.models.log import Log
-from app.models.blacklist import Blacklist
+from api.v2.tests.test_api_base import WeConnectApiTestBase
+from api.v2.models.user import User
+from api.v2.models.log import Log
+from api.v2.models.blacklist import Blacklist
 
 
 class WeConnectApiAuthTestCase(WeConnectApiTestBase):
@@ -111,9 +111,9 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
         self.assertEqual(
             repr(
                 User(
-                    first_name=self.users['two']['first_name'], 
-                    last_name=self.users['two']['last_name'], 
-                    username=self.users['two']['username'], 
+                    first_name=self.users['two']['first_name'],
+                    last_name=self.users['two']['last_name'],
+                    username=self.users['two']['username'],
                     password=self.users['two']['password']
                 )
             ), "<User: {}>".format(self.users['two']['username']))
@@ -122,9 +122,9 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
         """Test that the user model is represented as a dictionary"""
 
         user = User(
-            first_name=self.users['two']['first_name'], 
-            last_name=self.users['two']['last_name'], 
-            username=self.users['two']['username'], 
+            first_name=self.users['two']['first_name'],
+            last_name=self.users['two']['last_name'],
+            username=self.users['two']['username'],
             password=self.users['two']['password']
         )
 
@@ -137,7 +137,8 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
             repr(
                 Log(
                     action='Login',
-                    message='Logged in user: {}'.format(self.users['one']['username']),
+                    message='Logged in user: {}'.format(
+                        self.users['one']['username']),
                     table='users',
                     user_id=1
                 )
@@ -146,7 +147,8 @@ class WeConnectApiAuthTestCase(WeConnectApiTestBase):
     def test_blacklist_representation(self):
         """Test that the blacklist model can be queried and represented"""
 
-        self.assertEqual(repr(Blacklist(token=self.access_token)), "<Token: {}>".format(self.access_token))
+        self.assertEqual(repr(Blacklist(token=self.access_token)),
+                         "<Token: {}>".format(self.access_token))
 
     def test_blacklist_as_dict(self):
         """Test that the blacklist model is represented as a dictionary"""
