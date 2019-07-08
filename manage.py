@@ -27,7 +27,8 @@ def test():
 def main():  # pragma: no cover
     """Redirect to api endpoints"""
 
-    return redirect('/api/v2/')
+    # return redirect('/api/v2/')
+    return redirect('/apidocs')
 
 
 if __name__ == '__main__':

@@ -36,32 +36,39 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 ## Tested with
 
-* Python 3.6
-* PostgreSQL 10
+* [Python 3.6](https://www.python.org/downloads)
+* [PostgreSQL 11](https://www.postgresql.org/download/)
 
 ## Requirements
 
-* Install [Python](https://www.python.org/downloads/)
-* Install [PostgreSQL](https://www.postgresql.org/download/)
-* Run `pip install virtualenv` on command prompt
-* Run `pip install virtualenvwrapper-win` on command prompt
-* Run `set WORKON_HOME=%USERPROFILES%\Envs` on command prompt
+* Install [Python](https://www.python.org/downloads/).
+* Install [PostgreSQL](https://www.postgresql.org/download/).
+* Run `pip install virtualenv` on command prompt.
+* Run `pip install virtualenvwrapper-win` for Windows.
+* Run `set WORKON_HOME=%USERPROFILES%\Envs` for Windows.
 
 ## Setup
 
 * Run `git clone` this repository and `cd` into the project root.
-* Run `mkvirtualenv venv` on command prompt
-* Run `workon venv` on command prompt
-* Run `pip install -r requirements.txt` on command prompt
-* Run `createdb <weconnect_db>` and `createdb <test_weconnect_db>` on the psql bash terminal
-* Run `set DATABASE_URL=postgresql://<db_user>:<password>@localhost/<weconnect_db>`
-* Run `set SECRET_KEY=<some_secret_value>`
-* Run `set FLASK_CONFIG=development` on command prompt
-* Run the following on command prompt
+* Run `mkvirtualenv venv` for Windows or `python3 -m venv ../wc-venv` for Unix/Mac.
+* Run `workon venv` for Windows or `source ../wc-venv/bin/activate` for Unix/Mac.
+* Run `pip install -r requirements.txt`.
+* Run `createdb <weconnect_db>` and `createdb <test_weconnect_db>` on the psql bash terminal.
+* Run `touch .env` to create a file for storing environment variables. Add the following lines (use `set` for Windows instead of `export`, used here for Unix/Mac) to it:
+
+```env
+export DATABASE_URL=postgresql://<db_user>:<password>@localhost/<weconnect_db>
+export SECRET_KEY=<some_secret_value>
+export FLASK_CONFIG=development
+```
+
+* Run `source .env` to activate the environment variables on Unix/Mac.
+* Run `env` to verify the above.
+* Run the following:
   * `python manage.py db init` to create a migration repository
   * `python manage.py db migrate` to update the migration script
   * `python manage.py db upgrade` to apply the migration to the database
-* Run `python manage.py runserver` on command prompt to run on the default ip and port
+* Run `python manage.py runserver` to run on the default ip and port
 * View the app on `http://127.0.0.1:5000/`
 
 ## Use endpoints
@@ -76,14 +83,17 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 ## Unittests
 
-* Run `set DATABASE_URL=postgresql://<db_user>:<password>@localhost/<test_weconnect_db>`
-* Run `set SECRET_KEY=<some_secret_value>`
-* Run `set FLASK_CONFIG=testing` on command prompt
-* Run the following on command prompt
-  * `python manage.py db init` to create a migration repository
-  * `python manage.py db migrate` to update the migration script
-  * `python manage.py db upgrade` to apply the migration to the database
-* Run `python manage.py test` or `pytest` on command prompt
+* Change the `.env` file to:
+
+```env
+export DATABASE_URL=postgresql://<db_user>:<password>@localhost/<test_weconnect_db>
+export SECRET_KEY=<some_secret_value>
+export FLASK_CONFIG=testing
+```
+
+* Run `source .env`.
+* Run the migrations like before.
+* Run `python manage.py test` or `pytest`.
 
 ## GitHub pages
 
@@ -92,3 +102,9 @@ Go to [WeConnect](https://rwothoromo.github.io/WeConnect-App/)
 ## Notes
 
 For detailed instructions on heroku deployments, go [here](https://medium.com/@johnkagga/deploying-a-python-flask-app-to-heroku-41250bda27d0) or [here](https://devcenter.heroku.com/articles/heroku-cli)
+
+## Extra
+
+If removing unnecessary files:
+
+* Run find . | grep -E "(\__pycache__|\migrations)" | xargs rm -rf.
