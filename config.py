@@ -9,13 +9,10 @@ class Config:
     """
 
     SECRET_KEY = os.environ.get('SECRET_KEY', 'some value')
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL', 'postgresql://db_user:password@localhost/weconnect_db')
 
     TESTING = False
     DEBUG = False
     CSRF_ENABLED = True  # protect against CSRF attacks
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevelopmentConfig(Config):
@@ -24,7 +21,6 @@ class DevelopmentConfig(Config):
     """
 
     DEBUG = True
-    SQLALCHEMY_ECHO = True
 
 
 class ProductionConfig(Config):

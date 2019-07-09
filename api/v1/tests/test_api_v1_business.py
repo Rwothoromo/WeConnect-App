@@ -1,22 +1,11 @@
-# tests/test_api_v1_business.py
 """This script tests the business functionality of WeConnect api v1"""
 
 # third party imports
 from unittest import TestCase
 
-import os
-import sys
-import inspect
 import json
 
-# solution to python 3 relative import errors
-# use the inspect module because for os.path.abspath(__file__),
-# the __file__ attribute is not always given
-test_api_v1_dir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
-tests_dir = os.path.dirname(test_api_v1_dir)
-sys.path.insert(0, tests_dir)
-# sys.path.append(os.path.dirname)
+# local imports
 from api.v1 import app
 
 
@@ -115,7 +104,8 @@ class WeConnectApiBusinessTestCase(TestCase):
         """Test api business creation fails"""
 
         self.client.post(self.prefix + 'businesses',
-                         headers={'Authorization': 'Bearer ' + self.access_token},
+                         headers={'Authorization': 'Bearer ' +
+                                  self.access_token},
                          content_type='application/json', data=json.dumps(self.business1))
         response = self.client.post(self.prefix + 'businesses',
                                     headers={

@@ -2,8 +2,6 @@
 """Contains user logic"""
 
 import os
-import sys
-import inspect
 import random
 import datetime
 import json
@@ -17,21 +15,9 @@ from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
 
-
-# solution to python 3 relative import messages
-# use the inspect module because for os.path.abspath(__file__),
-# the __file__ attribute is not always given
-auth_dir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
-resources_dir = os.path.dirname(auth_dir)
-v1_dir = os.path.dirname(resources_dir)
-api_dir = os.path.dirname(v1_dir)
-app_dir = os.path.dirname(api_dir)
-sys.path.insert(0, app_dir)
-
-
-from .models.weconnect import WeConnect
+# local imports
 from api.v1.models.user import User
+from .models.weconnect import WeConnect
 
 
 weconnect = WeConnect()
@@ -67,7 +53,8 @@ def string_empty(string_var):
 
     return not isinstance(string_var, str) or string_var in [' ', '']
 
-def get_user_by_id(user_id): # pragma: no cover
+
+def get_user_by_id(user_id):  # pragma: no cover
     """Return user if user id matches"""
 
     for user in users:
@@ -86,7 +73,9 @@ def get_user_by_username(username):
     return False
 
 
-def token_required(function): # pragma: no cover
+def token_required(function):  # pragma: no cover
+    """Verify that the right token is provided"""
+
     @wraps(function)
     def decorated_function(*args, **kwargs):
         access_token = None

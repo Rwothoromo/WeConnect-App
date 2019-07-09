@@ -6,13 +6,7 @@ jobs:
         environment:
           SECRET_KEY: some_secret_value
           FLASK_CONFIG: testing
-          DATABASE_URL: postgresql://ubuntu@localhost/circle_test?sslmode=disable
-      - image: circleci/postgres:9.6.5-alpine-ram
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: circle_test
-          POSTGRES_PASSWORD: ""
-    steps:    
+    steps:
       - checkout
       - run: mkdir test-reports
       - run:
