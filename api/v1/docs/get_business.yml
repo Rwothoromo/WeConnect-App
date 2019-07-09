@@ -1,0 +1,32 @@
+Endpoint that retrieves a business
+---
+tags:
+  - Business
+parameters:
+  - name: Authorization
+    description: A json web token prefixed with 'Bearer '
+    type: string
+    in: header
+    required: true
+  - name: business_id
+    description: business id
+    type: integer
+    in: path
+    required: true
+responses:
+  200:
+    description: A business
+    schema:
+      type: object
+      properties:
+        business:
+          type: array
+  404:
+    description: Business not found
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Business not found"

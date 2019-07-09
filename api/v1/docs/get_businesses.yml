@@ -1,0 +1,22 @@
+Endpoint that retrieves all businesses
+---
+tags:
+  - Business
+parameters:
+  - name: Authorization
+    description: A json web token prefixed with 'Bearer '
+    type: string
+    in: header
+    required: true
+responses:
+  200:
+    description: A list of created businesses
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "No business found"
+        businesses:
+          type: array
