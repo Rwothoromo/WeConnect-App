@@ -1,8 +1,6 @@
 # app/api/resources/auth.py
 
 import os
-import sys
-import inspect
 import random
 import datetime
 import json
@@ -17,18 +15,7 @@ from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
 from werkzeug.security import check_password_hash, generate_password_hash
 
-
-# solution to python 3 relative import messages
-# use the inspect module because for os.path.abspath(__file__),
-# the __file__ attribute is not always given
-auth_dir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
-resources_dir = os.path.dirname(auth_dir)
-v2_dir = os.path.dirname(resources_dir)
-api_dir = os.path.dirname(v2_dir)
-app_dir = os.path.dirname(api_dir)
-sys.path.insert(0, app_dir)
-
+# local imports
 from api.db import db
 from api.v2.models.blacklist import Blacklist
 from api.v2.models.user import User
@@ -61,16 +48,19 @@ user_request_parser.add_argument(
 def validate_inputs(args):
     """Return error message if input is invalid"""
 
-    fifty_character_limit = ['first_name', 'last_name', 'username', 'password', 'name', 'category', 'location']
+    fifty_character_limit = ['first_name', 'last_name',
+                             'username', 'password', 'name', 'category', 'location']
     for key, value in args.items():
         valid_length = 50 if key in fifty_character_limit else 256
-        arg_is_invalid = (len(value) > valid_length or not isinstance(value, str) or not value.strip(), \
-                            valid_length, key)
+        arg_is_invalid = (len(value) > valid_length or not isinstance(value, str)
+                          or not value.strip(), valid_length, key)
         if arg_is_invalid[0]:
             return arg_is_invalid
 
 
 def token_required(function):
+    """Verify that the correct token is provided"""
+
     @wraps(function)
     def decorated_function(*args, **kwargs):
         access_token = None
@@ -96,12 +86,13 @@ def token_required(function):
             except (jwt.InvalidTokenError, IndexError, db.NoResultFound):
                 return {"message": "Invalid token provided"}, 401
             else:
-                request.data = json.loads(request.data.decode()) if request.data else {}
+                request.data = json.loads(
+                    request.data.decode()) if request.data else {}
                 request.data["user"] = user
 
             return function(*args, **kwargs)
-        else:
-            return {"message": "No token provided"}, 401
+
+        return {"message": "No token provided"}, 401
 
     return decorated_function
 
@@ -118,10 +109,12 @@ class RegisterUser(Resource):
         """Creates a user account"""
 
         args = user_request_parser.parse_args()
-        
+
         invalid_input = validate_inputs(args)
         if invalid_input:
-            return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
+            return make_response(jsonify(
+                {"message": "{} must be a string of maximum {} characters".format(
+                    invalid_input[2], invalid_input[1])}), 400)
 
         first_name = args.get("first_name", None)
         last_name = args.get("last_name", None)
@@ -161,7 +154,9 @@ class LoginUser(Resource):
 
         invalid_input = validate_inputs(args)
         if invalid_input:
-            return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
+            return make_response(jsonify(
+                {"message": "{} must be a string of maximum {} characters".format(
+                    invalid_input[2], invalid_input[1])}), 400)
 
         username = args.get("username", None)
         password = args.get("password", None)

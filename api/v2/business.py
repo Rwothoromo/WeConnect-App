@@ -5,14 +5,14 @@ from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
 from flasgger import swag_from
 
-from .auth import token_required, validate_inputs
-
 from api.db import db
 from api.v2.models.category import Category
 from api.v2.models.location import Location
 from api.v2.models.business import Business
 from api.v2.models.review import Review
 from api.v2.models.log import Log
+
+from .auth import token_required, validate_inputs
 
 
 # RequestParser and added arguments will know which fields to accept and how to validate those
@@ -120,7 +120,9 @@ class BusinessCollection(Resource):
 
         invalid_input = validate_inputs(args)
         if invalid_input:
-            return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
+            return make_response(jsonify(
+                {"message": "{} must be a string of maximum {} characters".format(
+                    invalid_input[2], invalid_input[1])}), 400)
 
         business_name = args.get("name", None)
         category_name = args.get("category", None)
@@ -139,7 +141,8 @@ class BusinessCollection(Resource):
                 category = Category.query.filter_by(name=category_name).first()
 
                 log1 = Log(
-                    "Insert", "Added category: {}".format(category_name), "categories", user_data.id)
+                    "Insert", "Added category: {}".format(category_name),
+                    "categories", user_data.id)
                 db.session.add(log1)
                 db.session.commit()
 
@@ -195,13 +198,16 @@ class BusinessResource(Resource):
         if business:
             user_data = request.data.get("user", None)
             if not user_data or (user_data and (user_data.id != business.created_by)):
-                return make_response(jsonify({"message": "Only the Business owner can update"}), 409)
+                return make_response(jsonify(
+                    {"message": "Only the Business owner can update"}), 409)
 
             args = business_request_parser.parse_args()
 
             invalid_input = validate_inputs(args)
             if invalid_input:
-                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
+                return make_response(jsonify(
+                    {"message": "{} must be a string of maximum {} characters".format(
+                        invalid_input[2], invalid_input[1])}), 400)
 
             session["user_id"] = user_data.id
             business_name = args.get("name", None)
@@ -224,7 +230,8 @@ class BusinessResource(Resource):
                         name=category_name).first()
 
                     log1 = Log(
-                        "Insert", "Added category: {}".format(category_name), "categories", user_data.id)
+                        "Insert", "Added category: {}".format(category_name),
+                        "categories", user_data.id)
                     db.session.add(log1)
                     db.session.commit()
 
@@ -238,7 +245,8 @@ class BusinessResource(Resource):
                         name=location_name).first()
 
                     log2 = Log(
-                        "Insert", "Added location: {}".format(location_name), "locations", user_data.id)
+                        "Insert", "Added location: {}".format(location_name),
+                        "locations", user_data.id)
                     db.session.add(log2)
                     db.session.commit()
 
@@ -251,7 +259,8 @@ class BusinessResource(Resource):
                 db.session.commit()
 
                 log3 = Log(
-                    "Update", "Updated business: {}".format(business_name), "businesses", user_data.id)
+                    "Update", "Updated business: {}".format(business_name),
+                    "businesses", user_data.id)
                 db.session.add(log3)
                 db.session.commit()
 
@@ -272,7 +281,8 @@ class BusinessResource(Resource):
             business_name = business.name
             user_data = request.data.get("user", None)
             if not user_data or (user_data and (user_data.id != business.created_by)):
-                return make_response(jsonify({"message": "Only the Business owner can delete"}), 409)
+                return make_response(jsonify(
+                    {"message": "Only the Business owner can delete"}), 409)
 
             db.session.delete(business)
             db.session.commit()
@@ -323,7 +333,9 @@ class BusinessReviews(Resource):
 
             invalid_input = validate_inputs(args)
             if invalid_input:
-                return make_response(jsonify({"message": "{} must be a string of maximum {} characters".format(invalid_input[2], invalid_input[1])}), 400)
+                return make_response(jsonify(
+                    {"message": "{} must be a string of maximum {} characters".format(
+                        invalid_input[2], invalid_input[1])}), 400)
 
             review_name = args.get("name", None)
             description = args.get("description", None)
@@ -342,6 +354,7 @@ class BusinessReviews(Resource):
 
                 return make_response(jsonify({"message": "Business review added"}), 201)
 
-            return make_response(jsonify({"message": "Business review by that name already exists"}), 409)
+            return make_response(jsonify(
+                {"message": "Business review by that name already exists"}), 409)
 
         return make_response(jsonify({"message": "Business not found"}), 404)

@@ -6,8 +6,7 @@ from flask import redirect
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from api import db
-from api.v2 import app
+from api.v2 import app, db
 
 
 migrate = Migrate(app, db)
@@ -18,6 +17,8 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def test():
+    """Run tests"""
+
     tests = unittest.TestLoader().discover('api/v2/tests', pattern='test*.py')
     result = unittest.TextTestRunner(verbosity=2).run(tests)
 
