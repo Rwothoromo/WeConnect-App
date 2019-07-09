@@ -1,4 +1,2 @@
-app/static/* linguist-vendored
 app/designs/* linguist-vendored
-app/templates/* linguist-vendored
 app/api/v2/resources/docs/* linguist-vendored

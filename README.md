@@ -68,9 +68,8 @@ export FLASK_CONFIG=development
   * `python manage.py db init` to create a migration repository.
   * `python manage.py db migrate` to update the migration script.
   * `python manage.py db upgrade` to apply the migration to the database.
-* Run `python manage.py runserver` to run `api/v2` on the default ip and port.
+* Run `python manage.py runserver` or `python3 run.py` to run on the default ip and port.
 * View the app on `http://127.0.0.1:5000/`.
-* For `api/v1`, run `python3 run.py`.
 
 ## Use endpoints
 
@@ -106,4 +105,4 @@ For detailed instructions on heroku deployments, go [here](https://medium.com/@j
 
 ## Extra
 
-* Run `find . | grep -E "(\__pycache__|\migrations)" | xargs rm -rf` to remove unnecessary files.
+* Run `find . | grep -E "(\__pycache__|\migrations|\.pytest_cache)" | xargs rm -rf` to remove unnecessary files.
