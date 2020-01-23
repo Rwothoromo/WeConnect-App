@@ -36,7 +36,7 @@ WeConnect brings businesses and users together, and allows users to review busin
 
 ## Tested with
 
-* [Python 3.6](https://www.python.org/downloads)
+* [Python 3.8](https://www.python.org/downloads)
 * [PostgreSQL 11](https://www.postgresql.org/download/)
 
 ## Requirements
