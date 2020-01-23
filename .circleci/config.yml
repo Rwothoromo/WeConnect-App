@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.2-stretch-browsers
+      - image: circleci/python:3.8.0b1-stretch-browsers
         environment:
           SECRET_KEY: some_secret_value
           FLASK_CONFIG: testing
