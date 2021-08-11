@@ -1,0 +1,19 @@
+# define the Compose file format, see https://docs.docker.com/compose/compose-file/
+version: "3.8"
+# define the services to use
+services:
+  # first service
+  app:
+    # build the Docker image using the Dockerfile
+    build: .
+    # run the manage.py file key commands
+    command: python manage.py runserver
+    restart: always
+    # map port 5000 on the host to port 5000 on the container. Because by default, Flask runs on port 5000
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env
+    # mount a folder from the host machine to the container
+    volumes:
+      - .:/weconnect

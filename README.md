@@ -50,16 +50,26 @@ WeConnect brings businesses and users together, and allows users to review busin
 ## Setup
 
 * Run `git clone` this repository and `cd` into the project root.
-* Run `mkvirtualenv venv` for Windows or `python3 -m venv ../wc-venv` for Unix/Mac.
-* Run `workon venv` for Windows or `source ../wc-venv/bin/activate` for Unix/Mac.
-* Run `pip install -r requirements.txt`.
 * Run `createdb <weconnect_db>` and `createdb <test_weconnect_db>` on the psql bash terminal.
+
+### Docker
+
+* Run `docker compose up` to start and run the entire app.
+* Run `docker ps` to see all the running containers.
+* Run `docker logs weconnect` to view the logs.
+
+### Regular
+
+* Run `mkvirtualenv venv` or `virtualenv venv` for Windows. `python3 -m venv ../wc-venv` for Unix/Mac.
+* Run `workon venv` or `venv\Scripts\activate` for Windows. `source ../wc-venv/bin/activate` for Unix/Mac.
+* Run `pip install -r requirements.txt`.
 * Run `touch .env` to create a file for storing environment variables. Add the following lines (use `set` for Windows instead of `export`, used here for Unix/Mac) to it:
 
 ```env
 export DATABASE_URL=postgresql://<db_user>:<password>@localhost/<weconnect_db>
 export SECRET_KEY=<some_secret_value>
 export FLASK_CONFIG=development
+export FLASK_APP=run.py
 ```
 
 * Run `source .env` to activate the environment variables on Unix/Mac.
