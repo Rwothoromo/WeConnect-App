@@ -50,29 +50,30 @@ WeConnect brings businesses and users together, and allows users to review busin
 ## Setup
 
 * Run `git clone` this repository and `cd` into the project root.
-* Run `createdb <weconnect_db>` and `createdb <test_weconnect_db>` on the psql bash terminal.
+* Run `createdb <weconnect_dev>` and `createdb <weconnect_test>` on the psql bash terminal.
 
 ### Docker
 
+* Run `docker-compose down -v` to remove the volumes along with the containers.
+* Run `docker compose build` to set up.
 * Run `docker compose up` to start and run the entire app.
-* Run `docker ps` to see all the running containers.
-* Run `docker logs weconnect` to view the logs.
+* Run `docker compose exec web python manage.py db init` in a separate terminal.
 
 ### Regular
 
 * Run `mkvirtualenv venv` or `virtualenv venv` for Windows. `python3 -m venv ../wc-venv` for Unix/Mac.
 * Run `workon venv` or `venv\Scripts\activate` for Windows. `source ../wc-venv/bin/activate` for Unix/Mac.
 * Run `pip install -r requirements.txt`.
-* Run `touch .env` to create a file for storing environment variables. Add the following lines (use `set` for Windows instead of `export`, used here for Unix/Mac) to it:
+* Run `touch .env.dev` to create a file for storing environment variables. Add the following lines (use `set` for Windows instead of `export`, used here for Unix/Mac) to it:
 
 ```env
-export DATABASE_URL=postgresql://<db_user>:<password>@localhost/<weconnect_db>
-export SECRET_KEY=<some_secret_value>
-export FLASK_CONFIG=development
-export FLASK_APP=run.py
+DATABASE_URL=postgresql://postgres@localhost/weconnect_dev
+SECRET_KEY=some_secret_value
+FLASK_CONFIG=development
+FLASK_ENV=development
 ```
 
-* Run `source .env` to activate the environment variables on Unix/Mac.
+* Run `source .env.dev` to activate the environment variables on Unix/Mac.
 * Run `env` to verify the above.
 * Run the migrations:
   * `python manage.py db init` to create a migration repository.
@@ -93,13 +94,20 @@ export FLASK_APP=run.py
 
 ## Unittests
 
-* Change the `.env` file to:
+* Set the `.env.test` file to:
 
 ```env
-export DATABASE_URL=postgresql://<db_user>:<password>@localhost/<test_weconnect_db>
-export SECRET_KEY=<some_secret_value>
-export FLASK_CONFIG=testing
+DATABASE_URL=postgresql://postgres@localhost/weconnect_test
+SECRET_KEY=some_secret_value
+FLASK_CONFIG=testing
+FLASK_ENV=testing
 ```
+
+### Docker Test
+
+* Coming soon
+
+### Regular Test
 
 * Run `source .env`.
 * Run the migrations like before.
